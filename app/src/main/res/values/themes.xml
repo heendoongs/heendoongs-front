@@ -1,0 +1,10 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- 상태바 투명 테마 -->
+    <style name="TransparentStatusTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!--drawerlayout statusbar -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+</resources>
