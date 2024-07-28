@@ -12,8 +12,8 @@
         android:paddingBottom="19dp" />
     <item
         android:id="@+id/fragment_battle"
-        android:title="투표"
-        android:icon="@drawable/ic_vote"
+        android:title="배틀"
+        android:icon="@drawable/ic_battle"
         android:paddingBottom="19dp" />
     <item
         android:id="@+id/fragment_my_closet"

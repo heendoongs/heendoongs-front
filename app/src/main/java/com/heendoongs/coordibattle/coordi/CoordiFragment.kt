@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.heendoongs.coordibattle.R
+import com.heendoongs.coordibattle.databinding.FragmentCoordiBinding
 import java.io.IOException
 
 /**
@@ -32,27 +33,21 @@ import java.io.IOException
  */
 
 class CoordiFragment : Fragment() {
-    private lateinit var saveButton: Button
-    private lateinit var uploadButton: Button
-    private lateinit var imageContainer: FrameLayout
-    private lateinit var clothesList: RecyclerView
+    private var _binding: FragmentCoordiBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_coordi, container, false)
+        _binding = FragmentCoordiBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        saveButton = view.findViewById(R.id.btn_save)
-        uploadButton = view.findViewById(R.id.btn_upload)
-        imageContainer = view.findViewById(R.id.coordi_container)
-        clothesList = view.findViewById(R.id.clothes_list)
-
-        saveButton.setOnClickListener {
+        binding.btnSave.setOnClickListener {
             saveImageToGallery()
         }
 
-        uploadButton.setOnClickListener {
+        binding.btnUpload.setOnClickListener {
             // 업로드 로직 추가
         }
 
@@ -62,8 +57,8 @@ class CoordiFragment : Fragment() {
     }
 
     private fun setupClothesList() {
-        clothesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        clothesList.adapter = ClothesAdapter { imageResId ->
+        binding.clothesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.clothesList.adapter = ClothesAdapter { imageResId ->
             addImageToContainer(imageResId)
         }
     }
@@ -76,10 +71,11 @@ class CoordiFragment : Fragment() {
             FrameLayout.LayoutParams.WRAP_CONTENT
         )
 
+        var rotationDegrees = 0f
+
         imageView.setOnTouchListener(object : View.OnTouchListener {
             private val gestureDetector = GestureDetector(requireContext(), GestureListener(imageView))
             private val scaleDetector = ScaleGestureDetector(requireContext(), ScaleListener(imageView))
-            private var rotationDegrees = 0f
 
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 gestureDetector.onTouchEvent(event)
@@ -95,7 +91,7 @@ class CoordiFragment : Fragment() {
             }
 
             private inner class GestureListener(private val imageView: ImageView) : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(_ : MotionEvent?): Boolean {
+                override fun onDoubleTap(event: MotionEvent?): Boolean {
                     rotationDegrees += 90f
                     imageView.rotation = rotationDegrees
                     return true
@@ -111,13 +107,13 @@ class CoordiFragment : Fragment() {
             }
         })
 
-        imageContainer.addView(imageView)
+        binding.coordiContainer.addView(imageView)
     }
 
     private fun saveImageToGallery() {
-        val bitmap = Bitmap.createBitmap(imageContainer.width, imageContainer.height, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(binding.coordiContainer.width, binding.coordiContainer.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        imageContainer.draw(canvas)
+        binding.coordiContainer.draw(canvas)
 
         val resolver = requireContext().contentResolver
         val contentValues = ContentValues().apply {
@@ -137,5 +133,10 @@ class CoordiFragment : Fragment() {
         } ?: run {
             Toast.makeText(requireContext(), "이미지 저장 실패!", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
