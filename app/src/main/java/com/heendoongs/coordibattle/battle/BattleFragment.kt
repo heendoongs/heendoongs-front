@@ -1,13 +1,14 @@
-package com.heendoongs.coordibattle
+package com.heendoongs.coordibattle.battle
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.heendoongs.coordibattle.R
 
 /**
- * 로그인 프래그먼트
+ * 배틀 프래그먼트
  * @author 임원정
  * @since 2024.07.26
  * @version 1.0
@@ -19,12 +20,12 @@ import androidx.fragment.app.Fragment
  * </pre>
  */
 
-class LogInFragment : Fragment() {
+class BattleFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_log_in, container, false)
+        return inflater.inflate(R.layout.fragment_battle, container, false)
     }
 }

@@ -2,12 +2,13 @@ package com.heendoongs.coordibattle
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.WindowManager
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.heendoongs.coordibattle.battle.BattleFragment
+import com.heendoongs.coordibattle.coordi.CoordiFragment
+import com.heendoongs.coordibattle.coordi.HomeFragment
 import com.heendoongs.coordibattle.databinding.ActivityMainBinding
+import com.heendoongs.coordibattle.member.MyClosetFragment
 
 /**
  * 메인 액티비티
