@@ -7,4 +7,19 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <!-- 커스텀 텍스트 스타일 정의 -->
+    <style name="BottomNavigationTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/dongle_regular</item>
+        <item name="android:textSize">19dp</item>
+
+    </style>
+
+    <!-- BottomNavigationView 스타일 정의 -->
+    <style name="BottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
+        <item name="itemTextAppearanceActive">@style/BottomNavigationTextAppearance</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationTextAppearance</item>
+        <item name="itemTextColor">@color/bottom_nav_color</item>
+        <item name="itemIconTint">@color/bottom_nav_color</item>
+    </style>
+
 </resources>
