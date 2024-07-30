@@ -1,7 +1,9 @@
 package com.heendoongs.coordibattle.battle
 
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 /**
@@ -15,6 +17,7 @@ import retrofit2.http.Query
  * ----------  --------    ---------------------------
  * 2024.07.30  	남진수       최초 생성
  * 2024.07.30  	남진수       getBattleCoordies 배틀 페이지 리스트 조회
+ * 2024.07.30  	남진수       postBattleResult 배틀 투표결과 저장
  * </pre>
  */
 
@@ -23,4 +26,9 @@ interface BattleService {
     fun getBattleCoordies(
         @Query("memberId") memberId: Long
     ): Call<List<BattleDTO>>
+
+    @POST("battle")
+    fun postBattleResult(
+        @Body voteRequest: MemberCoordiVoteRequestDTO
+    ): Call<BattleResponseDTO>
 }

@@ -2,14 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/battle_background">
 
     <View
+        android:id="@+id/dark_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/battle_background" />
+        android:background="#80000000"
+        android:visibility="gone"
+        android:elevation="11dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/battle_background"
+        />
 
     <ImageView
         android:id="@+id/battle_logo"
@@ -19,10 +30,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/battle_logo" />
+        app:srcCompat="@drawable/battle_logo"
+        />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card1"
+        android:id="@+id/battle_card_top"
         android:layout_width="200dp"
         android:layout_height="200dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +44,7 @@
         app:cardCornerRadius="10dp"
         app:cardElevation="10dp" >
         <ImageView
-            android:id="@+id/battle_ex_1"
+            android:id="@+id/battle_image_top"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
@@ -47,7 +59,8 @@
         android:elevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/battle_description_top" />
+        app:srcCompat="@drawable/battle_description_top"
+        />
 
     <TextView
         android:id="@+id/battle_description_top_text"
@@ -78,7 +91,7 @@
         />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card2"
+        android:id="@+id/battle_card_bottom"
         android:layout_width="200dp"
         android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,7 +101,7 @@
         app:cardCornerRadius="10dp"
         app:cardElevation="10dp" >
         <ImageView
-            android:id="@+id/battle_ex_2"
+            android:id="@+id/battle_image_bottom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
@@ -103,7 +116,8 @@
         android:elevation="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/battle_description_bottom" />
+        app:srcCompat="@drawable/battle_description_bottom"
+        />
 
     <TextView
         android:id="@+id/battle_description_bottom_text"
@@ -131,6 +145,36 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@id/battle_description_bottom"
         app:layout_constraintBottom_toBottomOf="@id/battle_description_bottom"
+        />
+
+    <LinearLayout
+        android:id="@+id/battle_layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/battle_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/battle_logo"
+        />
+
+    <LinearLayout
+        android:id="@+id/battle_layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/battle_guideline"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/battle_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="400dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
