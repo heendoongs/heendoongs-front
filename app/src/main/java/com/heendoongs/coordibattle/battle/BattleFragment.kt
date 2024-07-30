@@ -108,11 +108,13 @@ class BattleFragment : Fragment() {
 
     private fun decodeBase64ToBitmap(base64Str: String): Bitmap? {
         return try {
-            val decodedBytes = Base64.decode(base64Str, Base64.DEFAULT)
+            val base64Data = base64Str.substringAfter(",")
+            val decodedBytes = Base64.decode(base64Data, Base64.DEFAULT)
             BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
             null
         }
     }
+
 }
