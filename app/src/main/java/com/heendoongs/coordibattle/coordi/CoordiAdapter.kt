@@ -67,10 +67,14 @@ class CoordiAdapter(private val context: Context, private var coordiList: Mutabl
         }
     }
 
-    private fun decodeBase64ToBitmap(base64Image: String?): Bitmap? {
-        return base64Image?.let {
-            val decodedString = Base64.decode(it, Base64.DEFAULT)
-            BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+    private fun decodeBase64ToBitmap(base64Str: String): Bitmap? {
+        return try {
+            val decodedBytes = Base64.decode(base64Str, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+            null
         }
     }
 }
+
