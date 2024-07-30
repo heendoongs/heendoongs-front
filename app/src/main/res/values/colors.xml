@@ -9,4 +9,5 @@
     <color name="dark_gray">#545454</color>
     <color name="red">#FF0000</color>
     <color name="selected_nav">#623500</color>
+    <color name="battle_background">#FFF6DE</color>
 </resources>
