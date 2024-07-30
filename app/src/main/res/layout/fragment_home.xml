@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--  상단 로고   -->
     <ImageView
         android:id="@+id/logo"
         android:layout_width="match_parent"
@@ -14,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
 
+    <!--  배너  -->
     <ImageButton
         android:id="@+id/banner"
         android:layout_width="312dp"
@@ -23,88 +26,112 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo" />
 
-    <ImageView
-        android:id="@+id/coordi_list"
-        android:layout_width="216dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="24dp"
+    <!-- 코디 리스트 타이틀   -->
+    <LinearLayout
+        android:id="@+id/title_coordiList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginVertical="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/banner"
-        app:srcCompat="@drawable/coordi_list" />
+        app:layout_constraintTop_toBottomOf="@+id/banner">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/coordi_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/coordi_list"
-        app:layout_constraintTop_toTopOf="@+id/coordi_list"
-        app:srcCompat="@drawable/ic_paw" />
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            app:srcCompat="@drawable/ic_paw" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/coordi_list"
-        app:layout_constraintEnd_toStartOf="@+id/coordi_list"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/coordi_list"
-        app:srcCompat="@drawable/ic_paw" />
+        <ImageView
+            android:id="@+id/coordi_list"
+            android:layout_width="216dp"
+            android:layout_height="46dp"
+            android:layout_marginHorizontal="16dp"
+            app:srcCompat="@drawable/coordi_list" />
 
-    <TextView
-        android:id="@+id/filter1"
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            app:srcCompat="@drawable/ic_paw" />
+    </LinearLayout>
+
+    <!--   필터１ ： 배틀별 필터   -->
+    <LinearLayout
+        android:id="@+id/btn_filter1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="108dp"
-        android:fontFamily="@font/dongle_bold"
-        android:text="이전 배틀"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coordi_list" />
-
-    <TextView
-        android:id="@+id/filter2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginVertical="16dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/dongle_bold"
-        android:text="최신순"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.637"
-        app:layout_constraintStart_toEndOf="@+id/filter1"
-        app:layout_constraintTop_toBottomOf="@+id/coordi_list" />
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/btn_filter2"
+        app:layout_constraintTop_toBottomOf="@+id/title_coordiList">
 
-    <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="0dp"
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_arrow_down" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/dongle_regular"
+            android:text="이전 배틀"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <!--   필터２ ： 최신순／랭킹순 필터   -->
+    <LinearLayout
+        android:id="@+id/btn_filter2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_filter1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_filter1">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_arrow_down" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/dongle_regular"
+            android:text="랭킹순"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_filter1"
+        app:layout_constraintBottom_toTopOf="@+id/btn_more"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filter1">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp"/>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </TableLayout>
+    <!-- 더보기 버튼 -->
+    <Button
+        android:id="@+id/btn_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="더보기"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
