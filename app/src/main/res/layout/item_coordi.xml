@@ -1,0 +1,36 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@color/gray"
+    android:layout_margin="8dp">
+
+    <ImageView
+        android:id="@+id/iv_coordiImage"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/tv_coordiTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/dongle_bold"
+        android:textColor="@color/black"
+        android:text="진수의 남침룩" />
+
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:textSize="16sp"
+        android:layout_gravity="end"
+        android:fontFamily="@font/dongle_regular"
+        android:textColor="@color/dark_gray"
+        android:text="by. 진수" />
+</LinearLayout>

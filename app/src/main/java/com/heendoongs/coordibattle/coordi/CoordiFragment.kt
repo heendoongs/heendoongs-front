@@ -76,20 +76,31 @@ class CoordiFragment : Fragment() {
         imageView.setOnTouchListener(object : View.OnTouchListener {
             private val gestureDetector = GestureDetector(requireContext(), GestureListener(imageView))
             private val scaleDetector = ScaleGestureDetector(requireContext(), ScaleListener(imageView))
+            private var initialX = 0f
+            private var initialY = 0f
+            private var dX = 0f
+            private var dY = 0f
 
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 gestureDetector.onTouchEvent(event)
                 scaleDetector.onTouchEvent(event)
 
                 when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        // 터치가 시작될 때의 뷰의 위치와 터치 포인트를 기록
+                        initialX = v.x
+                        initialY = v.y
+                        dX = event.rawX - initialX
+                        dY = event.rawY - initialY
+                    }
                     MotionEvent.ACTION_MOVE -> {
-                        v.x = event.rawX - v.width/2
-                        v.y = event.rawY - v.height
+                        // 터치 포인트가 이동할 때마다 뷰를 새로운 위치로 이동
+                        v.x = event.rawX - dX
+                        v.y = event.rawY - dY
                     }
                 }
                 return true
             }
-
             private inner class GestureListener(private val imageView: ImageView) : GestureDetector.SimpleOnGestureListener() {
                 override fun onDoubleTap(event: MotionEvent?): Boolean {
                     rotationDegrees += 90f
@@ -102,6 +113,7 @@ class CoordiFragment : Fragment() {
                 override fun onScale(detector: ScaleGestureDetector): Boolean {
                     imageView.scaleX *= detector.scaleFactor
                     imageView.scaleY *= detector.scaleFactor
+
                     return true
                 }
             }
