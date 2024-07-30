@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--  상단 로고   -->
+    <!-- 상단 로고 -->
     <ImageView
         android:id="@+id/logo"
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
 
-    <!--  배너  -->
+    <!-- 배너 -->
     <ImageButton
         android:id="@+id/banner"
         android:layout_width="312dp"
@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo" />
 
-    <!-- 코디 리스트 타이틀   -->
+    <!-- 코디 리스트 타이틀 -->
     <LinearLayout
         android:id="@+id/title_coordiList"
         android:layout_width="match_parent"
@@ -56,12 +56,12 @@
             app:srcCompat="@drawable/ic_paw" />
     </LinearLayout>
 
-    <!--   필터１ ： 배틀별 필터   -->
+    <!-- 필터1: 배틀별 필터 -->
     <LinearLayout
         android:id="@+id/btn_filter1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:clickable="true"
         android:gravity="center"
@@ -84,7 +84,7 @@
             android:textSize="24sp" />
     </LinearLayout>
 
-    <!--   필터２ ： 최신순／랭킹순 필터   -->
+    <!-- 필터2: 최신순/랭킹순 필터 -->
     <LinearLayout
         android:id="@+id/btn_filter2"
         android:layout_width="wrap_content"
@@ -115,23 +115,31 @@
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/btn_filter1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:paddingHorizontal="16dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_more"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_filter1"
+        app:layout_constraintVertical_bias="0" />
 
     <!-- 더보기 버튼 -->
     <Button
         android:id="@+id/btn_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/white"
+        android:fontFamily="@font/dongle_bold"
         android:text="더보기"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
