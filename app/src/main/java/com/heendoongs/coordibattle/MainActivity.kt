@@ -1,5 +1,6 @@
 package com.heendoongs.coordibattle
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
@@ -8,6 +9,7 @@ import com.heendoongs.coordibattle.battle.BattleFragment
 import com.heendoongs.coordibattle.coordi.CoordiFragment
 import com.heendoongs.coordibattle.coordi.HomeFragment
 import com.heendoongs.coordibattle.databinding.ActivityMainBinding
+import com.heendoongs.coordibattle.member.LogInFragment
 import com.heendoongs.coordibattle.member.MyClosetFragment
 
 /**
@@ -57,7 +59,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_home -> HomeFragment()
                 R.id.fragment_coordi -> CoordiFragment()
                 R.id.fragment_battle -> BattleFragment()
-                R.id.fragment_my_closet -> MyClosetFragment()
+                R.id.fragment_my_closet -> { LogInFragment()
+//                    if (isLoggedIn()) {
+//                        MyClosetFragment()
+//                    } else {
+//                        LogInFragment()
+//                    }
+                }
                 else -> null
             }
             replaceFragment(fragment)
@@ -65,10 +73,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun isLoggedIn(): Boolean {
+        // sharedPreferences
+        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean("isLoggedIn", false)
+    }
+
     /**
      * 프래그먼트 교체
      */
-    private fun replaceFragment(fragment : Fragment?) {
+    fun replaceFragment(fragment : Fragment?) {
         if(fragment!=null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.main_container, fragment)
