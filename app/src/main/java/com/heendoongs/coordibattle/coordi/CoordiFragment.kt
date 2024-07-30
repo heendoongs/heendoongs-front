@@ -57,8 +57,8 @@ class CoordiFragment : Fragment() {
     }
 
     private fun setupClothesList() {
-        binding.clothesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.clothesList.adapter = ClothesAdapter { imageResId ->
+        binding.itemList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.itemList.adapter = ClothesAdapter { imageResId ->
             addImageToContainer(imageResId)
         }
     }
@@ -83,8 +83,8 @@ class CoordiFragment : Fragment() {
 
                 when (event.action) {
                     MotionEvent.ACTION_MOVE -> {
-                        v.x = event.rawX - v.width / 2
-                        v.y = event.rawY - v.height / 2
+                        v.x = event.rawX - v.width/2
+                        v.y = event.rawY - v.height
                     }
                 }
                 return true
@@ -110,6 +110,9 @@ class CoordiFragment : Fragment() {
         binding.coordiContainer.addView(imageView)
     }
 
+    /**
+     * 갤러리에 이미지 저장
+     */
     private fun saveImageToGallery() {
         val bitmap = Bitmap.createBitmap(binding.coordiContainer.width, binding.coordiContainer.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
