@@ -1,6 +1,8 @@
 package com.heendoongs.coordibattle.member
 
 import com.heendoongs.coordibattle.battle.BattleDTO
+import com.heendoongs.coordibattle.battle.BattleResponseDTO
+import com.heendoongs.coordibattle.battle.MemberCoordiVoteRequestDTO
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -28,4 +30,15 @@ interface MemberService {
     fun signUp(
         @Body signUpRequest: SignUpRequest
     ): Call<ResponseBody>
+
+    @GET("mycloset")
+    fun getMyCloset(
+        @Query("memberId") memberId: Long
+    ): Call<MyClosetResponse>
+
+    @GET("myinfo")
+    fun getMyInfo(
+        @Query("memberId") memberId: Long
+    ): Call<MyInfoResponse>
+
 }

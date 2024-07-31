@@ -20,13 +20,25 @@ data class LoginRequest(
 
 // 로그인 응답
 data class LoginResponse(
-    val token: String, // 예를 들어, 로그인 성공 시 받는 토큰
-    val userId: Long
+    val token: String,
+    val memberId: Long
 )
 
 // 회원가입 요청
 data class SignUpRequest(
     val loginId: String,
     val password: String,
+    val nickname: String
+)
+
+// 내 옷장 응답
+data class MyClosetResponse(
+    val memberId: Long,
+    val nickname: String
+)
+
+// 내 정보 응답
+data class MyInfoResponse(
+    val loginId: String,
     val nickname: String
 )

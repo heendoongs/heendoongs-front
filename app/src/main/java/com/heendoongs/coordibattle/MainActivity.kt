@@ -61,11 +61,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_coordi -> CoordiFragment()
                 R.id.fragment_battle -> BattleFragment()
                 R.id.fragment_my_closet -> { LogInFragment()
-//                    if (isLoggedIn()) {
-//                        MyClosetFragment()
-//                    } else {
-//                        LogInFragment()
-//                    }
+                    if (isLoggedIn()) {
+                        MyClosetFragment()
+                    } else {
+                        LogInFragment()
+                    }
                 }
                 else -> null
             }
@@ -76,8 +76,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun isLoggedIn(): Boolean {
         // sharedPreferences
-        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean("isLoggedIn", false)
+        val sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE)
+        val t = sharedPreferences.getString("jwt_token", null) != null
+        return t
     }
 
     /**

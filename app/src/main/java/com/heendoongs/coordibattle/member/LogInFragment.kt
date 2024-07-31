@@ -1,5 +1,6 @@
 package com.heendoongs.coordibattle.member
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.heendoongs.coordibattle.RetrofitConnection
 import com.heendoongs.coordibattle.battle.BattleService
 import com.heendoongs.coordibattle.databinding.FragmentLogInBinding
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,6 +31,7 @@ import java.lang.reflect.Member
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.07.26  	임원정       최초 생성
+ * 2024.07.30  	로그인       login 메소드 추가
  * </pre>
  */
 class LogInFragment : Fragment() {
@@ -71,7 +74,21 @@ class LogInFragment : Fragment() {
                     // 성공적인 응답 처리
                     val responseBody = response.body()?.string() // 응답 본문 읽기
                     if (responseBody != null && responseBody.isNotEmpty()) {
+                        // JWT 토큰 추출
+                        val jsonObject = JSONObject(responseBody)
+                        val token = jsonObject.getString("token")
+//                        val memberId = jsonObject.getString("memberId")
+                        val memberId = 1L
+
+                        // SharedPreferences에 저장
+                        val sharedPref = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
+                        with(sharedPref.edit()) {
+                            putString("jwt_token", token)
+                            putLong("memberId", memberId)
+                            apply()
+                        }
                         showToast("로그인 성공! 환영합니다.")
+                        (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment())
                     } else {
                         showToast("로그인 성공하지만 서버에서 응답 메시지가 없습니다.")
                     }
@@ -87,6 +104,7 @@ class LogInFragment : Fragment() {
             }
         })
     }
+
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
