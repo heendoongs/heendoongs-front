@@ -10,4 +10,9 @@ interface CoordiService {
         @Query("page") page: Int,
         @Query("size") size: Int
     ): Call<Page<RankingOrderCoordiListResponseDTO>>
+
+    @GET("coordi/details")
+    fun getCoordiDetails(
+        @Query("coordiId") coordiId: Long
+    ): Call<CoordiDetailsResponseDTO>
 }
