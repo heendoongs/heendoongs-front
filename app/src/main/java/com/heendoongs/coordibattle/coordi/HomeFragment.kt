@@ -53,7 +53,7 @@ class HomeFragment : Fragment() {
 
         // Retrofit 설정
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/") // BASE_URL을 프로젝트에 맞게 설정하세요.
+            .baseUrl("http://10.0.2.2:8080/") // BASE_URL
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -84,10 +84,13 @@ class HomeFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     val pageData = response.body()!!
                     val newItems = pageData.content
-                    if (page == 0) {
-                        adapter.updateData(newItems)
+                    adapter.appendData(newItems)
+
+                    // 데이터가 더 이상 없을 때 버튼 숨기기
+                    if (page >= pageData.totalPages - 1) {
+                        binding.btnMore.visibility = View.GONE
                     } else {
-                        adapter.appendData(newItems)
+                        binding.btnMore.visibility = View.VISIBLE
                     }
                 } else {
                     Toast.makeText(context, "Failed to fetch data", Toast.LENGTH_SHORT).show()
