@@ -56,7 +56,13 @@ class SignUpFragment : Fragment() {
     private fun signUp() {
         val loginId = binding.editId.text.toString()
         val password = binding.editPw.text.toString()
+        val passwordCheck = binding.editPwChk.toString()
         val nickname = binding.editNickname.text.toString()
+
+        if (password != passwordCheck) {
+            showToast("비밀번호와 비밀번호 확인이 다릅니다.")
+            return
+        }
 
         val signUpRequest = SignUpRequest(loginId, password, nickname)
 

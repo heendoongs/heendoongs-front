@@ -41,4 +41,14 @@ interface MemberService {
         @Query("memberId") memberId: Long
     ): Call<MyInfoResponse>
 
+    @POST("updateAccount")
+    fun updateAccount(
+        @Body memberUpdateRequest : MemberUpdateRequest
+    ): Call<ResponseBody>
+
+    @POST("deleteAccount")
+    fun deleteAccount(
+        @Query("memberId") memberId: Long
+    ): Call<ResponseBody>
+
 }

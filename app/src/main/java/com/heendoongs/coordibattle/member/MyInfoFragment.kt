@@ -1,9 +1,11 @@
 package com.heendoongs.coordibattle.member
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
@@ -11,6 +13,10 @@ import com.heendoongs.coordibattle.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentLogInBinding
 import com.heendoongs.coordibattle.databinding.FragmentMyClosetBinding
 import com.heendoongs.coordibattle.databinding.FragmentMyInfoBinding
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * 마이페이지_내정보 프래그먼트
@@ -39,24 +45,65 @@ class MyInfoFragment : Fragment() {
 
         service = RetrofitConnection.getInstance().create(MemberService::class.java)
 
+        // SharedPreferences에서 JWT 토큰과 memberId 가져오기
+        val sharedPref = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("jwt_token", null)
+        val memberId = sharedPref.getLong("memberId", -1)
+
         binding.btnUpdate.setOnClickListener {
-            update()
+            update(memberId)
         }
 
         binding.btnDelete.setOnClickListener {
-            delete()
+            delete(memberId)
         }
 
         return binding.root
     }
 
-    private fun update() {
-        TODO("Not yet implemented")
+    private fun update(memberId: Long) {
+        val loginId = binding.editId.text.toString()
+        val password = binding.editPw.text.toString()
+        val passwordCheck = binding.editPwChk.toString()
+        val nickname = binding.editNickname.text.toString()
+
+        val updateRequest = MemberUpdateRequest(memberId, loginId, password, nickname)
+
+        // 회원정보 수정 요청 보내기
+        service.updateAccount(updateRequest).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    showToast("회원 정보 수정 완료")
+                } else {
+                    showToast("회원 정보 수정 오류. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
+            }
+        })
     }
 
-    private fun delete() {
-        TODO("Not yet implemented")
+    private fun delete(memberId: Long) {
+
+        // 회원 탈퇴 요청 보내
+        service.deleteAccount(memberId).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    showToast("회원 탈퇴 완료")
+                } else {
+                    showToast("회원 탈퇴 오. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
+            }
+        })
     }
 
-
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
 }
