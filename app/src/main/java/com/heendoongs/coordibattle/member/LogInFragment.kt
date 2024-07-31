@@ -31,7 +31,6 @@ import java.lang.reflect.Member
  * 2024.07.26  	임원정       최초 생성
  * </pre>
  */
-
 class LogInFragment : Fragment() {
 
     private lateinit var service: MemberService

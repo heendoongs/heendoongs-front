@@ -22,6 +22,7 @@ import com.heendoongs.coordibattle.member.MyClosetFragment
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.07.26  	임원정       최초 생성
+ * 2024.07.30  	조희정       하단바 fragment_my_closet 연결 프레그먼트 변경
  * </pre>
  */
 
