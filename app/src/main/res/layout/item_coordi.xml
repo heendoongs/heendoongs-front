@@ -6,13 +6,12 @@
     android:paddingTop="12dp"
     android:layout_margin="8dp"
     android:clipChildren="false"
-    android:clipToPadding="false">
+    android:clipToPadding="false" >
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="10dp"
-        app:cardBackgroundColor="@color/gray">
+        app:cardCornerRadius="12dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -25,7 +24,8 @@
                 android:id="@+id/iv_coordiImage"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:layout_marginTop="8dp"/>
 
             <TextView
                 android:id="@+id/tv_coordiTitle"

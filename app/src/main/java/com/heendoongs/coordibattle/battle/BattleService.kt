@@ -31,4 +31,7 @@ interface BattleService {
     fun postBattleResult(
         @Body voteRequest: MemberCoordiVoteRequestDTO
     ): Call<BattleResponseDTO>
+
+    @GET("banner")
+    fun getCurrentBattles(): Call<List<BannerResponseDTO>>
 }
