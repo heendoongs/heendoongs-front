@@ -59,18 +59,26 @@ class CoordiAdapter(private val context: Context, private var coordiList: Mutabl
             binding.tvCoordiTitle.text = item.coordiTitle
             binding.tvNickname.text = "by. ${item.nickname}"
 
-            // Base64 이미지를 Bitmap으로 변환
-            val bitmap = decodeBase64ToBitmap(item.coordiImage)
-            if (bitmap != null) {
-                binding.ivCoordiImage.setImageBitmap(bitmap)
+            // 이미지 로딩 함수 호출
+            loadImage(item.coordiImage, binding.ivCoordiImage)
+        }
+
+        private fun loadImage(base64Image: String, imageView: ImageView) {
+            val bitmap = decodeBase64ToBitmap(base64Image)
+            bitmap?.let {
+                Glide.with(context).load(it).into(imageView)
             }
         }
-    }
 
-    private fun decodeBase64ToBitmap(base64Image: String?): Bitmap? {
-        return base64Image?.let {
-            val decodedString = Base64.decode(it, Base64.DEFAULT)
-            BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+        private fun decodeBase64ToBitmap(base64Str: String): Bitmap? {
+            return try {
+                val base64Data = base64Str.substringAfter(",")
+                val decodedBytes = Base64.decode(base64Data, Base64.DEFAULT)
+                BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
+                null
+            }
         }
     }
 }
