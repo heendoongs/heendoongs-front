@@ -22,7 +22,7 @@
         app:srcCompat="@drawable/logo" />
 
     <!-- 배너 -->
-    <ImageButton
+    <com.smarteist.autoimageslider.SliderView
         android:id="@+id/banner"
         android:layout_width="312dp"
         android:layout_height="160dp"
@@ -122,8 +122,9 @@
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginHorizontal="16dp"
         android:paddingHorizontal="16dp"
+        android:paddingBottom="16dp"
         android:nestedScrollingEnabled="false"
         app:layout_constraintBottom_toTopOf="@+id/btn_more"
         app:layout_constraintEnd_toEndOf="parent"
@@ -138,10 +139,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/dark_gray"
         android:fontFamily="@font/dongle_bold"
-        android:text="더보기"
-        android:textColor="@color/black"
+        android:text="@string/btn_more"
+        android:textColor="@color/white"
         android:textSize="30sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
