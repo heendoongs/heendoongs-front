@@ -3,7 +3,7 @@ package com.heendoongs.coordibattle.battle
 import java.time.LocalDate
 
 data class BannerResponseDTO(
-    val bannerId: Long,
+    val battleId: Long,
     val battleTitle: String,
     val bannerImageURL: String,
     val startDate: LocalDate,

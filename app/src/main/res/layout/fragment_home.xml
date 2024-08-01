@@ -80,14 +80,23 @@
             android:layout_height="16dp"
             android:src="@drawable/ic_arrow_down" />
 
-        <TextView
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:fontFamily="@font/dongle_regular"
             android:text="이전 배틀"
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textSize="24sp" />-->
+        <Spinner
+            android:id="@+id/spinner_battle_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/battle_titles"
+            app:layout_constraintEnd_toStartOf="@+id/btn_filter2"
+            app:layout_constraintTop_toBottomOf="@+id/title_coordiList" />
     </LinearLayout>
 
     <!-- 정렬: 최신순/랭킹순 정렬 -->
