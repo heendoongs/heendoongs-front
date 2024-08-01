@@ -9,5 +9,7 @@ data class CoordiDetailsResponseDTO(
     val coordiImage: String,
     val coordiTitle: String,
     val clothesList: List<ClothDetailsResponseDTO>,
-    val voteCount: Int
+    val voteCount: Int,
+    val isVotingPeriod: Boolean,
+    val isVoted: Boolean
 )

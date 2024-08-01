@@ -15,6 +15,8 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.heendoongs.coordibattle.R
+import com.heendoongs.coordibattle.RetrofitConnection
+import com.heendoongs.coordibattle.coordi.CoordiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,12 +50,7 @@ class BattleFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_battle, container, false)
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        service = retrofit.create(BattleService::class.java)
+        service = RetrofitConnection.getInstance().create(BattleService::class.java)
 
         loadBattleData()
 
