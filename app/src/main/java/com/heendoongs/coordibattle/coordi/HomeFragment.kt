@@ -16,8 +16,6 @@ import com.smarteist.autoimageslider.SliderView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * 홈 프래그먼트
@@ -77,8 +75,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadCoordiList(page: Int, size: Int) {
-        service.getCoordiList(page, size).enqueue(object : Callback<Page<RankingOrderCoordiListResponseDTO>> {
-            override fun onResponse(call: Call<Page<RankingOrderCoordiListResponseDTO>>, response: Response<Page<RankingOrderCoordiListResponseDTO>>) {
+        service.getCoordiList(page, size).enqueue(object : Callback<Page<CoordiListResponseDTO>> {
+            override fun onResponse(call: Call<Page<CoordiListResponseDTO>>, response: Response<Page<CoordiListResponseDTO>>) {
                 if (response.isSuccessful && response.body() != null) {
                     val pageData = response.body()!!
                     val newItems = pageData.content
@@ -95,7 +93,7 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<Page<RankingOrderCoordiListResponseDTO>>, t: Throwable) {
+            override fun onFailure(call: Call<Page<CoordiListResponseDTO>>, t: Throwable) {
                 Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })

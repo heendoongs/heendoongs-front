@@ -14,7 +14,7 @@ package com.heendoongs.coordibattle.coordi
  * </pre>
  */
 
-data class RankingOrderCoordiListResponseDTO(
+data class CoordiListResponseDTO(
     val coordiId: Long,
     val coordiTitle: String,
     val coordiImage: String,

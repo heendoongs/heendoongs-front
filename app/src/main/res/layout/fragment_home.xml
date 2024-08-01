@@ -62,7 +62,7 @@
             app:srcCompat="@drawable/ic_paw" />
     </LinearLayout>
 
-    <!-- 필터1: 배틀별 필터 -->
+    <!-- 필터: 배틀별 필터 -->
     <LinearLayout
         android:id="@+id/btn_filter1"
         android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
             android:textSize="24sp" />
     </LinearLayout>
 
-    <!-- 필터2: 최신순/랭킹순 필터 -->
+    <!-- 정렬: 최신순/랭킹순 정렬 -->
     <LinearLayout
         android:id="@+id/btn_filter2"
         android:layout_width="wrap_content"
