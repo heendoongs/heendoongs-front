@@ -1,20 +1,18 @@
 package com.heendoongs.coordibattle.coordi
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.heendoongs.coordibattle.R
+import com.heendoongs.coordibattle.RetrofitConnection
+import com.heendoongs.coordibattle.battle.BannerSliderAdapter
+import com.heendoongs.coordibattle.battle.BannerResponseDTO
+import com.heendoongs.coordibattle.battle.BattleService
 import com.heendoongs.coordibattle.databinding.FragmentHomeBinding
+import com.smarteist.autoimageslider.SliderView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,6 +39,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var adapter: CoordiAdapter
     private lateinit var service: CoordiService
+    private lateinit var battleService: BattleService
     private var currentPage = 0
     private val pageSize = 6
 
@@ -52,12 +51,8 @@ class HomeFragment : Fragment() {
         val view = binding.root
 
         // Retrofit 설정
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/") // BASE_URL을 프로젝트에 맞게 설정하세요.
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        service = retrofit.create(CoordiService::class.java)
+        service = RetrofitConnection.getInstance().create(CoordiService::class.java)
+        battleService = RetrofitConnection.getInstance().create(BattleService::class.java)
 
         // RecyclerView 초기화
         binding.recyclerView.layoutManager = GridLayoutManager(context, 2) // 한 행에 2개 아이템 표시
@@ -75,6 +70,9 @@ class HomeFragment : Fragment() {
         // 처음 데이터 로드
         loadCoordiList(currentPage, pageSize)
 
+        // 배너 데이터 로드
+        loadBanners()
+
         return view
     }
 
@@ -84,10 +82,13 @@ class HomeFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     val pageData = response.body()!!
                     val newItems = pageData.content
-                    if (page == 0) {
-                        adapter.updateData(newItems)
+                    adapter.appendData(newItems)
+
+                    // 데이터가 더 이상 없을 때 버튼 숨기기
+                    if (page >= pageData.totalPages - 1) {
+                        binding.btnMore.visibility = View.GONE
                     } else {
-                        adapter.appendData(newItems)
+                        binding.btnMore.visibility = View.VISIBLE
                     }
                 } else {
                     Toast.makeText(context, "Failed to fetch data", Toast.LENGTH_SHORT).show()
@@ -98,6 +99,32 @@ class HomeFragment : Fragment() {
                 Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    private fun loadBanners() {
+        battleService.getCurrentBattles().enqueue(object : Callback<List<BannerResponseDTO>> {
+            override fun onResponse(call: Call<List<BannerResponseDTO>>, response: Response<List<BannerResponseDTO>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    setupSlider(response.body()!!)
+                } else {
+                    Toast.makeText(context, "Failed to load banners", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<BannerResponseDTO>>, t: Throwable) {
+                Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                println("Error connecting to the server: ${t.message}")
+            }
+        })
+    }
+
+    private fun setupSlider(banners: List<BannerResponseDTO>) {
+        val sliderAdapter = BannerSliderAdapter(banners, requireContext())
+        binding.banner.setSliderAdapter(sliderAdapter)
+        binding.banner.setAutoCycleDirection(SliderView.LAYOUT_DIRECTION_LTR)
+        binding.banner.setScrollTimeInSec(3) // set scroll delay in seconds
+        binding.banner.setAutoCycle(true)
+        binding.banner.startAutoCycle()
     }
 
     override fun onDestroyView() {
