@@ -1,16 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
+        android:id="@+id/coordi_detail_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="상세 페이지"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="이름"
+        android:elevation="10dp"
+        android:fontFamily="@font/dongle_regular"
+        android:textColor="@color/black"
+        android:textSize="45sp"
+        app:layout_constraintTop_toTopOf="@id/coordi_detail_guideline_top"
+        app:layout_constraintBottom_toBottomOf="@id/coordi_detail_guideline_top"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginStart="40dp"
+        />
+
+    <TextView
+        android:id="@+id/coordi_detail_create_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2024.07.21"
+        android:elevation="10dp"
+        android:fontFamily="@font/dongle_regular"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        app:layout_constraintTop_toTopOf="@id/coordi_detail_guideline_top"
+        app:layout_constraintBottom_toBottomOf="@id/coordi_detail_guideline_top"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="40dp"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/coordi_detail_guideline_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="75dp"
+        />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/coordi_detail_card"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="100dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp" >
+        <ImageView
+            android:id="@+id/coordi_detail_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/coordi_detail_guideline_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="260dp"
+        />
+
+    <TextView
+        android:id="@+id/coordi_detail_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="진수의 남침룩"
+        android:elevation="10dp"
+        android:fontFamily="@font/dongle_bold"
+        android:textColor="@color/black"
+        android:textSize="45sp"
+        app:layout_constraintBottom_toTopOf="@+id/coordi_detail_guideline_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="40dp"
+        />
+
+    <ImageButton
+        android:id="@+id/coordi_detail_update"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="80dp"
+        android:background="@color/white"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="@+id/coordi_detail_title"
+        app:layout_constraintBottom_toBottomOf="@+id/coordi_detail_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/coordi_detail_update"
+        />
+
+    <ImageButton
+        android:id="@+id/coordi_detail_delete"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/white"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="@+id/coordi_detail_title"
+        app:layout_constraintBottom_toBottomOf="@+id/coordi_detail_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/coordi_detail_delete"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/clothes_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/coordi_detail_guideline_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:clipToPadding="false"
+        android:paddingStart="35dp"
+        android:paddingVertical="16dp"
+        android:orientation="horizontal"
+        tools:listitem="@layout/item_cloth_image"
+        />
+
+    <ImageButton
+        android:id="@+id/coordi_detail_vote_disabled"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="30dp"
+        app:srcCompat="@drawable/coordi_detail_vote_disabled"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
