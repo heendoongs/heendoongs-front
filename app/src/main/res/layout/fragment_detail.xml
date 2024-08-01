@@ -13,11 +13,36 @@
         android:elevation="10dp"
         android:fontFamily="@font/dongle_regular"
         android:textColor="@color/black"
-        android:textSize="45sp"
+        android:textSize="50sp"
         app:layout_constraintTop_toTopOf="@id/coordi_detail_guideline_top"
         app:layout_constraintBottom_toBottomOf="@id/coordi_detail_guideline_top"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="40dp"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/coordi_detail_vote_count"
+        app:layout_constraintBottom_toBottomOf="@id/coordi_detail_vote_count"
+        android:layout_marginEnd="3dp"
+        app:layout_constraintEnd_toStartOf="@id/coordi_detail_vote_count"
+        android:src="@drawable/coordi_detail_vote_count"
+        />
+
+    <TextView
+        android:id="@+id/coordi_detail_vote_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="527"
+        android:elevation="10dp"
+        android:fontFamily="@font/dongle_regular"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@id/coordi_detail_guideline_top"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="40dp"
         />
 
     <TextView
@@ -28,7 +53,7 @@
         android:elevation="10dp"
         android:fontFamily="@font/dongle_regular"
         android:textColor="@color/black"
-        android:textSize="25sp"
+        android:textSize="22sp"
         app:layout_constraintTop_toTopOf="@id/coordi_detail_guideline_top"
         app:layout_constraintBottom_toBottomOf="@id/coordi_detail_guideline_top"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="75dp"
+        app:layout_constraintGuide_begin="80dp"
         />
 
     <androidx.cardview.widget.CardView
@@ -76,7 +101,7 @@
         android:elevation="10dp"
         android:fontFamily="@font/dongle_bold"
         android:textColor="@color/black"
-        android:textSize="45sp"
+        android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/coordi_detail_guideline_bottom"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="40dp"
@@ -123,9 +148,9 @@
         />
 
     <ImageButton
-        android:id="@+id/coordi_detail_vote_disabled"
-        android:layout_width="320dp"
-        android:layout_height="80dp"
+        android:id="@+id/coordi_detail_vote_button"
+        android:layout_width="260dp"
+        android:layout_height="70dp"
         android:padding="10dp"
         android:background="@color/white"
         android:scaleType="centerCrop"
