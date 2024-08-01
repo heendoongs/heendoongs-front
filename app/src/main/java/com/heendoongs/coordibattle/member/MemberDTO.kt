@@ -46,7 +46,12 @@ data class MyInfoResponse(
 // 회원 업데이트
 data class MemberUpdateRequest(
     val memberId: Long,
-    val loginId: String,
     val password: String,
     val nickname: String
+)
+
+// 에러 코드
+data class ExceptionDto(
+    val code: Int,
+    val message: String
 )

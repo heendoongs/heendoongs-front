@@ -78,7 +78,7 @@ class LogInFragment : Fragment() {
                         val jsonObject = JSONObject(responseBody)
                         val token = jsonObject.getString("token")
 //                        val memberId = jsonObject.getString("memberId")
-                        val memberId = 1L
+                        val memberId = 952L
 
                         // SharedPreferences에 저장
                         val sharedPref = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)

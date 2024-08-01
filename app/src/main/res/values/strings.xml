@@ -8,4 +8,9 @@
     <string name="nickname">닉네임</string>
     <string name="sign_in">회원가입</string>
     <string name="login">로그인</string>
+    <string name="id_input">아이디를 입력해주세요</string>
+    <string name="pw_input">비밀번호를 입력해주세요</string>
+    <string name="pw_chk_input">비밀번호를 다시 입력해주세요</string>
+    <string name="nickname_input">닉네임을 입력해주세요</string>
+    <string name="nickname_chk">닉네임은 3글자까지 가능합니다</string>
 </resources>

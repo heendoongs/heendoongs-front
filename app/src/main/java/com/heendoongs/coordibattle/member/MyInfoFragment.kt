@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.gson.Gson
 import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.RetrofitConnection
@@ -59,51 +61,73 @@ class MyInfoFragment : Fragment() {
             delete(memberId)
         }
 
-        getMyCloset(memberId)
+        messageInit()
+        getMyInfo(memberId)
 
         return binding.root
     }
 
-    private fun getMyCloset(memberId: Long) {
+    private fun getMyInfo(memberId: Long) {
         service.getMyInfo(memberId).enqueue(object : Callback<MyInfoResponse> {
             override fun onResponse(call: Call<MyInfoResponse>, response: Response<MyInfoResponse>) {
                 if (response.isSuccessful) {
-                    // 성공적인 응답 처리
                     val myInfoResponse = response.body()
                     if (myInfoResponse != null) {
-                        binding.id.text = myInfoResponse.loginId
-                        binding.nickname.text = myInfoResponse.nickname
+                        binding.editId.text = myInfoResponse.loginId
+                        binding.editNickname.setText(myInfoResponse.nickname)
                     } else {
                         showToast("데이터를 가져올 수 없습니다.")
                     }
                 } else {
-                    // 실패한 응답 처리
-                    showToast("데이터 가져오기 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                    showToast("데이터를 가져올 수 없습니다.")
                 }
             }
 
             override fun onFailure(call: Call<MyInfoResponse>, t: Throwable) {
-                // 요청 실패 처리
                 showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
             }
         })
     }
 
     private fun update(memberId: Long) {
-        val loginId = binding.editId.text.toString()
         val password = binding.editPw.text.toString()
-        val passwordCheck = binding.editPwChk.toString()
+        val passwordCheck = binding.editPwChk.text.toString()
         val nickname = binding.editNickname.text.toString()
 
-        val updateRequest = MemberUpdateRequest(memberId, loginId, password, nickname)
+        if (password.isEmpty() || passwordCheck.isEmpty()) {
+            showMessage(binding.pwNotMatch, "비밀번호를 입력해주세요")
+            return
+        }
+
+        if (nickname.isEmpty()) {
+            showMessage(binding.existNickname, "닉네임을 입력해주세요")
+            return
+        }
+
+        // 비밀번호 확인
+        if (password != passwordCheck) {
+            showMessage(binding.pwNotMatch, "비밀번호가 일치하지 않습니다.")
+            return
+        }
+
+        val updateRequest = MemberUpdateRequest(memberId, password, nickname)
 
         // 회원정보 수정 요청 보내기
         service.updateAccount(updateRequest).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     showToast("회원 정보 수정 완료")
+                    messageInit()
                 } else {
-                    showToast("회원 정보 수정 오류. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                    // 회원가입 실패 처리
+                    val errorBody = response.errorBody()?.string()
+                    val exceptionDto = Gson().fromJson(errorBody, ExceptionDto::class.java)
+
+                    // 에러 유형에 따라 메시지 표시
+                    when (exceptionDto.code) {
+                        602 -> showMessage(binding.existNickname, exceptionDto.message)
+                        else -> showToast(exceptionDto.message)
+                    }
                 }
             }
 
@@ -115,13 +139,20 @@ class MyInfoFragment : Fragment() {
 
     private fun delete(memberId: Long) {
 
-        // 회원 탈퇴 요청 보내
+        // 회원 탈퇴 요청 보내기
         service.deleteAccount(memberId).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     showToast("회원 탈퇴 완료")
+                    val sharedPref = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
+                    with(sharedPref.edit()) {
+                        remove("jwt_token")
+                        remove("memberId")
+                        apply()
+                    }
+                    (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment())
                 } else {
-                    showToast("회원 탈퇴 오. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                    showToast("회원 탈퇴 오류.")
                 }
             }
 
@@ -129,6 +160,22 @@ class MyInfoFragment : Fragment() {
                 showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
             }
         })
+    }
+
+    // 에러 메시지 초기화
+    private fun messageInit() {
+        binding.existNickname.visibility = View.GONE
+        binding.pwNotMatch.visibility = View.GONE
+    }
+
+    // 에러 메시지 보여주기
+    private fun showMessage(visibleMessage: TextView, message: String) {
+        // 모든 메시지를 GONE으로 설정
+        messageInit()
+
+        // 전달된 메시지 설정하고 VISIBLE로 설정
+        visibleMessage.text = message
+        visibleMessage.visibility = View.VISIBLE
     }
 
     private fun showToast(message: String) {
