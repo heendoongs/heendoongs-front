@@ -17,6 +17,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowDy="8"
+        app:outlineShadowRadius="2"
         app:textStrokeColor="@color/black"
         app:textStrokeWidth="18" />
 
@@ -37,14 +40,14 @@
         android:id="@+id/edit_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="52dp"
         android:fontFamily="@font/dongle_bold"
         android:inputType="textPersonName"
         android:textColor="@color/black"
         android:textSize="25dp"
-        app:layout_constraintStart_toStartOf="@+id/id"
-        app:layout_constraintTop_toBottomOf="@+id/id"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="52dp"/>
+        app:layout_constraintStart_toStartOf="@+id/id"
+        app:layout_constraintTop_toBottomOf="@+id/id" />
 
     <com.heendoongs.coordibattle.view.OutLineTextView
         android:id="@+id/id"
@@ -58,6 +61,9 @@
         android:textSize="30dp"
         app:layout_constraintStart_toEndOf="@+id/img_id_heart"
         app:layout_constraintTop_toBottomOf="@+id/myInfo"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowDy="2"
+        app:outlineShadowRadius="2"
         app:textStrokeColor="@color/light_pink"
         app:textStrokeWidth="6" />
 
@@ -85,6 +91,9 @@
         app:layout_constraintStart_toEndOf="@+id/img_pw_heart"
         app:layout_constraintTop_toTopOf="@+id/img_pw_heart"
         app:layout_constraintVertical_bias="0.529"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowDy="2"
+        app:outlineShadowRadius="2"
         app:textStrokeColor="@color/light_pink"
         app:textStrokeWidth="6" />
 
@@ -92,17 +101,17 @@
         android:id="@+id/edit_pw"
         android:layout_width="0dp"
         android:layout_height="40dp"
+        android:layout_marginEnd="52dp"
+        android:background="@drawable/input_text"
         android:fontFamily="@font/dongle_bold"
         android:hint="@string/pw_input"
         android:inputType="textPassword"
+        android:paddingLeft="10dp"
         android:textColor="@color/black"
         android:textSize="25dp"
-        android:background="@drawable/input_text"
-        android:paddingLeft="10dp"
-        app:layout_constraintStart_toStartOf="@+id/pw"
-        app:layout_constraintTop_toBottomOf="@+id/pw"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="52dp"/>
+        app:layout_constraintStart_toStartOf="@+id/pw"
+        app:layout_constraintTop_toBottomOf="@+id/pw" />
 
     <!--    비밀번호 확인-->
 
@@ -128,6 +137,9 @@
         app:layout_constraintBottom_toBottomOf="@+id/img_pw_chk_heart"
         app:layout_constraintStart_toEndOf="@+id/img_pw_chk_heart"
         app:layout_constraintTop_toTopOf="@+id/img_pw_chk_heart"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowDy="2"
+        app:outlineShadowRadius="2"
         app:textStrokeColor="@color/light_pink"
         app:textStrokeWidth="6" />
 
@@ -135,17 +147,17 @@
         android:id="@+id/edit_pw_chk"
         android:layout_width="0dp"
         android:layout_height="40dp"
+        android:layout_marginEnd="52dp"
+        android:background="@drawable/input_text"
         android:fontFamily="@font/dongle_bold"
         android:hint="@string/pw_chk_input"
         android:inputType="textPassword"
+        android:paddingLeft="10dp"
         android:textColor="@color/black"
         android:textSize="25dp"
-        android:background="@drawable/input_text"
-        android:paddingLeft="10dp"
-        app:layout_constraintStart_toStartOf="@+id/pw_chk"
-        app:layout_constraintTop_toBottomOf="@+id/pw_chk"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="52dp"/>
+        app:layout_constraintStart_toStartOf="@+id/pw_chk"
+        app:layout_constraintTop_toBottomOf="@+id/pw_chk" />
 
     <TextView
         android:id="@+id/pw_not_match"
@@ -181,6 +193,9 @@
         app:layout_constraintBottom_toBottomOf="@+id/img_nickname_heart"
         app:layout_constraintStart_toEndOf="@+id/img_nickname_heart"
         app:layout_constraintTop_toTopOf="@+id/img_nickname_heart"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowDy="2"
+        app:outlineShadowRadius="2"
         app:textStrokeColor="@color/light_pink"
         app:textStrokeWidth="6" />
 
@@ -188,18 +203,17 @@
         android:id="@+id/edit_nickname"
         android:layout_width="0dp"
         android:layout_height="40dp"
+        android:layout_marginEnd="52dp"
+        android:background="@drawable/input_text"
         android:fontFamily="@font/dongle_bold"
         android:hint="@string/nickname_input"
         android:inputType="textPersonName"
+        android:paddingLeft="10dp"
         android:textColor="@color/black"
         android:textSize="25dp"
-        android:background="@drawable/input_text"
-        android:paddingLeft="10dp"
-        app:layout_constraintStart_toStartOf="@+id/nickname"
-        app:layout_constraintTop_toBottomOf="@+id/nickname"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="52dp"
-        />
+        app:layout_constraintStart_toStartOf="@+id/nickname"
+        app:layout_constraintTop_toBottomOf="@+id/nickname" />
 
 
     <TextView
@@ -227,31 +241,33 @@
 
     <!--    버튼-->
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_marginTop="48dp"
-        android:fontFamily="@font/dongle_bold"
-        android:text="수정하기"
-        android:textSize="35dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
         app:layout_constraintEnd_toStartOf="@+id/btn_delete"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_nickname" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_nickname"
+        app:srcCompat="@drawable/ic_update_btn" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/dongle_bold"
-        android:text="탈퇴하기"
-        android:textSize="35dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:layout_marginLeft="15dp"
         app:layout_constraintBottom_toBottomOf="@+id/btn_update"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btn_update"
-        app:layout_constraintTop_toTopOf="@+id/btn_update" />
+        app:layout_constraintTop_toTopOf="@+id/btn_update"
+        app:srcCompat="@drawable/ic_delete_btn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

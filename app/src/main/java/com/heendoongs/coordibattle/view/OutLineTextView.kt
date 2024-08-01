@@ -29,12 +29,20 @@ class OutLineTextView @JvmOverloads constructor(
 
     private var strokeColor: Int
     private var strokeWidthVal: Float
+    private var outlineShadowColor: Int
+    private var outlineShadowRadius: Float
+    private var outlineShadowDx: Float
+    private var outlineShadowDy: Float
 
     init {
-        //attributes 가져오기
+        // attributes 가져오기
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.OutLineTextView)
         strokeWidthVal = typedArray.getFloat(R.styleable.OutLineTextView_textStrokeWidth, 3f)
-        strokeColor = typedArray.getColor(R.styleable.OutLineTextView_textStrokeColor, Color.WHITE)
+        strokeColor = typedArray.getColor(R.styleable.OutLineTextView_textStrokeColor, Color.TRANSPARENT)
+        outlineShadowColor = typedArray.getColor(R.styleable.OutLineTextView_outlineShadowColor, Color.TRANSPARENT)
+        outlineShadowRadius = typedArray.getFloat(R.styleable.OutLineTextView_outlineShadowRadius, 0f)
+        outlineShadowDx = typedArray.getFloat(R.styleable.OutLineTextView_outlineShadowDx, 0f)
+        outlineShadowDy = typedArray.getFloat(R.styleable.OutLineTextView_outlineShadowDy, 0f)
         typedArray.recycle()
     }
 
@@ -46,11 +54,13 @@ class OutLineTextView @JvmOverloads constructor(
             // draw stroke
             paint.style = Paint.Style.STROKE
             paint.strokeWidth = strokeWidthVal
+            paint.setShadowLayer(outlineShadowRadius, outlineShadowDx, outlineShadowDy, outlineShadowColor) // 그림자 설정
             setTextColor(strokeColor)
             super.onDraw(canvas)
 
             // draw fill
             paint.style = Paint.Style.FILL
+            paint.setShadowLayer(0f, 0f, 0f, 0) // 그림자 제거
             setTextColor(originalTextColor)
             super.onDraw(canvas)
         }

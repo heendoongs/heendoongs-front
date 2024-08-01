@@ -33,7 +33,7 @@
         android:id="@+id/id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
+        android:layout_marginStart="8dp"
         android:fontFamily="@font/dongle_bold"
         android:text="@string/id"
         android:textColor="@color/pink"
@@ -42,7 +42,10 @@
         app:layout_constraintStart_toEndOf="@+id/img_id_heart"
         app:layout_constraintTop_toTopOf="@+id/img_id_heart"
         app:textStrokeColor="@color/light_pink"
-        app:textStrokeWidth="6" />
+        app:textStrokeWidth="6"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowRadius="2"
+        app:outlineShadowDy="2"/>
 
 
     <!--    비밀번호 입력   -->
@@ -78,7 +81,7 @@
         android:id="@+id/pw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
+        android:layout_marginStart="8dp"
         android:fontFamily="@font/dongle_bold"
         android:text="@string/password"
         android:textColor="@color/pink"
@@ -87,7 +90,10 @@
         app:layout_constraintStart_toEndOf="@+id/img_pw_heart"
         app:layout_constraintTop_toTopOf="@+id/img_pw_heart"
         app:textStrokeColor="@color/light_pink"
-        app:textStrokeWidth="6" />
+        app:textStrokeWidth="6"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowRadius="2"
+        app:outlineShadowDy="2"/>
 
     <EditText
         android:id="@+id/edit_pw"
@@ -107,31 +113,37 @@
         app:layout_constraintTop_toTopOf="@+id/pw" />
 
     <!--    버튼-->
-    <Button
+    <ImageButton
         android:id="@+id/btn_sign_up_page"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
         android:backgroundTint="#FF8A00"
         android:fontFamily="@font/dongle_bold"
         android:text="@string/sign_in"
         android:textColor="@color/white"
         android:textSize="20dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_pw" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_pw"
+        app:srcCompat="@drawable/ic_signup_page_btn"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
         android:fontFamily="@font/dongle_bold"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
         android:text="@string/login"
         android:textSize="35dp"
         android:layout_marginBottom="56dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_login_btn"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

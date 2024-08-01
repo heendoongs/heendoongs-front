@@ -5,48 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <com.heendoongs.coordibattle.view.OutLineTextView
         android:id="@+id/nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="@font/dongle_bold"
+        android:text="진둥이"
         android:textColor="@color/black"
-        android:text=""
-        android:textSize="50sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.15"
+        android:textSize="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowDy="6"
+        app:outlineShadowRadius="2"
+        app:textStrokeColor="@color/white"
+        app:textStrokeWidth="15" />
 
-    <Button
+    <ImageButton
+        android:id="@+id/btn_my_info_page"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/nickname"
+        app:layout_constraintStart_toEndOf="@+id/nickname"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/ic_pencil" />
+
+    <ImageButton
         android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/pink"
-        android:fontFamily="@font/dongle_bold"
-        android:text="로그아웃"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_my_Info_page"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
-
-    <Button
-        android:id="@+id/btn_my_Info_page"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:layout_marginEnd="40dp"
         android:backgroundTint="#FF8A00"
         android:fontFamily="@font/dongle_bold"
         android:text="프로필 수정하기"
         android:textColor="@color/white"
         android:textSize="20dp"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/nickname"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintTop_toTopOf="@+id/nickname"
+        app:srcCompat="@drawable/ic_logout_btn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
