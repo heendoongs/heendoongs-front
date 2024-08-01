@@ -50,6 +50,7 @@ class MyInfoFragment : Fragment() {
         val token = sharedPref.getString("jwt_token", null)
         val memberId = sharedPref.getLong("memberId", -1)
 
+
         binding.btnUpdate.setOnClickListener {
             update(memberId)
         }
@@ -58,7 +59,34 @@ class MyInfoFragment : Fragment() {
             delete(memberId)
         }
 
+        getMyCloset(memberId)
+
         return binding.root
+    }
+
+    private fun getMyCloset(memberId: Long) {
+        service.getMyInfo(memberId).enqueue(object : Callback<MyInfoResponse> {
+            override fun onResponse(call: Call<MyInfoResponse>, response: Response<MyInfoResponse>) {
+                if (response.isSuccessful) {
+                    // 성공적인 응답 처리
+                    val myInfoResponse = response.body()
+                    if (myInfoResponse != null) {
+                        binding.id.text = myInfoResponse.loginId
+                        binding.nickname.text = myInfoResponse.nickname
+                    } else {
+                        showToast("데이터를 가져올 수 없습니다.")
+                    }
+                } else {
+                    // 실패한 응답 처리
+                    showToast("데이터 가져오기 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<MyInfoResponse>, t: Throwable) {
+                // 요청 실패 처리
+                showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
+            }
+        })
     }
 
     private fun update(memberId: Long) {
