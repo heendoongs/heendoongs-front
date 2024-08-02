@@ -5,13 +5,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.databinding.ItemCoordiBinding
 
 /**
@@ -26,7 +23,7 @@ import com.heendoongs.coordibattle.databinding.ItemCoordiBinding
  * 2024.07.30  	임원정       최초 생성
  * </pre>
  */
-class CoordiAdapter(private val context: Context, private var coordiList: MutableList<RankingOrderCoordiListResponseDTO>) :
+class CoordiAdapter(private val context: Context, private var coordiList: MutableList<CoordiListResponseDTO>) :
     RecyclerView.Adapter<CoordiAdapter.CoordiViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoordiViewHolder {
@@ -43,19 +40,19 @@ class CoordiAdapter(private val context: Context, private var coordiList: Mutabl
         return coordiList.size
     }
 
-    fun updateData(newData: List<RankingOrderCoordiListResponseDTO>) {
+    fun updateData(newData: List<CoordiListResponseDTO>) {
         coordiList.clear()
         coordiList.addAll(newData)
         notifyDataSetChanged()
     }
 
-    fun appendData(newData: List<RankingOrderCoordiListResponseDTO>) {
+    fun appendData(newData: List<CoordiListResponseDTO>) {
         coordiList.addAll(newData)
         notifyDataSetChanged()
     }
 
     inner class CoordiViewHolder(private val binding: ItemCoordiBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: RankingOrderCoordiListResponseDTO) {
+        fun bind(item: CoordiListResponseDTO) {
             binding.tvCoordiTitle.text = item.coordiTitle
             binding.tvNickname.text = "by. ${item.nickname}"
 

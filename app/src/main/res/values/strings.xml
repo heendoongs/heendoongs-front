@@ -12,4 +12,15 @@
     <string name="nickname_input">닉네임을 입력해주세요</string>
     <string name="nickname_chk">닉네임은 3글자까지 가능합니다</string>
     <string name="btn_more">더보기</string>
+
+    <!-- 배틀 필터 기본 옵션 -->
+    <string-array name="battle_filter_options">
+        <item>배틀별</item> <!-- 기본값 -->
+    </string-array>
+
+    <!-- 정렬 옵션 -->
+    <string-array name="sort_options">
+        <item>랭킹순</item> <!-- 기본값 -->
+        <item>최신순</item>
+    </string-array>
 </resources>
