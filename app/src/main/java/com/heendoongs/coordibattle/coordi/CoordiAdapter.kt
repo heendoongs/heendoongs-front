@@ -50,18 +50,25 @@ class CoordiAdapter(private val context: Context,
         }
     }
 
+    /**
+     * 아이템 개수 반환
+     */
     override fun getItemCount(): Int {
         return coordiList.size
     }
-    
-    // 데이터 변경 시
+
+    /**
+     * 데이터 변경 됐을 때
+     */
     fun updateData(newData: List<CoordiListResponseDTO>) {
         coordiList.clear()
         coordiList.addAll(newData)
         notifyDataSetChanged()
     }
-    
-    // 데이터 추가 시
+
+    /**
+     * 데이터 추가 됐을 떄
+     */
     fun appendData(newData: List<CoordiListResponseDTO>) {
         coordiList.addAll(newData)
         notifyDataSetChanged()
@@ -76,6 +83,7 @@ class CoordiAdapter(private val context: Context,
             loadImage(item.coordiImage, binding.ivCoordiImage)
         }
 
+        // 이미지 가져오기
         private fun loadImage(base64Image: String, imageView: ImageView) {
             val bitmap = decodeBase64ToBitmap(base64Image)
             bitmap?.let {
@@ -83,7 +91,7 @@ class CoordiAdapter(private val context: Context,
             }
         }
         
-        // Base64 인코딩 Bitmap으로 변환
+        // Base64 To Bitmap 변환
         private fun decodeBase64ToBitmap(base64Str: String): Bitmap? {
             return try {
                 val base64Data = base64Str.substringAfter(",")

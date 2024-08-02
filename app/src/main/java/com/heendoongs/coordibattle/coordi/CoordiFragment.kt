@@ -29,18 +29,21 @@ import java.io.IOException
 /**
  * 옷입히기 프래그먼트
  * @author 임원정
- * @since 2024.07.26
+ * @since 2024.07.29
  * @version 1.0
  *
  * <pre>
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
- * 2024.07.26  	임원정       최초 생성
+ * 2024.07.29  	임원정       최초 생성
+ * 2024.07.29   임원정       이미지 드래그앤드롭, 확대/축소, 이미지 저장 구현
+ * 2024.08.02   임원정       아이템 탭 메뉴 동작 및 아이템 불러오기 구현
+ * 2024.08.03   임원정       코디 업로드 기능 구현
  * </pre>
  */
 
 class CoordiFragment : Fragment() {
-    private var _binding: FragmentCoordiBinding? = null
+    private var _binding: com.heendoongs.coordibattle.databinding.FragmentCoordiBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var heendyAdapter: HeendyAdapter
@@ -69,6 +72,9 @@ class CoordiFragment : Fragment() {
             showUploadDialog()
         }
 
+        // 기본으로 얼굴 아이콘이 선택된 상태로 설정
+        selectTab(binding.faceIcon)
+
         return view
     }
 
@@ -90,11 +96,19 @@ class CoordiFragment : Fragment() {
      * 아이템 탭별 동작 매칭
      */
     private fun setupItemTabs() {
-        binding.faceIcon.setOnClickListener { loadLocalItems(getFaceItems()) }
-        binding.armsIcon.setOnClickListener { loadLocalItems(getArmsItems()) }
-        binding.topIcon.setOnClickListener { loadRemoteItems("Top") }
-        binding.bottomIcon.setOnClickListener { loadRemoteItems("Bottom") }
-        binding.shoesIcon.setOnClickListener { loadRemoteItems("Shoe") }
+        binding.faceIcon.setOnClickListener { selectTab(binding.faceIcon); loadLocalItems(getFaceItems()) }
+        binding.armsIcon.setOnClickListener { selectTab(binding.armsIcon); loadLocalItems(getArmsItems()) }
+        binding.topIcon.setOnClickListener { selectTab(binding.topIcon); loadRemoteItems("Top") }
+        binding.bottomIcon.setOnClickListener { selectTab(binding.bottomIcon); loadRemoteItems("Bottom") }
+        binding.shoesIcon.setOnClickListener { selectTab(binding.shoesIcon); loadRemoteItems("Shoe") }
+    }
+
+    private fun selectTab(selectedTab: ImageView) {
+        val tabs = listOf(binding.faceIcon, binding.armsIcon, binding.topIcon, binding.bottomIcon, binding.shoesIcon)
+
+        for (tab in tabs) {
+            tab.isSelected = tab == selectedTab
+        }
     }
 
     /**
@@ -123,7 +137,7 @@ class CoordiFragment : Fragment() {
     }
 
     /**
-     * 서버에 저장된 아이템(상의, 하의, 신발) 가져오기
+     * DB에 저장된 아이템(상의, 하의, 신발) 가져오기
      */
     private fun loadRemoteItems(type: String) {
         service.getClothesList(type).enqueue(object : Callback<List<ClothesResponseDTO>> {
@@ -140,12 +154,18 @@ class CoordiFragment : Fragment() {
         })
     }
 
+    /**
+     * 코디 영역에 로컬 이미지 올리기
+     */
     private fun addLocalImageToContainer(imageResId: Int) {
         val imageView = ImageView(requireContext())
         imageView.setImageResource(imageResId)
         setupImageView(imageView)
     }
 
+    /**
+     * 코디 영역에 DB에 저장된 이미지 올리기
+     */
     private fun addRemoteImageToContainer(clothId: Long, imageUrl: String) {
         if (!selectedClothIds.contains(clothId)) {
             selectedClothIds.add(clothId)
@@ -155,6 +175,9 @@ class CoordiFragment : Fragment() {
         setupImageView(imageView)
     }
 
+    /**
+     * 이미지뷰 설정
+     */
     private fun setupImageView(imageView: ImageView) {
         imageView.layoutParams = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.WRAP_CONTENT,
@@ -163,6 +186,9 @@ class CoordiFragment : Fragment() {
 
         var rotationDegrees = 0f
 
+        /**
+         * 이미지 뷰 터치 설정
+         */
         imageView.setOnTouchListener(object : View.OnTouchListener {
             private val gestureDetector = GestureDetector(requireContext(), GestureListener(imageView))
             private val scaleDetector = ScaleGestureDetector(requireContext(), ScaleListener(imageView))
@@ -171,6 +197,9 @@ class CoordiFragment : Fragment() {
             private var dX = 0f
             private var dY = 0f
 
+            /**
+             * 드래그 앤 드랍
+             */
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 gestureDetector.onTouchEvent(event)
                 scaleDetector.onTouchEvent(event)
@@ -190,6 +219,9 @@ class CoordiFragment : Fragment() {
                 return true
             }
 
+            /**
+             * 회전
+             */
             private inner class GestureListener(private val imageView: ImageView) : GestureDetector.SimpleOnGestureListener() {
                 override fun onDoubleTap(event: MotionEvent?): Boolean {
                     rotationDegrees += 90f
@@ -198,6 +230,9 @@ class CoordiFragment : Fragment() {
                 }
             }
 
+            /**
+             *  확대/축소
+             */
             private inner class ScaleListener(private val imageView: ImageView) : ScaleGestureDetector.SimpleOnScaleGestureListener() {
                 override fun onScale(detector: ScaleGestureDetector): Boolean {
                     imageView.scaleX *= detector.scaleFactor
@@ -210,6 +245,9 @@ class CoordiFragment : Fragment() {
         binding.coordiContainer.addView(imageView)
     }
 
+    /**
+     * 업로드 시 제목 입력 Dialog
+     */
     private fun showUploadDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_upload, null)
         val editTextTitle = dialogView.findViewById<EditText>(R.id.editTextTitle)
@@ -229,6 +267,9 @@ class CoordiFragment : Fragment() {
             .show()
     }
 
+    /**
+     * 코디 업로드
+     */
     private fun uploadCoordi(title: String) {
         val bitmap = Bitmap.createBitmap(binding.coordiContainer.width, binding.coordiContainer.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
@@ -250,6 +291,7 @@ class CoordiFragment : Fragment() {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "업로드 성공!", Toast.LENGTH_SHORT).show()
+                    navigateToHomeFragment()
                 } else {
                     Toast.makeText(requireContext(), "업로드 실패!", Toast.LENGTH_SHORT).show()
                 }
@@ -259,6 +301,15 @@ class CoordiFragment : Fragment() {
                 Toast.makeText(requireContext(), "업로드 오류: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun navigateToHomeFragment() {
+        val homeFragment = HomeFragment()
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_container, homeFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     /**

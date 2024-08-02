@@ -11,13 +11,15 @@ import com.heendoongs.coordibattle.databinding.ItemClothBinding
 /**
  * 옷 리스트 어댑터
  * @author 임원정
- * @since 2024.07.26
+ * @since 2024.07.29
  * @version 1.0
  *
  * <pre>
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
- * 2024.07.28  	임원정       최초 생성
+ * 2024.07.29  	임원정       최초 생성
+ * 2024.07.29   임원정       아이템 리스트 구현
+ * 2024.08.02   임원정       서버 연결
  * </pre>
  */
 
@@ -36,8 +38,14 @@ class ClothesAdapter(
         holder.bind(clothes[position])
     }
 
+    /**
+     * 아이템 개수 반환
+     */
     override fun getItemCount(): Int = clothes.size
 
+    /**
+     * 새로운 데이터(타입) 아이템으로 전환
+     */
     fun updateData(newClothes: List<ClothesResponseDTO>) {
         clothes = newClothes
         notifyDataSetChanged()
