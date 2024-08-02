@@ -18,10 +18,13 @@ import retrofit2.http.Query
  * 2024.07.30  	남진수       최초 생성
  * 2024.07.30  	남진수       getBattleCoordies 배틀 페이지 리스트 조회
  * 2024.07.30  	남진수       postBattleResult 배틀 투표결과 저장
+ * 2024.07.31   임원정       getCurrentBattles 메소드 추가
+ * 2024.08.01   임원정       getBattles 메소드 추가
  * </pre>
  */
 
 interface BattleService {
+
     @GET("battle")
     fun getBattleCoordies(
         @Query("memberId") memberId: Long
@@ -32,6 +35,15 @@ interface BattleService {
         @Body voteRequest: MemberCoordiVoteRequestDTO
     ): Call<BattleResponseDTO>
 
-    @GET("banner")
+    /**
+     * 배너 출력
+     */
+    @GET("battle/banner")
     fun getCurrentBattles(): Call<List<BannerResponseDTO>>
+
+    /**
+     * 배틀 제목 반환
+     */
+    @GET("battle/title")
+    fun getBattleTitles(): Call<List<BattleTitleResponseDTO>>
 }

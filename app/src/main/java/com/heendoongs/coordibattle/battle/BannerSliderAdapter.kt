@@ -1,8 +1,6 @@
 package com.heendoongs.coordibattle.battle
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +10,19 @@ import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.coordi.CoordiFragment
 import com.heendoongs.coordibattle.databinding.ItemBannerBinding
 import com.smarteist.autoimageslider.SliderViewAdapter
+
+/**
+ * 배너 슬라이더 어댑터
+ * @author 임원정
+ * @since 2024.07.31
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        수정자        수정내용
+ * ----------  --------    ---------------------------
+ * 2024.07.31  	임원정       최초 생성
+ * </pre>
+ */
 
 class BannerSliderAdapter(private val banners: List<BannerResponseDTO>, private val context: Context) :
     SliderViewAdapter<BannerSliderAdapter.BannerViewHolder>() {
@@ -25,7 +36,6 @@ class BannerSliderAdapter(private val banners: List<BannerResponseDTO>, private 
         val banner = banners[position]
         with(viewHolder.binding) {
             bannerTitle.text = banner.battleTitle
-            println(banner.battleTitle)
             bannerPeriod.text = "${banner.startDate} ~ ${banner.endDate}"
 
             Glide.with(context)
