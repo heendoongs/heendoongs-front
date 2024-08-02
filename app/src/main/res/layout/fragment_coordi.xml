@@ -55,7 +55,7 @@
             android:id="@+id/title_image"
             android:layout_width="156dp"
             android:layout_height="35dp"
-            android:src="@drawable/title_coordi"
+            android:src="@drawable/img_coordi_title"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_upload"
             app:layout_constraintStart_toEndOf="@id/btn_save"

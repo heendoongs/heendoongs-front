@@ -19,7 +19,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo" />
+            app:srcCompat="@drawable/img_home_title" />
 
         <!-- 배너 -->
         <com.smarteist.autoimageslider.SliderView
@@ -42,7 +42,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/banner"
-            app:layout_constraintBottom_toTopOf="@id/btn_filter">
+            app:layout_constraintBottom_toTopOf="@id/spinner_battle_filter">
 
             <ImageView
                 android:layout_width="34dp"
@@ -63,56 +63,25 @@
         </LinearLayout>
 
         <!-- 필터: 배틀별 필터 -->
-        <LinearLayout
-            android:id="@+id/btn_filter"
+        <Spinner
+            android:id="@+id/spinner_battle_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:clickable="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toStartOf="@+id/btn_sort"
-            app:layout_constraintTop_toBottomOf="@+id/title_coordiList">
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_arrow_down" />
-
-            <!-- Spinner for battle filtering -->
-            <Spinner
-                android:id="@+id/spinner_battle_filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/battle_filter_options" />
-        </LinearLayout>
+            android:layout_marginVertical="16dp"
+            android:entries="@array/battle_filter_options"
+            app:layout_constraintEnd_toStartOf="@+id/spinner_sort"
+            app:layout_constraintTop_toBottomOf="@+id/title_coordiList"/>
 
         <!-- 정렬: 최신순/랭킹순 정렬 -->
-        <LinearLayout
-            android:id="@+id/btn_sort"
+        <Spinner
+            android:id="@+id/spinner_sort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:entries="@array/sort_options"
             android:layout_marginEnd="24dp"
-            android:clickable="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_filter"
+            app:layout_constraintBottom_toBottomOf="@+id/spinner_battle_filter"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_filter">
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_arrow_down" />
-
-            <!-- Spinner for sorting -->
-            <Spinner
-                android:id="@+id/spinner_sort"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/sort_options" />
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="@+id/spinner_battle_filter"/>
 
         <!-- RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
@@ -124,7 +93,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_more"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_filter"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_battle_filter"
             app:layout_constraintVertical_bias="0" />
 
         <!-- 더보기 버튼 -->

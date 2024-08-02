@@ -80,14 +80,15 @@ class HomeFragment : Fragment() {
                     val battleTitles = arrayOf("배틀별") + battles.map { it.battleTitle }.toTypedArray()
 
                     // 배열의 첫 번째 항목을 기본값으로 설정
-                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, battleTitles)
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, battleTitles)
+                    adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
                     binding.spinnerBattleFilter.adapter = adapter
 
                     binding.spinnerBattleFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             selectedBattleId = if (position == 0) null else battles[position - 1].battleId
-                            loadCoordiList(0, pageSize) // 페이지를 0으로 초기화
+                            currentPage = 0
+                            loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -107,17 +108,20 @@ class HomeFragment : Fragment() {
 
     private fun setupSortSpinner() {
         val sortOptions = resources.getStringArray(R.array.sort_options)
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, sortOptions)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, sortOptions)
+        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
         binding.spinnerSort.adapter = adapter
 
         // 기본값으로 "RANKING"을 선택
         binding.spinnerSort.setSelection(sortOptions.indexOf("랭킹순"))
+//        println("랭킹순 :"+sortOptions.indexOf("랭킹순"))
+//        println("최신순 :"+sortOptions.indexOf("최신순"))
 
         binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedSortOrder = if (position == 0) "NEW" else "RANKING"
-                loadCoordiList(0, pageSize) // 페이지를 0으로 초기화
+                selectedSortOrder = if (position == 0) "RANKING" else "RECENT"
+                currentPage = 0
+                loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
