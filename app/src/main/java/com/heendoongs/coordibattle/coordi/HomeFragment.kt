@@ -22,7 +22,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager = GridLayoutManager(context, 2) // 한 행에 2개 아이템 표시
 
         // 어댑터 초기화 및 설정
-        adapter = CoordiAdapter(requireContext(), mutableListOf())
+        adapter = CoordiAdapter(requireContext(), mutableListOf(), this)
         binding.recyclerView.adapter = adapter
 
         // 더보기 버튼
@@ -114,8 +114,7 @@ class HomeFragment : Fragment() {
 
         // 기본값으로 "RANKING"을 선택
         binding.spinnerSort.setSelection(sortOptions.indexOf("랭킹순"))
-//        println("랭킹순 :"+sortOptions.indexOf("랭킹순"))
-//        println("최신순 :"+sortOptions.indexOf("최신순"))
+
 
         binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -191,6 +190,19 @@ class HomeFragment : Fragment() {
         binding.banner.setScrollTimeInSec(3) // set scroll delay in seconds
         binding.banner.setAutoCycle(true)
         binding.banner.startAutoCycle()
+    }
+
+    override fun onItemClick(item: CoordiListResponseDTO) {
+        val bundle = Bundle().apply {
+            putLong("coordiId", item.coordiId)
+        }
+        val detailFragment = DetailFragment().apply {
+            arguments = bundle
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_container, detailFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroyView() {

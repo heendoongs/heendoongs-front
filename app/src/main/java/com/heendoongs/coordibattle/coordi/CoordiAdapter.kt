@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -23,8 +24,15 @@ import com.heendoongs.coordibattle.databinding.ItemCoordiBinding
  * 2024.07.30  	임원정       최초 생성
  * </pre>
  */
-class CoordiAdapter(private val context: Context, private var coordiList: MutableList<CoordiListResponseDTO>) :
+class CoordiAdapter(private val context: Context,
+                    private var coordiList: MutableList<CoordiListResponseDTO>,
+                    private val itemClickListener: OnItemClickListener
+) :
     RecyclerView.Adapter<CoordiAdapter.CoordiViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onItemClick(item: CoordiListResponseDTO)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoordiViewHolder {
         val binding = ItemCoordiBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -34,6 +42,9 @@ class CoordiAdapter(private val context: Context, private var coordiList: Mutabl
     override fun onBindViewHolder(holder: CoordiViewHolder, position: Int) {
         val item = coordiList[position]
         holder.bind(item)
+        holder.itemView.setOnClickListener {
+            itemClickListener.onItemClick(item)
+        }
     }
 
     override fun getItemCount(): Int {

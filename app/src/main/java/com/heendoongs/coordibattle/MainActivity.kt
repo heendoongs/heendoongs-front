@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_home -> HomeFragment()
                 R.id.fragment_coordi -> CoordiFragment()
                 R.id.fragment_battle -> BattleFragment()
-                R.id.fragment_my_closet -> { DetailFragment()
+                R.id.fragment_my_closet -> { LogInFragment()
 //                    if (isLoggedIn()) {
 //                        MyClosetFragment()
 //                    } else {

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,8 +49,10 @@ class DetailFragment : Fragment() {
 
     private lateinit var rootView: View
     private lateinit var service: CoordiService
-    private var coordiId: Long = 1L // 실제 데이터로 교체 필요
+    //private var coordiId: Long = 1L // 실제 데이터로 교체 필요
     private var memberId: Long = 2L // 실제 데이터로 교체 필요
+
+    private var coordiId: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,14 +60,13 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_detail, container, false)
-
         service = RetrofitConnection.getInstance().create(CoordiService::class.java)
-
+        coordiId = arguments?.getLong("coordiId")
         loadCoordiDetails()
         return rootView
     }
 
-    private fun loadCoordiDetails() {
+    /*private fun loadCoordiDetails() {
         if (coordiId != 0L) {
             val call = service.getCoordiDetails(memberId, coordiId)
             call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
@@ -122,7 +124,70 @@ class DetailFragment : Fragment() {
                 }
             })
         }
+    }*/
+
+    private fun loadCoordiDetails() {
+        coordiId?.let { id ->
+            val call = service.getCoordiDetails(memberId, id)
+            call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
+                override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
+                    if (response.isSuccessful) {
+                        val coordiDetails = response.body()
+                        coordiDetails?.let { data ->
+                            rootView.findViewById<TextView>(R.id.coordi_detail_nickname).text = data.nickname
+                            rootView.findViewById<TextView>(R.id.coordi_detail_create_date).text = data.createDate.toString()
+                            rootView.findViewById<TextView>(R.id.coordi_detail_title).text = data.coordiTitle
+
+                            val voteButton = rootView.findViewById<ImageButton>(R.id.coordi_detail_vote_button)
+
+                            if (!data.isVotingPeriod) {
+                                voteButton.setImageDrawable(context?.let {
+                                    ContextCompat.getDrawable(
+                                        it, R.drawable.coordi_detail_vote_disabled
+                                    )
+                                })
+                            } else {
+                                if (data.isVoted) {
+                                    voteButton.setImageDrawable(context?.let {
+                                        ContextCompat.getDrawable(
+                                            it, R.drawable.coordi_detail_vote_voted
+                                        )
+                                    })
+                                } else {
+                                    voteButton.setImageDrawable(context?.let {
+                                        ContextCompat.getDrawable(
+                                            it, R.drawable.coordi_detail_vote_not_voted
+                                        )
+                                    })
+                                }
+                            }
+
+                            val bitmap = decodeBase64ToBitmap(data.coordiImage)
+                            bitmap?.let {
+                                Glide.with(this@DetailFragment).load(it).into(rootView.findViewById(R.id.coordi_detail_image))
+                            }
+
+                            val clothes = data.clothesList.map {
+                                ClothDetailsResponseDTO(it.clothId, it.brand, it.productName, it.price, it.clothImageURL, it.productURL)
+                            }
+                            setupRecyclerView(clothes)
+
+                            voteButton.setOnClickListener {
+                                likeCoordi(data.memberId, id)
+                            }
+                        }
+                    } else {
+                        Toast.makeText(context, "Failed to load details", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
+                    Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
     }
+
 
     private fun likeCoordi(memberId: Long, coordiId: Long) {
         val call = service.likeCoordi(memberId, coordiId)
