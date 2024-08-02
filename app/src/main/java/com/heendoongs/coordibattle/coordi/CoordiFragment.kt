@@ -71,7 +71,7 @@ class CoordiFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        heendyAdapter = HeendyAdapter { imageResId ->
+        heendyAdapter = HeendyAdapter(getFaceItems()) { imageResId ->
             addLocalImageToContainer(imageResId)
         }
         clothesAdapter = ClothesAdapter(requireContext(), emptyList()) { imageUrl ->
@@ -82,20 +82,28 @@ class CoordiFragment : Fragment() {
     }
 
     private fun setupItemTabs() {
-        binding.faceIcon.setOnClickListener { loadLocalItems("face") }
-        binding.armsIcon.setOnClickListener { loadLocalItems("arms") }
+        binding.faceIcon.setOnClickListener { loadLocalItems(getFaceItems()) }
+        binding.armsIcon.setOnClickListener { loadLocalItems(getArmsItems()) }
         binding.topIcon.setOnClickListener { loadRemoteItems("Top") }
         binding.bottomIcon.setOnClickListener { loadRemoteItems("Bottom") }
         binding.shoesIcon.setOnClickListener { loadRemoteItems("Shoe") }
     }
 
-    private fun loadLocalItems(type: String) {
-        // Use local adapter
+    private fun getFaceItems(): List<Int> {
+        return listOf(R.drawable.img_face1, R.drawable.img_face2, R.drawable.img_face3, R.drawable.img_face4, R.drawable.img_face5, R.drawable.img_face6)
+    }
+
+    private fun getArmsItems(): List<Int> {
+        return listOf(R.drawable.img_arm1, R.drawable.img_arm2)
+    }
+
+    private fun loadLocalItems(items: List<Int>) {
+        heendyAdapter = HeendyAdapter(items) { imageResId ->
+            addLocalImageToContainer(imageResId)
+        }
         binding.itemList.adapter = heendyAdapter
         heendyAdapter.notifyDataSetChanged() // Refresh the local adapter
     }
-
-
 
     private fun loadRemoteItems(type: String) {
         service.getClothesList(type).enqueue(object : Callback<List<ClothesResponseDTO>> {

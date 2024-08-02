@@ -19,9 +19,10 @@ import com.heendoongs.coordibattle.databinding.ItemClothBinding
  * </pre>
  */
 
-class HeendyAdapter(private val itemClick: (Int) -> Unit) : RecyclerView.Adapter<HeendyAdapter.ViewHolder>() {
+class HeendyAdapter(private val items: List<Int>, private val itemClick: (Int) -> Unit) :
+    RecyclerView.Adapter<HeendyAdapter.ViewHolder>() {
 
-    private val clothes = listOf(R.drawable.img_face1, R.drawable.img_face2, R.drawable.img_face3, R.drawable.img_face4, R.drawable.img_face5, R.drawable.img_face6)
+    //private val clothes = listOf(R.drawable.img_face1, R.drawable.img_face2, R.drawable.img_face3, R.drawable.img_face4, R.drawable.img_face5, R.drawable.img_face6)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemClothBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,10 +30,10 @@ class HeendyAdapter(private val itemClick: (Int) -> Unit) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(clothes[position])
+        holder.bind(items[position])
     }
 
-    override fun getItemCount(): Int = clothes.size
+    override fun getItemCount(): Int = items.size
 
     inner class ViewHolder(private val binding: ItemClothBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(imageResId: Int) {
