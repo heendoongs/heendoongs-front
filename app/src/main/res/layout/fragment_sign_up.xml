@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <!--    로고    -->
 
@@ -24,48 +24,73 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/id"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintTop_toTopOf="@+id/id"
         app:srcCompat="@drawable/ic_heart" />
+
+
+    <EditText
+        android:id="@+id/edit_id"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:fontFamily="@font/dongle_bold"
+        android:paddingLeft="10dp"
+        android:hint="@string/id_input"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:background="@drawable/input_text"
+        app:layout_constraintStart_toStartOf="@+id/id"
+        app:layout_constraintTop_toBottomOf="@+id/id"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="52dp"/>
 
     <com.heendoongs.coordibattle.view.OutLineTextView
         android:id="@+id/id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/dongle_bold"
         android:text="@string/id"
         android:textColor="@color/pink"
         android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/img_id_heart"
         app:layout_constraintStart_toEndOf="@+id/img_id_heart"
-        app:layout_constraintTop_toTopOf="@+id/img_id_heart"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
         app:textStrokeColor="@color/light_pink"
-        app:textStrokeWidth="6" />
+        app:textStrokeWidth="6"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowRadius="2"
+        app:outlineShadowDy="2"/>
 
-    <EditText
-        android:id="@+id/edit_id"
+    <TextView
+        android:id="@+id/exist_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="9"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/dongle_bold"
-        android:inputType="textPersonName"
-        android:hint="아이디를 입력해주세요"
-        android:textColor="@color/black"
-        android:textSize="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id" />
+        android:textColor="@color/red"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/edit_id"
+        app:layout_constraintTop_toBottomOf="@+id/edit_id" />
 
-<!--    비밀번호-->
+    <TextView
+        android:id="@+id/pw_not_match"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dongle_bold"
+        android:textColor="@color/red"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/edit_pw_chk"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk" />
+
     <ImageView
         android:id="@+id/img_pw_heart"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_id"
         app:srcCompat="@drawable/ic_heart" />
@@ -74,7 +99,7 @@
         android:id="@+id/pw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
+        android:layout_marginStart="8dp"
         android:fontFamily="@font/dongle_bold"
         android:text="@string/password"
         android:textColor="@color/pink"
@@ -82,32 +107,37 @@
         app:layout_constraintBottom_toBottomOf="@+id/img_pw_heart"
         app:layout_constraintStart_toEndOf="@+id/img_pw_heart"
         app:layout_constraintTop_toTopOf="@+id/img_pw_heart"
+        app:layout_constraintVertical_bias="0.529"
         app:textStrokeColor="@color/light_pink"
-        app:textStrokeWidth="6" />
+        app:textStrokeWidth="6"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowRadius="2"
+        app:outlineShadowDy="2"/>
 
     <EditText
         android:id="@+id/edit_pw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="9"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:fontFamily="@font/dongle_bold"
+        android:hint="@string/pw_input"
         android:inputType="textPassword"
         android:textColor="@color/black"
-        android:hint="비밀번호를 입력해주세요"
         android:textSize="25dp"
+        android:background="@drawable/input_text"
+        android:paddingLeft="10dp"
+        app:layout_constraintStart_toStartOf="@+id/pw"
+        app:layout_constraintTop_toBottomOf="@+id/pw"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pw" />
+        android:layout_marginEnd="52dp"/>
 
-<!--    비밀번호 확인-->
+    <!--    비밀번호 확인-->
 
     <ImageView
         android:id="@+id/img_pw_chk_heart"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_pw"
         app:srcCompat="@drawable/ic_heart" />
@@ -116,7 +146,7 @@
         android:id="@+id/pw_chk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
+        android:layout_marginStart="8dp"
         android:fontFamily="@font/dongle_bold"
         android:text="@string/password_check"
         android:textColor="@color/pink"
@@ -125,31 +155,35 @@
         app:layout_constraintStart_toEndOf="@+id/img_pw_chk_heart"
         app:layout_constraintTop_toTopOf="@+id/img_pw_chk_heart"
         app:textStrokeColor="@color/light_pink"
-        app:textStrokeWidth="6" />
+        app:textStrokeWidth="6"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowRadius="2"
+        app:outlineShadowDy="2"/>
 
     <EditText
         android:id="@+id/edit_pw_chk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="9"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:fontFamily="@font/dongle_bold"
+        android:hint="@string/pw_chk_input"
         android:inputType="textPassword"
         android:textColor="@color/black"
-        android:hint="비밀번호를 다시 입력해주세요"
         android:textSize="25dp"
+        android:background="@drawable/input_text"
+        android:paddingLeft="10dp"
+        app:layout_constraintStart_toStartOf="@+id/pw_chk"
+        app:layout_constraintTop_toBottomOf="@+id/pw_chk"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pw_chk" />
+        android:layout_marginEnd="52dp"/>
 
-<!--    닉네임-->
+    <!--    닉네임-->
 
     <ImageView
         android:id="@+id/img_nickname_heart"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk"
         app:srcCompat="@drawable/ic_heart" />
@@ -158,7 +192,7 @@
         android:id="@+id/nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
+        android:layout_marginStart="8dp"
         android:fontFamily="@font/dongle_bold"
         android:text="@string/nickname"
         android:textColor="@color/pink"
@@ -167,37 +201,66 @@
         app:layout_constraintStart_toEndOf="@+id/img_nickname_heart"
         app:layout_constraintTop_toTopOf="@+id/img_nickname_heart"
         app:textStrokeColor="@color/light_pink"
-        app:textStrokeWidth="6" />
+        app:textStrokeWidth="6"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowRadius="2"
+        app:outlineShadowDy="2"/>
 
     <EditText
         android:id="@+id/edit_nickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="9"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:fontFamily="@font/dongle_bold"
+        android:hint="@string/nickname_input"
         android:inputType="textPersonName"
-        android:hint="닉네임을 입력해주세요"
         android:textColor="@color/black"
         android:textSize="25dp"
+        android:background="@drawable/input_text"
+        android:paddingLeft="10dp"
+        app:layout_constraintStart_toStartOf="@+id/nickname"
+        app:layout_constraintTop_toBottomOf="@+id/nickname"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nickname" />
+        android:layout_marginEnd="52dp"
+        />
 
 
-<!--    버튼-->
-    <Button
-        android:id="@+id/btn_sign_up"
+    <TextView
+        android:id="@+id/exist_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="회원가입"
         android:fontFamily="@font/dongle_bold"
+        android:textColor="@color/red"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/edit_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/edit_nickname" />
+
+    <TextView
+        android:id="@+id/nickname_chk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:fontFamily="@font/dongle_bold"
+        android:text="@string/nickname_chk"
+        android:textColor="@color/dark_gray"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/nickname"
+        app:layout_constraintStart_toEndOf="@+id/nickname" />
+
+    <!--    버튼-->
+
+    <ImageView
+        android:id="@+id/btn_sign_up"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:scaleType="centerInside"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/dongle_bold"
+        android:text="@string/sign_in"
         android:textSize="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_nickname" />
-
+        app:layout_constraintTop_toBottomOf="@+id/edit_nickname"
+        app:srcCompat="@drawable/ic_signup_btn"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

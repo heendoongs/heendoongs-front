@@ -1,17 +1,273 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <TextView
+    <com.heendoongs.coordibattle.view.OutLineTextView
+        android:id="@+id/myInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="내 정보 페이지"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/dongle_bold"
+        android:text="내 정보"
+        android:textColor="@color/white"
+        android:textSize="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowDy="8"
+        app:outlineShadowRadius="2"
+        app:textStrokeColor="@color/black"
+        app:textStrokeWidth="18" />
+
+    <!--    아이디 입력   -->
+
+    <ImageView
+        android:id="@+id/img_id_heart"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/id"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/id"
+        app:srcCompat="@drawable/ic_heart" />
+
+
+    <TextView
+        android:id="@+id/edit_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="52dp"
+        android:fontFamily="@font/dongle_bold"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/id"
+        app:layout_constraintTop_toBottomOf="@+id/id" />
+
+    <com.heendoongs.coordibattle.view.OutLineTextView
+        android:id="@+id/id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/dongle_bold"
+        android:text="@string/id"
+        android:textColor="@color/pink"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/img_id_heart"
+        app:layout_constraintTop_toBottomOf="@+id/myInfo"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowDy="2"
+        app:outlineShadowRadius="2"
+        app:textStrokeColor="@color/light_pink"
+        app:textStrokeWidth="6" />
+
+
+    <ImageView
+        android:id="@+id/img_pw_heart"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_id"
+        app:srcCompat="@drawable/ic_heart" />
+
+    <com.heendoongs.coordibattle.view.OutLineTextView
+        android:id="@+id/pw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/dongle_bold"
+        android:text="@string/password"
+        android:textColor="@color/pink"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_pw_heart"
+        app:layout_constraintStart_toEndOf="@+id/img_pw_heart"
+        app:layout_constraintTop_toTopOf="@+id/img_pw_heart"
+        app:layout_constraintVertical_bias="0.529"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowDy="2"
+        app:outlineShadowRadius="2"
+        app:textStrokeColor="@color/light_pink"
+        app:textStrokeWidth="6" />
+
+    <EditText
+        android:id="@+id/edit_pw"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="52dp"
+        android:background="@drawable/input_text"
+        android:fontFamily="@font/dongle_bold"
+        android:hint="@string/pw_input"
+        android:inputType="textPassword"
+        android:paddingLeft="10dp"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/pw"
+        app:layout_constraintTop_toBottomOf="@+id/pw" />
+
+    <!--    비밀번호 확인-->
+
+    <ImageView
+        android:id="@+id/img_pw_chk_heart"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pw"
+        app:srcCompat="@drawable/ic_heart" />
+
+    <com.heendoongs.coordibattle.view.OutLineTextView
+        android:id="@+id/pw_chk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/dongle_bold"
+        android:text="@string/password_check"
+        android:textColor="@color/pink"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_pw_chk_heart"
+        app:layout_constraintStart_toEndOf="@+id/img_pw_chk_heart"
+        app:layout_constraintTop_toTopOf="@+id/img_pw_chk_heart"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowDy="2"
+        app:outlineShadowRadius="2"
+        app:textStrokeColor="@color/light_pink"
+        app:textStrokeWidth="6" />
+
+    <EditText
+        android:id="@+id/edit_pw_chk"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="52dp"
+        android:background="@drawable/input_text"
+        android:fontFamily="@font/dongle_bold"
+        android:hint="@string/pw_chk_input"
+        android:inputType="textPassword"
+        android:paddingLeft="10dp"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/pw_chk"
+        app:layout_constraintTop_toBottomOf="@+id/pw_chk" />
+
+    <TextView
+        android:id="@+id/pw_not_match"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dongle_bold"
+        android:textColor="@color/red"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/edit_pw_chk"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk" />
+
+    <!--    닉네임-->
+
+    <ImageView
+        android:id="@+id/img_nickname_heart"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk"
+        app:srcCompat="@drawable/ic_heart" />
+
+    <com.heendoongs.coordibattle.view.OutLineTextView
+        android:id="@+id/nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/dongle_bold"
+        android:text="@string/nickname"
+        android:textColor="@color/pink"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_nickname_heart"
+        app:layout_constraintStart_toEndOf="@+id/img_nickname_heart"
+        app:layout_constraintTop_toTopOf="@+id/img_nickname_heart"
+        app:outlineShadowColor="#75000000"
+        app:outlineShadowDy="2"
+        app:outlineShadowRadius="2"
+        app:textStrokeColor="@color/light_pink"
+        app:textStrokeWidth="6" />
+
+    <EditText
+        android:id="@+id/edit_nickname"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="52dp"
+        android:background="@drawable/input_text"
+        android:fontFamily="@font/dongle_bold"
+        android:hint="@string/nickname_input"
+        android:inputType="textPersonName"
+        android:paddingLeft="10dp"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/nickname"
+        app:layout_constraintTop_toBottomOf="@+id/nickname" />
+
+
+    <TextView
+        android:id="@+id/exist_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dongle_bold"
+        android:textColor="@color/red"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/edit_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/edit_nickname" />
+
+    <TextView
+        android:id="@+id/nickname_chk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:fontFamily="@font/dongle_bold"
+        android:text="@string/nickname_chk"
+        android:textColor="@color/dark_gray"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/nickname"
+        app:layout_constraintStart_toEndOf="@+id/nickname" />
+
+
+    <!--    버튼-->
+
+    <ImageButton
+        android:id="@+id/btn_update"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="48dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        app:layout_constraintEnd_toStartOf="@+id/btn_delete"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_nickname"
+        app:srcCompat="@drawable/ic_update_btn" />
+
+    <ImageButton
+        android:id="@+id/btn_delete"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_update"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_update"
+        app:layout_constraintTop_toTopOf="@+id/btn_update"
+        app:srcCompat="@drawable/ic_delete_btn" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,6 +23,7 @@ import com.heendoongs.coordibattle.member.MyClosetFragment
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.07.26  	임원정       최초 생성
+ * 2024.07.30  	조희정       하단바 fragment_my_closet 연결 프레그먼트 변경
  * </pre>
  */
 
@@ -61,11 +62,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_coordi -> CoordiFragment()
                 R.id.fragment_battle -> BattleFragment()
                 R.id.fragment_my_closet -> { LogInFragment()
-//                    if (isLoggedIn()) {
-//                        MyClosetFragment()
-//                    } else {
-//                        LogInFragment()
-//                    }
+                    if (isLoggedIn()) {
+                        MyClosetFragment()
+                    } else {
+                        LogInFragment()
+                    }
                 }
                 else -> null
             }
@@ -76,8 +77,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun isLoggedIn(): Boolean {
         // sharedPreferences
-        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean("isLoggedIn", false)
+        val sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE)
+        val t = sharedPreferences.getString("jwt_token", null) != null
+        return t
     }
 
     /**

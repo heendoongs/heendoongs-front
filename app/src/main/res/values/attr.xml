@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="OutLineTextView">
-        <attr name ="textStrokeWidth" format ="float"/>
-        <attr name ="textStrokeColor" format ="color"/>
+        <attr name="textStrokeWidth" format="float"/>
+        <attr name="textStrokeColor" format="color"/>
+        <attr name="outlineShadowColor" format="color"/>
+        <attr name="outlineShadowRadius" format="float"/>
+        <attr name="outlineShadowDx" format="float"/>
+        <attr name="outlineShadowDy" format="float"/>
     </declare-styleable>
+
 </resources>
