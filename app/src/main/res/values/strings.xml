@@ -7,4 +7,15 @@
     <string name="sign_in">회원가입</string>
     <string name="login">로그인</string>
     <string name="btn_more">더보기</string>
+
+    <!-- 배틀 필터 기본 옵션 -->
+    <string-array name="battle_filter_options">
+        <item>배틀별</item> <!-- 기본값 -->
+    </string-array>
+
+    <!-- 정렬 옵션 -->
+    <string-array name="sort_options">
+        <item>랭킹순</item> <!-- 기본값 -->
+        <item>최신순</item>
+    </string-array>
 </resources>
