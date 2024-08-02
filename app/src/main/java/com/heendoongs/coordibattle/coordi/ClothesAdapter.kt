@@ -24,7 +24,7 @@ import com.heendoongs.coordibattle.databinding.ItemClothBinding
 class ClothesAdapter(
     private val context: Context,
     private var clothes: List<ClothesResponseDTO>,
-    private val itemClick: (String) -> Unit
+    private val itemClick: (Long, String) -> Unit
 ) : RecyclerView.Adapter<ClothesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,7 +48,7 @@ class ClothesAdapter(
             Log.d("ClothesAdapter", "Loading image URL: ${cloth.clothImageURL}")
             Glide.with(context).load(cloth.clothImageURL).into(binding.imageView)
             itemView.setOnClickListener {
-                itemClick(cloth.clothImageURL)
+                itemClick(cloth.clothId, cloth.clothImageURL)
             }
         }
     }

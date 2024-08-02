@@ -68,8 +68,17 @@ interface CoordiService {
         @Body requestDTO: CoordiFilterRequestDTO
     ): Call<Page<CoordiListResponseDTO>>
 
+    /**
+     * 타입별 옷 리스트
+     */
     @GET("coordi/clothes")
     fun getClothesList(
         @Query("type") type: String
     ): Call<List<ClothesResponseDTO>>
+
+    /**
+     *
+     */
+    @POST("coordi")
+    fun uploadCoordi(@Body request: CoordiCreateRequestDTO): Call<String>
 }

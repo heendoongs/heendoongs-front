@@ -54,6 +54,7 @@ object RetrofitConnection {
                         )
                     }
                 )
+                .setLenient() // lenient 모드를 설정하여 잘못된 JSON을 허용 -> Base64용
                 .create()
 
             INSTANCE = Retrofit.Builder()

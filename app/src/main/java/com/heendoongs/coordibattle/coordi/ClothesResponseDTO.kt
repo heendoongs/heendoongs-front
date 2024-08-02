@@ -15,6 +15,6 @@ package com.heendoongs.coordibattle.coordi
 
 data class ClothesResponseDTO(
     val clothId: Long,
-    val type: String,
+    val type: String,   // { 상의 : Top, 하의 : Bottom, 신발 : Shoe }
     val clothImageURL: String
 )

@@ -51,7 +51,7 @@ class DetailFragment : Fragment() {
     private lateinit var xButton: ImageButton
     private lateinit var titleTextView: TextView
     private lateinit var titleEditText: EditText
-    private var memberId: Long = 2L // 실제 데이터로 교체 필요
+    private var memberId: Long = 6002L // 실제 데이터로 교체 필요
     private var coordiId: Long? = null
 
     override fun onCreateView(
@@ -226,7 +226,7 @@ class DetailFragment : Fragment() {
     }
 
     private fun showDeleteDialog() {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog, null)
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_delete, null)
         val dialog = AlertDialog.Builder(requireContext()).create()
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setView(dialogView)
