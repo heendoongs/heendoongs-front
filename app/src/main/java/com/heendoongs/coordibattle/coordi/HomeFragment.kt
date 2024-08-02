@@ -6,16 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.heendoongs.coordibattle.R
-import com.heendoongs.coordibattle.RetrofitConnection
+import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.battle.BannerSliderAdapter
 import com.heendoongs.coordibattle.battle.BannerResponseDTO
 import com.heendoongs.coordibattle.battle.BattleService
-import com.heendoongs.coordibattle.battle.BattleTitleResponseDTO
 import com.heendoongs.coordibattle.databinding.FragmentHomeBinding
 import com.smarteist.autoimageslider.SliderView
 import retrofit2.Call
@@ -42,8 +40,8 @@ class HomeFragment : Fragment() {
         val view = binding.root
 
         // Retrofit 설정
-        service = RetrofitConnection.getInstance().create(CoordiService::class.java)
-        battleService = RetrofitConnection.getInstance().create(BattleService::class.java)
+        service = RetrofitConnection.getPublicClient().create(CoordiService::class.java)
+        battleService = RetrofitConnection.getPublicClient().create(BattleService::class.java)
 
         // RecyclerView 초기화
         binding.recyclerView.layoutManager = GridLayoutManager(context, 2) // 한 행에 2개 아이템 표시

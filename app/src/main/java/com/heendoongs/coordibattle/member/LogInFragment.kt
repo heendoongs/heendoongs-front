@@ -1,25 +1,20 @@
 package com.heendoongs.coordibattle.member
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.heendoongs.coordibattle.MainActivity
-import com.heendoongs.coordibattle.R
-import com.heendoongs.coordibattle.RetrofitConnection
-import com.heendoongs.coordibattle.battle.BattleService
+import com.heendoongs.coordibattle.MainApplication
+import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentLogInBinding
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Member
 
 /**
  * 로그인 프래그먼트
@@ -71,29 +66,19 @@ class LogInFragment : Fragment() {
         service.login(loginRequest).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    // 성공적인 응답 처리
-                    val responseBody = response.body()?.string() // 응답 본문 읽기
-                    if (responseBody != null && responseBody.isNotEmpty()) {
-                        // JWT 토큰 추출
-                        val jsonObject = JSONObject(responseBody)
-                        val token = jsonObject.getString("token")
-//                        val memberId = jsonObject.getString("memberId")
-                        val memberId = 952L
+                    val accessToken = response.headers()["Authorization"]
+                    val refreshToken = extractRefreshToken(response.headers()["Set-Cookie"])
 
-                        // SharedPreferences에 저장
-                        val sharedPref = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
-                        with(sharedPref.edit()) {
-                            putString("jwt_token", token)
-                            putLong("memberId", memberId)
-                            apply()
-                        }
-                        showToast("로그인 성공! 환영합니다.")
-                        (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment())
-                    } else {
-                        showToast("로그인 성공하지만 서버에서 응답 메시지가 없습니다.")
+
+                    if (accessToken != null && refreshToken != null) {
+                        MainApplication.prefs.saveAccessToken(accessToken)
+                        MainApplication.prefs.saveRefreshToken(refreshToken)
                     }
+
+                    showToast("로그인 성공! 환영합니다.")
+//                    (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment())
                 } else {
-                    // 실패한 응답 처리
+                    // 로그인 실패
                     showToast("로그인 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
                 }
             }
@@ -108,6 +93,17 @@ class LogInFragment : Fragment() {
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    // 토큰 추출
+    private fun extractRefreshToken(setCookieHeader: String?): String? {
+        setCookieHeader?.split(";")?.forEach { cookie ->
+            val parts = cookie.split("=")
+            if (parts.size == 2 && parts[0].trim() == "refresh") {
+                return parts[1].trim()
+            }
+        }
+        return null
     }
 
 }

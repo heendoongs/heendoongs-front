@@ -15,13 +15,10 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.heendoongs.coordibattle.R
-import com.heendoongs.coordibattle.RetrofitConnection
-import com.heendoongs.coordibattle.coordi.CoordiService
+import com.heendoongs.coordibattle.global.RetrofitConnection
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * 배틀 프래그먼트

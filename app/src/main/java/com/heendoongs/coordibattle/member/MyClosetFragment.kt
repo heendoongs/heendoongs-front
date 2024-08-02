@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.heendoongs.coordibattle.MainActivity
-import com.heendoongs.coordibattle.RetrofitConnection
+import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentMyClosetBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,7 +47,7 @@ class MyClosetFragment :Fragment() {
 
         if (token != null && memberId != null) {
             // Retrofit 인스턴스 생성 시 토큰 포함
-            service = RetrofitConnection.getInstance(token).create(MemberService::class.java)
+            service = RetrofitConnection.getInstance().create(MemberService::class.java)
 
             binding.btnMyInfoPage.setOnClickListener {
                 (requireActivity() as? MainActivity)?.replaceFragment(MyInfoFragment())

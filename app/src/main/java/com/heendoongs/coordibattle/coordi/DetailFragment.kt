@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -17,17 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.gson.*
 import com.heendoongs.coordibattle.R
-import com.heendoongs.coordibattle.RetrofitConnection
-import com.heendoongs.coordibattle.battle.BattleResponseDTO
-import com.heendoongs.coordibattle.battle.MemberCoordiVoteRequestDTO
+import com.heendoongs.coordibattle.global.RetrofitConnection
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Type
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 /**

@@ -10,10 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.heendoongs.coordibattle.MainActivity
-import com.heendoongs.coordibattle.R
-import com.heendoongs.coordibattle.RetrofitConnection
-import com.heendoongs.coordibattle.databinding.FragmentLogInBinding
-import com.heendoongs.coordibattle.databinding.FragmentMyClosetBinding
+import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentMyInfoBinding
 import okhttp3.ResponseBody
 import retrofit2.Call

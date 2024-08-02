@@ -7,11 +7,12 @@ import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import com.heendoongs.coordibattle.battle.BattleFragment
 import com.heendoongs.coordibattle.coordi.CoordiFragment
-import com.heendoongs.coordibattle.coordi.DetailFragment
 import com.heendoongs.coordibattle.coordi.HomeFragment
 import com.heendoongs.coordibattle.databinding.ActivityMainBinding
+import com.heendoongs.coordibattle.global.PreferenceUtil
 import com.heendoongs.coordibattle.member.LogInFragment
 import com.heendoongs.coordibattle.member.MyClosetFragment
+import dagger.hilt.android.HiltAndroidApp
 
 /**
  * 메인 액티비티
@@ -26,12 +27,18 @@ import com.heendoongs.coordibattle.member.MyClosetFragment
  * 2024.07.30  	조희정       하단바 fragment_my_closet 연결 프레그먼트 변경
  * </pre>
  */
-
 class MainActivity : AppCompatActivity() {
+    companion object{
+        lateinit var prefs : PreferenceUtil
+    }
+
     private lateinit var binding : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        prefs = PreferenceUtil(applicationContext)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -75,13 +82,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun isLoggedIn(): Boolean {
-        // sharedPreferences
-        val sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        val t = sharedPreferences.getString("jwt_token", null) != null
-        return t
-    }
-
     /**
      * 프래그먼트 교체
      */
@@ -93,4 +93,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 로그인 여부 확인
+     */
+    private fun isLoggedIn(): Boolean {
+        // sharedPreferences
+        val sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE)
+        val t = sharedPreferences.getString("jwt_token", null) != null
+        return t
+    }
 }
