@@ -10,28 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.gson.*
-import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.RetrofitConnection
-import com.heendoongs.coordibattle.battle.BattleResponseDTO
-import com.heendoongs.coordibattle.battle.MemberCoordiVoteRequestDTO
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Type
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 /**
@@ -60,7 +50,7 @@ class DetailFragment : Fragment() {
     private lateinit var xButton: ImageButton
     private lateinit var titleTextView: TextView
     private lateinit var titleEditText: EditText
-    private var coordiId: Long = 3L // 실제 데이터로 교체 필요
+    private var coordiId: Long = 4L // 실제 데이터로 교체 필요
     private var memberId: Long = 2L // 실제 데이터로 교체 필요
 
     override fun onCreateView(
@@ -91,6 +81,7 @@ class DetailFragment : Fragment() {
 
                             rootView.findViewById<TextView>(R.id.coordi_detail_nickname).text = data.nickname
                             rootView.findViewById<TextView>(R.id.coordi_detail_create_date).text = data.createDate.toString()
+                            rootView.findViewById<TextView>(R.id.coordi_detail_vote_count).text = data.voteCount.toString()
 
                             val voteButton = rootView.findViewById<ImageButton>(R.id.coordi_detail_vote_button)
                             updateButton = rootView.findViewById(R.id.coordi_detail_update_button)
@@ -142,6 +133,8 @@ class DetailFragment : Fragment() {
                             } else{
                                 updateButton.visibility = View.INVISIBLE;
                                 deleteButton.visibility = View.INVISIBLE;
+                                updateButton.isClickable = false
+                                deleteButton.isClickable = false
                             }
 
                             val bitmap = decodeBase64ToBitmap(data.coordiImage)
@@ -155,7 +148,9 @@ class DetailFragment : Fragment() {
                             setupRecyclerView(clothes)
 
                             voteButton.setOnClickListener {
-                                likeCoordi(data.memberId, coordiId)
+                                if (data.isVotingPeriod) {
+                                    likeCoordi(memberId, coordiId)
+                                }
                             }
                         }
                     }
@@ -232,7 +227,7 @@ class DetailFragment : Fragment() {
     private fun showDeleteDialog() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog, null)
         val dialog = AlertDialog.Builder(requireContext()).create()
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)  // 투명 배경 설정
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setView(dialogView)
 
         dialogView.findViewById<ImageButton>(R.id.dialog_ok_button).setOnClickListener {
