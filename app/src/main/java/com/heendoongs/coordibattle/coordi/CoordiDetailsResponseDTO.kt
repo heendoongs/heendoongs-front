@@ -11,5 +11,6 @@ data class CoordiDetailsResponseDTO(
     val clothesList: List<ClothDetailsResponseDTO>,
     val voteCount: Int,
     val isVotingPeriod: Boolean,
+    val isCoordiPeriod: Boolean,
     val isVoted: Boolean
 )

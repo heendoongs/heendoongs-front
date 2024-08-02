@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/coordi_detail_title"
+        android:id="@+id/coordi_detail_title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/dongle_bold"
@@ -18,29 +18,69 @@
         app:layout_constraintBottom_toTopOf="@id/coordi_detail_image"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <EditText
+        android:id="@+id/coordi_detail_title_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dongle_bold"
+        android:text="진수의 남침룩"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="35sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@id/coordi_detail_image"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ImageButton
-        android:id="@+id/coordi_detail_update"
+        android:id="@+id/coordi_detail_update_button"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginEnd="40dp"
         android:background="@android:color/transparent"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="@id/coordi_detail_delete"
-        app:layout_constraintTop_toTopOf="@+id/coordi_detail_title"
-        app:layout_constraintBottom_toBottomOf="@+id/coordi_detail_title"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@id/coordi_detail_delete_button"
+        app:layout_constraintTop_toTopOf="@+id/coordi_detail_title_text"
+        app:layout_constraintBottom_toBottomOf="@+id/coordi_detail_title_text"
         app:srcCompat="@drawable/ic_coordi_detail_update" />
 
     <ImageButton
-        android:id="@+id/coordi_detail_delete"
+        android:id="@+id/coordi_detail_check_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="40dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/coordi_detail_delete_button"
+        app:layout_constraintTop_toTopOf="@+id/coordi_detail_title_text"
+        app:layout_constraintBottom_toBottomOf="@+id/coordi_detail_title_text"
+        app:srcCompat="@drawable/ic_check" />
+
+    <ImageButton
+        android:id="@+id/coordi_detail_delete_button"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:background="@android:color/transparent"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/coordi_detail_title"
-        app:layout_constraintTop_toTopOf="@+id/coordi_detail_title"
+        app:layout_constraintBottom_toBottomOf="@+id/coordi_detail_title_text"
+        app:layout_constraintTop_toTopOf="@+id/coordi_detail_title_text"
         app:srcCompat="@drawable/ic_coordi_detail_delete" />
+
+    <ImageButton
+        android:id="@+id/coordi_detail_x_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/coordi_detail_title_text"
+        app:layout_constraintTop_toTopOf="@+id/coordi_detail_title_text"
+        app:srcCompat="@drawable/ic_x" />
 
     <ImageView
         android:id="@+id/coordi_detail_image"

@@ -7,6 +7,7 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.gson.*
+import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.RetrofitConnection
 import com.heendoongs.coordibattle.battle.BattleResponseDTO
@@ -41,6 +43,7 @@ import java.time.format.DateTimeFormatter
  * ----------  --------    ---------------------------
  * 2024.07.26  	임원정       최초 생성
  * 2024.07.31   남진수       상세페이지 조회
+ * 2024.08.02   남진수       상세능페이지 코디 수정기능
  * </pre>
  */
 
@@ -48,7 +51,13 @@ class DetailFragment : Fragment() {
 
     private lateinit var rootView: View
     private lateinit var service: CoordiService
-    private var coordiId: Long = 1L // 실제 데이터로 교체 필요
+    private lateinit var updateButton: ImageButton
+    private lateinit var deleteButton: ImageButton
+    private lateinit var checkButton: ImageButton
+    private lateinit var xButton: ImageButton
+    private lateinit var titleTextView: TextView
+    private lateinit var titleEditText: EditText
+    private var coordiId: Long = 3L // 실제 데이터로 교체 필요
     private var memberId: Long = 2L // 실제 데이터로 교체 필요
 
     override fun onCreateView(
@@ -72,11 +81,24 @@ class DetailFragment : Fragment() {
                     if (response.isSuccessful) {
                         val coordiDetails = response.body()
                         coordiDetails?.let { data ->
+                            titleTextView = rootView.findViewById(R.id.coordi_detail_title_text)
+                            titleEditText = rootView.findViewById(R.id.coordi_detail_title_edit)
+                            titleTextView.text = data.coordiTitle
+                            titleEditText.setText(data.coordiTitle)
+
                             rootView.findViewById<TextView>(R.id.coordi_detail_nickname).text = data.nickname
                             rootView.findViewById<TextView>(R.id.coordi_detail_create_date).text = data.createDate.toString()
-                            rootView.findViewById<TextView>(R.id.coordi_detail_title).text = data.coordiTitle
 
                             val voteButton = rootView.findViewById<ImageButton>(R.id.coordi_detail_vote_button)
+                            updateButton = rootView.findViewById(R.id.coordi_detail_update_button)
+                            deleteButton = rootView.findViewById(R.id.coordi_detail_delete_button)
+                            checkButton = rootView.findViewById(R.id.coordi_detail_check_button)
+                            xButton  = rootView.findViewById(R.id.coordi_detail_x_button)
+
+                            checkButton.visibility = View.INVISIBLE
+                            xButton.visibility = View.INVISIBLE
+                            checkButton.isClickable = false
+                            xButton.isClickable = false
 
                             if (!data.isVotingPeriod) {
                                 voteButton.setImageDrawable(context?.let {
@@ -98,6 +120,25 @@ class DetailFragment : Fragment() {
                                         )
                                     })
                                 }
+                            }
+
+                            if (data.isCoordiPeriod && memberId == data.memberId) {
+                                updateButton.setOnClickListener {
+                                    toggleEditMode(true)
+                                }
+                                deleteButton.setOnClickListener {
+
+                                }
+                                checkButton.setOnClickListener {
+                                    updateTitle(data.memberId, coordiId)
+                                    toggleEditMode(false)
+                                }
+                                xButton.setOnClickListener {
+                                    cancelEditMode()
+                                }
+                            } else{
+                                updateButton.visibility = View.INVISIBLE;
+                                deleteButton.visibility = View.INVISIBLE;
                             }
 
                             val bitmap = decodeBase64ToBitmap(data.coordiImage)
@@ -132,6 +173,67 @@ class DetailFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
+
+            }
+        })
+    }
+
+    private fun toggleEditMode(isEditMode: Boolean) {
+        if (isEditMode) {
+            titleTextView.visibility = View.INVISIBLE
+            titleEditText.visibility = View.VISIBLE
+            updateButton.visibility = View.INVISIBLE
+            deleteButton.visibility = View.INVISIBLE
+            checkButton.visibility = View.VISIBLE
+            xButton.visibility = View.VISIBLE
+            checkButton.isClickable = true
+            xButton.isClickable = true
+        } else {
+            titleTextView.visibility = View.VISIBLE
+            titleEditText.visibility = View.INVISIBLE
+            updateButton.visibility = View.VISIBLE
+            deleteButton.visibility = View.VISIBLE
+            checkButton.visibility = View.INVISIBLE
+            xButton.visibility = View.INVISIBLE
+            checkButton.isClickable = false
+            xButton.isClickable = false
+        }
+    }
+
+    private fun cancelEditMode() {
+        titleEditText.setText(titleTextView.text)
+        toggleEditMode(false)
+    }
+
+    private fun updateTitle(memberId: Long, coordiId: Long) {
+        val newTitle = titleEditText.text.toString()
+        if (newTitle != titleTextView.text.toString()) {
+            val requestDTO = CoordiUpdateRequestDTO(newTitle)
+            updateCoordi(memberId, coordiId, requestDTO)
+        }
+    }
+
+    private fun updateCoordi(memberId: Long, coordiId: Long, requestDTO: CoordiUpdateRequestDTO){
+        val call = service.updateCoordi(memberId, coordiId, requestDTO)
+        call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
+            override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
+                loadCoordiDetails()
+            }
+
+            override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
+
+            }
+        })
+    }
+
+    private fun deleteCoordi(memberId: Long, coordiId: Long){
+        val call = service.deleteCoordi(memberId, coordiId)
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                HomeFragment()
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
 
             }
         })

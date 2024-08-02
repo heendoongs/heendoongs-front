@@ -1,10 +1,7 @@
 package com.heendoongs.coordibattle.coordi
 
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 /**
  * 코디 Service
@@ -30,17 +27,36 @@ interface CoordiService {
         @Query("size") size: Int
     ): Call<Page<CoordiListResponseDTO>>
 
+    /*
+     * 코디 상세정보 조회
+     */
     @GET("coordi/details")
     fun getCoordiDetails(
         @Query("memberId") memberId: Long,
         @Query("coordiId") coordiId: Long
     ): Call<CoordiDetailsResponseDTO>
 
+    /*
+     * 코디 상세정보 좋아요
+     */
     @GET("coordi/like")
     fun likeCoordi(
         @Query("memberId") memberId: Long,
         @Query("coordiId") coordiId: Long
     ): Call<CoordiDetailsResponseDTO>
+
+    @PATCH("coordi/update")
+    fun updateCoordi(
+        @Query("memberId") memberId: Long,
+        @Query("coordiId") coordiId: Long,
+        @Body requestDTO: CoordiUpdateRequestDTO
+    ): Call<CoordiDetailsResponseDTO>
+
+    @DELETE("coordi/delete")
+    fun deleteCoordi(
+        @Query("memberId") memberId: Long,
+        @Query("coordiId") coordiId: Long
+    ): Call<String>
 
     /**
      * 코디 리스트 (필터 - 배틀별, 최신순, 랭킹순)
