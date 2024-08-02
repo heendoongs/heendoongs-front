@@ -41,5 +41,19 @@ class DetailClothesAdapter(private val clothes: List<ClothDetailsResponseDTO>) :
             val price = DecimalFormat("#,###")
             priceView.text = "₩ ${price.format(cloth.price)}"
         }
+
+        interface OnItemClickListener{
+            fun onItemClick(url:String)
+        }
+
+        var itemClickListener:OnItemClickListener?=null
+
+//        inner class ViewHolder(val binding: FavoriteRowBinding):RecyclerView.ViewHolder(binding.root){
+//            init {
+//                binding.root.setOnClickListener {
+//                    itemClickListener?.onItemClick(items[adapterPosition].url)
+//                }
+//            }
+//        }
     }
 }

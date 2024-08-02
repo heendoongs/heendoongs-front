@@ -25,11 +25,17 @@ import retrofit2.http.Query
 
 interface BattleService {
 
+    /*
+     * 배틀 페이지 불러오기
+     */
     @GET("battle")
     fun getBattleCoordies(
         @Query("memberId") memberId: Long
     ): Call<List<BattleDTO>>
 
+    /*
+     * 배틀 결과
+     */
     @POST("battle")
     fun postBattleResult(
         @Body voteRequest: MemberCoordiVoteRequestDTO
