@@ -1,5 +1,6 @@
 package com.heendoongs.coordibattle.coordi
 
+import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +46,7 @@ import java.time.format.DateTimeFormatter
  * 2024.07.26  	임원정       최초 생성
  * 2024.07.31   남진수       상세페이지 조회
  * 2024.08.02   남진수       상세능페이지 코디 수정기능
+ * 2024.08.02   남진수       상세능페이지 코디 삭제기능
  * </pre>
  */
 
@@ -127,7 +130,7 @@ class DetailFragment : Fragment() {
                                     toggleEditMode(true)
                                 }
                                 deleteButton.setOnClickListener {
-
+                                    showDeleteDialog()
                                 }
                                 checkButton.setOnClickListener {
                                     updateTitle(data.memberId, coordiId)
@@ -224,6 +227,22 @@ class DetailFragment : Fragment() {
 
             }
         })
+    }
+
+    private fun showDeleteDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog, null)
+        val dialog = AlertDialog.Builder(requireContext()).create()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)  // 투명 배경 설정
+        dialog.setView(dialogView)
+
+        dialogView.findViewById<ImageButton>(R.id.dialog_ok_button).setOnClickListener {
+            deleteCoordi(memberId, coordiId)
+            dialog.dismiss()
+        }
+        dialogView.findViewById<ImageButton>(R.id.dialog_cancel_button).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun deleteCoordi(memberId: Long, coordiId: Long){
