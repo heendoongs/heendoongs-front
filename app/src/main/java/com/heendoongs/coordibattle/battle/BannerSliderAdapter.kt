@@ -1,6 +1,8 @@
 package com.heendoongs.coordibattle.battle
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +39,8 @@ class BannerSliderAdapter(private val banners: List<BannerResponseDTO>, private 
         with(viewHolder.binding) {
             bannerTitle.text = banner.battleTitle
             bannerPeriod.text = "${banner.startDate} ~ ${banner.endDate}"
+            // 배너 이미지 어둡게
+            bannerImage.setColorFilter(Color.parseColor("#E3E3E3"), PorterDuff.Mode.MULTIPLY)
 
             Glide.with(context)
                 .load(banner.bannerImageURL)

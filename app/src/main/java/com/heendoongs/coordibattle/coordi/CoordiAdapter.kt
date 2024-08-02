@@ -22,6 +22,8 @@ import com.heendoongs.coordibattle.databinding.ItemCoordiBinding
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.07.30  	임원정       최초 생성
+ * 2024.07.31   임원정       이미지 처리 오류 수정, 디자인 수정
+ * 2024.08.02   임원정       onItemClick 메소드 및 인터페이스 추가
  * </pre>
  */
 class CoordiAdapter(private val context: Context,
@@ -30,6 +32,7 @@ class CoordiAdapter(private val context: Context,
 ) :
     RecyclerView.Adapter<CoordiAdapter.CoordiViewHolder>() {
 
+    // 아이템 터치 감지 인터페이스
     interface OnItemClickListener {
         fun onItemClick(item: CoordiListResponseDTO)
     }
@@ -38,7 +41,7 @@ class CoordiAdapter(private val context: Context,
         val binding = ItemCoordiBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CoordiViewHolder(binding)
     }
-
+    
     override fun onBindViewHolder(holder: CoordiViewHolder, position: Int) {
         val item = coordiList[position]
         holder.bind(item)
@@ -50,13 +53,15 @@ class CoordiAdapter(private val context: Context,
     override fun getItemCount(): Int {
         return coordiList.size
     }
-
+    
+    // 데이터 변경 시
     fun updateData(newData: List<CoordiListResponseDTO>) {
         coordiList.clear()
         coordiList.addAll(newData)
         notifyDataSetChanged()
     }
-
+    
+    // 데이터 추가 시
     fun appendData(newData: List<CoordiListResponseDTO>) {
         coordiList.addAll(newData)
         notifyDataSetChanged()
@@ -77,7 +82,8 @@ class CoordiAdapter(private val context: Context,
                 Glide.with(context).load(it).into(imageView)
             }
         }
-
+        
+        // Base64 인코딩 Bitmap으로 변환
         private fun decodeBase64ToBitmap(base64Str: String): Bitmap? {
             return try {
                 val base64Data = base64Str.substringAfter(",")

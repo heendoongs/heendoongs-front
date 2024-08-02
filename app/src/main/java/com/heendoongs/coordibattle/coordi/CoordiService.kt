@@ -9,13 +9,15 @@ import retrofit2.http.Query
 /**
  * 코디 Service
  * @author 임원정
- * @since 2024.08.01
+ * @since 2024.07.30
  * @version 1.0
  *
  * <pre>
  * 수정일        수정자        수정내용
  * ----------  --------    ---------------------------
- * 2024.08.01  	임원정       최초 생성
+ * 2024.07.30  	임원정       최초 생성
+ * 2024.07.31   임원정       getCoordiList API 추가
+ * 2024.08.01   임원정       getCoordiListWithFilter API 추가
  * </pre>
  */
 
@@ -49,4 +51,9 @@ interface CoordiService {
     fun getCoordiListWithFilter(
         @Body requestDTO: CoordiFilterRequestDTO
     ): Call<Page<CoordiListResponseDTO>>
+
+    @GET("coordi/clothes")
+    fun getClothesList(
+        @Query("type") type: String
+    ): Call<List<ClothesResponseDTO>>
 }

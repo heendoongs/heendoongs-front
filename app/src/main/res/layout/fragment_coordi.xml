@@ -1,4 +1,4 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -100,21 +100,53 @@
         android:id="@+id/coordi_container"
         android:layout_width="match_parent"
         android:layout_height="360dp"
-        android:background="#e0e0e0"
+        android:background="@color/battle_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/title_bar" >
+
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@drawable/img_arm1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="120dp"
+            android:layout_marginEnd="40dp"/>
+
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@drawable/img_arm2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="120dp"
+            android:layout_marginStart="40dp"/>
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="230dp"
+            android:src="@drawable/img_body"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="110dp"/>
+
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@drawable/img_face1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"/>
+    </FrameLayout>
 
     <!-- 하단 아이템 선택 메뉴 -->
     <LinearLayout
         android:id="@+id/item_list_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/coordi_container"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coordi_container">
 
         <LinearLayout
             android:id="@+id/item_tab"
@@ -158,92 +190,13 @@
                 android:src="@drawable/ic_shoe" />
         </LinearLayout>
 
+
         <!-- 아이템 리스트가 출력될 부분 -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/item_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="16dp"/>
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal" />
     </LinearLayout>
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/item_tab"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:padding="16dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/coordi_container">-->
-
-<!--        <ImageButton-->
-<!--            android:id="@+id/btn_face"-->
-<!--            android:layout_width="24dp"-->
-<!--            android:layout_height="24dp"-->
-<!--            android:background="@drawable/ic_face"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/btn_arm"-->
-<!--            app:layout_constraintHorizontal_chainStyle="spread"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        <ImageButton-->
-<!--            android:id="@+id/btn_arm"-->
-<!--            android:layout_width="24dp"-->
-<!--            android:layout_height="24dp"-->
-<!--            android:background="@drawable/ic_arm"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/btn_top"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/btn_face"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/btn_top"-->
-<!--            android:layout_width="24dp"-->
-<!--            android:layout_height="24dp"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:src="@drawable/ic_top"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/btn_bottom"-->
-<!--            app:layout_constraintHorizontal_bias="0.5"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/btn_arm"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/btn_bottom"-->
-<!--            android:layout_width="24dp"-->
-<!--            android:layout_height="24dp"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:src="@drawable/ic_bottom"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/btn_shoe"-->
-<!--            app:layout_constraintHorizontal_bias="0.5"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/btn_top"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/btn_shoe"-->
-<!--            android:layout_width="24dp"-->
-<!--            android:layout_height="24dp"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:src="@drawable/ic_shoe"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="0.5"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/btn_bottom"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--    &lt;!&ndash; 하단 리스트 영역 &ndash;&gt;-->
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/clothes_list"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="120dp"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:paddingLeft="16dp"-->
-<!--        android:paddingRight="16dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/item_tab"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

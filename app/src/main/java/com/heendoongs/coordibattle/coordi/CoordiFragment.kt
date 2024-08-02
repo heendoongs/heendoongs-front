@@ -7,16 +7,23 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.heendoongs.coordibattle.R
+import com.heendoongs.coordibattle.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentCoordiBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.IOException
 
 /**
@@ -36,12 +43,21 @@ class CoordiFragment : Fragment() {
     private var _binding: FragmentCoordiBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var heendyAdapter: HeendyAdapter
+    private lateinit var clothesAdapter: ClothesAdapter
+    private lateinit var service: CoordiService
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCoordiBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        service = RetrofitConnection.getInstance().create(CoordiService::class.java)
+
+        setupItemTabs()
+        setupRecyclerView()
 
         binding.btnSave.setOnClickListener {
             saveImageToGallery()
@@ -51,21 +67,64 @@ class CoordiFragment : Fragment() {
             // 업로드 로직 추가
         }
 
-        setupClothesList()
-
         return view
     }
 
-    private fun setupClothesList() {
-        binding.itemList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.itemList.adapter = ClothesAdapter { imageResId ->
-            addImageToContainer(imageResId)
+    private fun setupRecyclerView() {
+        heendyAdapter = HeendyAdapter { imageResId ->
+            addLocalImageToContainer(imageResId)
         }
+        clothesAdapter = ClothesAdapter(requireContext(), emptyList()) { imageUrl ->
+            addRemoteImageToContainer(imageUrl)
+        }
+        binding.itemList.layoutManager = GridLayoutManager(context, 3) // 한 행에 3개 아이템 표시
+        binding.itemList.adapter = heendyAdapter // Default adapter
     }
 
-    private fun addImageToContainer(imageResId: Int) {
+    private fun setupItemTabs() {
+        binding.faceIcon.setOnClickListener { loadLocalItems("face") }
+        binding.armsIcon.setOnClickListener { loadLocalItems("arms") }
+        binding.topIcon.setOnClickListener { loadRemoteItems("Top") }
+        binding.bottomIcon.setOnClickListener { loadRemoteItems("Bottom") }
+        binding.shoesIcon.setOnClickListener { loadRemoteItems("Shoe") }
+    }
+
+    private fun loadLocalItems(type: String) {
+        // Use local adapter
+        binding.itemList.adapter = heendyAdapter
+        heendyAdapter.notifyDataSetChanged() // Refresh the local adapter
+    }
+
+
+
+    private fun loadRemoteItems(type: String) {
+        service.getClothesList(type).enqueue(object : Callback<List<ClothesResponseDTO>> {
+            override fun onResponse(call: Call<List<ClothesResponseDTO>>, response: Response<List<ClothesResponseDTO>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    clothesAdapter.updateData(response.body()!!)
+                    binding.itemList.adapter = clothesAdapter
+                }
+            }
+
+            override fun onFailure(call: Call<List<ClothesResponseDTO>>, t: Throwable) {
+                Log.e("CoordiFragment", "Error loading clothes", t)
+            }
+        })
+    }
+
+    private fun addLocalImageToContainer(imageResId: Int) {
         val imageView = ImageView(requireContext())
         imageView.setImageResource(imageResId)
+        setupImageView(imageView)
+    }
+
+    private fun addRemoteImageToContainer(imageUrl: String) {
+        val imageView = ImageView(requireContext())
+        Glide.with(this).load(imageUrl).into(imageView)
+        setupImageView(imageView)
+    }
+
+    private fun setupImageView(imageView: ImageView) {
         imageView.layoutParams = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.WRAP_CONTENT,
             FrameLayout.LayoutParams.WRAP_CONTENT
@@ -87,20 +146,19 @@ class CoordiFragment : Fragment() {
 
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        // 터치가 시작될 때의 뷰의 위치와 터치 포인트를 기록
                         initialX = v.x
                         initialY = v.y
                         dX = event.rawX - initialX
                         dY = event.rawY - initialY
                     }
                     MotionEvent.ACTION_MOVE -> {
-                        // 터치 포인트가 이동할 때마다 뷰를 새로운 위치로 이동
                         v.x = event.rawX - dX
                         v.y = event.rawY - dY
                     }
                 }
                 return true
             }
+
             private inner class GestureListener(private val imageView: ImageView) : GestureDetector.SimpleOnGestureListener() {
                 override fun onDoubleTap(event: MotionEvent?): Boolean {
                     rotationDegrees += 90f
@@ -113,7 +171,6 @@ class CoordiFragment : Fragment() {
                 override fun onScale(detector: ScaleGestureDetector): Boolean {
                     imageView.scaleX *= detector.scaleFactor
                     imageView.scaleY *= detector.scaleFactor
-
                     return true
                 }
             }

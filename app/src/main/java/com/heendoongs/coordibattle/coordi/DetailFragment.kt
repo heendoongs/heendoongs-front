@@ -42,6 +42,7 @@ import java.time.format.DateTimeFormatter
  * ----------  --------    ---------------------------
  * 2024.07.26  	임원정       최초 생성
  * 2024.07.31   남진수       상세페이지 조회
+ * 2024.08.02   임원정       coordiId 연결
  * </pre>
  */
 
@@ -127,7 +128,7 @@ class DetailFragment : Fragment() {
     }*/
 
     private fun loadCoordiDetails() {
-        coordiId?.let { id ->
+        coordiId?.let { id ->  
             val call = service.getCoordiDetails(memberId, id)
             call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
                 override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {

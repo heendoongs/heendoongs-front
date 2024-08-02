@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,12 +14,26 @@ import com.heendoongs.coordibattle.RetrofitConnection
 import com.heendoongs.coordibattle.battle.BannerSliderAdapter
 import com.heendoongs.coordibattle.battle.BannerResponseDTO
 import com.heendoongs.coordibattle.battle.BattleService
-import com.heendoongs.coordibattle.battle.BattleTitleResponseDTO
 import com.heendoongs.coordibattle.databinding.FragmentHomeBinding
 import com.smarteist.autoimageslider.SliderView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+/**
+ * 홈 프래그먼트
+ * @author 임원정
+ * @since 2024.07.28
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        	수정자        수정내용
+ * ----------  --------    ---------------------------
+ * 2024.07.28  	임원정       최초 생성
+ * 2024.07.30   임원정       코디 리스트 출력
+ * 2024.07.31   임원정       더보기 버튼 구현
+ * </pre>
+ */
 
 class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
     private var _binding: FragmentHomeBinding? = null
@@ -167,6 +180,7 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         })
     }
 
+    // 배너 가져오기
     private fun loadBanners() {
         battleService.getCurrentBattles().enqueue(object : Callback<List<BannerResponseDTO>> {
             override fun onResponse(call: Call<List<BannerResponseDTO>>, response: Response<List<BannerResponseDTO>>) {
