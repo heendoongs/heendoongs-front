@@ -1,26 +1,28 @@
 package com.heendoongs.coordibattle.coordi
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.gson.*
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.RetrofitConnection
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -219,7 +221,10 @@ class DetailFragment : Fragment() {
         val call = service.updateCoordi(memberId, coordiId, requestDTO)
         call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
             override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
-                loadCoordiDetails()
+                if (response.isSuccessful) {
+                    Toast.makeText(context, "제목이 수정되었습니다!", Toast.LENGTH_SHORT).show()
+                    loadCoordiDetails()
+                }
             }
 
             override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
@@ -244,15 +249,27 @@ class DetailFragment : Fragment() {
         dialog.show()
     }
 
-    private fun deleteCoordi(memberId: Long, coordiId: Long?){
+    private fun deleteCoordi(memberId: Long, coordiId: Long?) {
         val call = service.deleteCoordi(memberId, coordiId)
-        call.enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                HomeFragment()
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()?.string()
+                    Toast.makeText(context, responseBody, Toast.LENGTH_SHORT).show()
+                    val homeFragment = HomeFragment()
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.main_container, homeFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .addToBackStack(null)
+                        .commit()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("DetailFragment", "삭제 실패, error: $errorBody")
+                }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
-
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("DetailFragment", "삭제 요청 실패", t)
             }
         })
     }

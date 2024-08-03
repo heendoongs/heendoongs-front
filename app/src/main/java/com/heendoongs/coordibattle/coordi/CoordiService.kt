@@ -1,5 +1,6 @@
 package com.heendoongs.coordibattle.coordi
 
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -58,7 +59,7 @@ interface CoordiService {
     fun deleteCoordi(
         @Query("memberId") memberId: Long,
         @Query("coordiId") coordiId: Long?
-    ): Call<String>
+    ): Call<ResponseBody>
 
     /**
      * 코디 리스트 (필터 - 배틀별, 최신순, 랭킹순)
