@@ -1,8 +1,10 @@
 package com.heendoongs.coordibattle.coordi
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
@@ -22,6 +24,7 @@ import com.heendoongs.coordibattle.RetrofitConnection
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 
 /**
@@ -116,7 +119,7 @@ class DetailFragment : Fragment() {
                                 }
                             }
 
-                            if (data.isCoordiPeriod && memberId == data.memberId) {
+                            if (data.isCoordiPeriod && Objects.equals(memberId, data.memberId)) {
                                 updateButton.setOnClickListener {
                                     toggleEditMode(true)
                                 }
@@ -124,7 +127,7 @@ class DetailFragment : Fragment() {
                                     showDeleteDialog()
                                 }
                                 checkButton.setOnClickListener {
-                                    updateTitle(data.memberId, id)
+                                    updateTitle(memberId, id)
                                     toggleEditMode(false)
                                 }
                                 xButton.setOnClickListener {
@@ -256,7 +259,8 @@ class DetailFragment : Fragment() {
 
     private fun setupRecyclerView(clothes: List<ClothDetailsResponseDTO>) {
         val recyclerView = rootView.findViewById<RecyclerView>(R.id.clothes_recycler_view)
-        recyclerView.adapter = DetailClothesAdapter(clothes)
+        val adapter = DetailClothesAdapter(clothes, requireContext())
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
 
