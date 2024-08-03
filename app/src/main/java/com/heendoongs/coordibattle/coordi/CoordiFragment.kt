@@ -169,7 +169,7 @@ class CoordiFragment : Fragment() {
             // 왼쪽팔
             R.drawable.img_left_arm1, R.drawable.img_left_arm2 -> {
                 binding.leftArm.setImageResource(imageResId)
-                setupImageView(binding.leftArm, 300, 300, 0,100)
+                setupImageView(binding.leftArm, 320, 340, 0,130)
                 if (binding.leftArm.parent == null) {
                     binding.coordiContainer.addView(binding.leftArm)
                 }
@@ -177,7 +177,7 @@ class CoordiFragment : Fragment() {
             // 오른쪽 팔
             R.drawable.img_right_arm1, R.drawable.img_right_arm2 -> {
                 binding.rightArm.setImageResource(imageResId)
-                setupImageView(binding.rightArm,300, 300, 100, 0)
+                setupImageView(binding.rightArm,320, 340, 130, 0)
                 if (binding.rightArm.parent == null) {
                     binding.coordiContainer.addView(binding.rightArm)
                 }
