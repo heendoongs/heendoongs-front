@@ -20,7 +20,22 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeFragment : Fragment() {
+/**
+ * 홈 프래그먼트
+ * @author 임원정
+ * @since 2024.07.28
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        	수정자        수정내용
+ * ----------  --------    ---------------------------
+ * 2024.07.28  	임원정       최초 생성
+ * 2024.07.30   임원정       코디 리스트 출력
+ * 2024.07.31   임원정       더보기 버튼 구현
+ * </pre>
+ */
+
+class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -47,7 +62,7 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager = GridLayoutManager(context, 2) // 한 행에 2개 아이템 표시
 
         // 어댑터 초기화 및 설정
-        adapter = CoordiAdapter(requireContext(), mutableListOf())
+        adapter = CoordiAdapter(requireContext(), mutableListOf(), this)
         binding.recyclerView.adapter = adapter
 
         // 더보기 버튼
@@ -78,14 +93,15 @@ class HomeFragment : Fragment() {
                     val battleTitles = arrayOf("배틀별") + battles.map { it.battleTitle }.toTypedArray()
 
                     // 배열의 첫 번째 항목을 기본값으로 설정
-                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, battleTitles)
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, battleTitles)
+                    adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
                     binding.spinnerBattleFilter.adapter = adapter
 
                     binding.spinnerBattleFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             selectedBattleId = if (position == 0) null else battles[position - 1].battleId
-                            loadCoordiList(0, pageSize) // 페이지를 0으로 초기화
+                            currentPage = 0
+                            loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -105,17 +121,19 @@ class HomeFragment : Fragment() {
 
     private fun setupSortSpinner() {
         val sortOptions = resources.getStringArray(R.array.sort_options)
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, sortOptions)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, sortOptions)
+        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
         binding.spinnerSort.adapter = adapter
 
         // 기본값으로 "RANKING"을 선택
         binding.spinnerSort.setSelection(sortOptions.indexOf("랭킹순"))
 
+
         binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedSortOrder = if (position == 0) "NEW" else "RANKING"
-                loadCoordiList(0, pageSize) // 페이지를 0으로 초기화
+                selectedSortOrder = if (position == 0) "RANKING" else "RECENT"
+                currentPage = 0
+                loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -162,6 +180,7 @@ class HomeFragment : Fragment() {
         })
     }
 
+    // 배너 가져오기
     private fun loadBanners() {
         battleService.getCurrentBattles().enqueue(object : Callback<List<BannerResponseDTO>> {
             override fun onResponse(call: Call<List<BannerResponseDTO>>, response: Response<List<BannerResponseDTO>>) {
@@ -185,6 +204,19 @@ class HomeFragment : Fragment() {
         binding.banner.setScrollTimeInSec(3) // set scroll delay in seconds
         binding.banner.setAutoCycle(true)
         binding.banner.startAutoCycle()
+    }
+
+    override fun onItemClick(item: CoordiListResponseDTO) {
+        val bundle = Bundle().apply {
+            putLong("coordiId", item.coordiId)
+        }
+        val detailFragment = DetailFragment().apply {
+            arguments = bundle
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_container, detailFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroyView() {
