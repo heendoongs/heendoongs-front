@@ -1,6 +1,7 @@
 package com.heendoongs.coordibattle.coordi
 
 import ClothesAdapter
+import android.R.attr.*
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -12,10 +13,9 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.RetrofitConnection
@@ -43,7 +43,7 @@ import java.io.IOException
  */
 
 class CoordiFragment : Fragment() {
-    private var _binding: com.heendoongs.coordibattle.databinding.FragmentCoordiBinding? = null
+    private var _binding: FragmentCoordiBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var heendyAdapter: HeendyAdapter
@@ -72,9 +72,6 @@ class CoordiFragment : Fragment() {
             showUploadDialog()
         }
 
-        // 기본으로 얼굴 아이콘이 선택된 상태로 설정
-        selectTab(binding.faceIcon)
-
         return view
     }
 
@@ -83,57 +80,109 @@ class CoordiFragment : Fragment() {
      */
     private fun setupRecyclerView() {
         heendyAdapter = HeendyAdapter(getFaceItems()) { imageResId ->
-            addLocalImageToContainer(imageResId)
+            changeFaceImage(imageResId)
         }
         clothesAdapter = ClothesAdapter(requireContext(), emptyList()) { clothesId, imageUrl ->
             addRemoteImageToContainer(clothesId, imageUrl)
         }
         binding.itemList.layoutManager = GridLayoutManager(context, 3) // 한 행에 3개 아이템 표시
-        binding.itemList.adapter = heendyAdapter // Default adapter
+        binding.itemList.adapter = heendyAdapter // 기본 흰디 얼굴 선택
     }
 
     /**
      * 아이템 탭별 동작 매칭
      */
     private fun setupItemTabs() {
-        binding.faceIcon.setOnClickListener { selectTab(binding.faceIcon); loadLocalItems(getFaceItems()) }
-        binding.armsIcon.setOnClickListener { selectTab(binding.armsIcon); loadLocalItems(getArmsItems()) }
-        binding.topIcon.setOnClickListener { selectTab(binding.topIcon); loadRemoteItems("Top") }
-        binding.bottomIcon.setOnClickListener { selectTab(binding.bottomIcon); loadRemoteItems("Bottom") }
-        binding.shoesIcon.setOnClickListener { selectTab(binding.shoesIcon); loadRemoteItems("Shoe") }
-    }
-
-    private fun selectTab(selectedTab: ImageView) {
-        val tabs = listOf(binding.faceIcon, binding.armsIcon, binding.topIcon, binding.bottomIcon, binding.shoesIcon)
-
-        for (tab in tabs) {
-            tab.isSelected = tab == selectedTab
+        binding.faceIcon.setOnClickListener {
+            selectTab(binding.faceIcon)
+            loadLocalItems(getFaceItems())
         }
+        binding.armsIcon.setOnClickListener {
+            selectTab(binding.armsIcon)
+            loadLocalItems(getArmsItems())
+        }
+        binding.topIcon.setOnClickListener {
+            selectTab(binding.topIcon)
+            loadRemoteItems("Top")
+        }
+        binding.bottomIcon.setOnClickListener {
+            selectTab(binding.bottomIcon)
+            loadRemoteItems("Bottom")
+        }
+        binding.shoesIcon.setOnClickListener {
+            selectTab(binding.shoesIcon)
+            loadRemoteItems("Shoe")
+        }
+        selectTab(binding.faceIcon)
     }
 
     /**
-     * 얼굴 가져오기
+     * 선택된 탭
+     */
+    private fun selectTab(selectedIcon: ImageView) {
+        val icons = listOf(binding.faceIcon, binding.armsIcon, binding.topIcon, binding.bottomIcon, binding.shoesIcon)
+        icons.forEach { it.isSelected = false }
+        selectedIcon.isSelected = true
+    }
+
+    /**
+     * 얼굴 아이템 가져오기
      */
     private fun getFaceItems(): List<Int> {
         return listOf(R.drawable.img_face1, R.drawable.img_face2, R.drawable.img_face3, R.drawable.img_face4, R.drawable.img_face5, R.drawable.img_face6)
     }
 
     /**
-     * 팔 가져오기
+     * 팔 아이템 가져오기
      */
     private fun getArmsItems(): List<Int> {
-        return listOf(R.drawable.img_arm1, R.drawable.img_arm2)
+        return listOf(R.drawable.img_left_arm1, R.drawable.img_left_arm2, R.drawable.img_right_arm1, R.drawable.img_right_arm2)
     }
 
     /**
-     * 로컬로 저장된 아이템(얼굴, 팔) 가져오기
+     * 안드로이드에 저장된 아이템(얼굴, 팔) 로드
      */
     private fun loadLocalItems(items: List<Int>) {
         heendyAdapter = HeendyAdapter(items) { imageResId ->
-            addLocalImageToContainer(imageResId)
+            if (items == getFaceItems()) {
+                changeFaceImage(imageResId)
+            } else if (items == getArmsItems()) {
+                changeArmImage(imageResId)
+            }
         }
         binding.itemList.adapter = heendyAdapter
-        heendyAdapter.notifyDataSetChanged() // Refresh the local adapter
+        heendyAdapter.notifyDataSetChanged()
+    }
+
+    /**
+     * 얼굴 변경
+     */
+    private fun changeFaceImage(imageResId: Int) {
+        binding.face.setImageResource(imageResId)
+    }
+
+    /**
+     * 팔 변경
+     */
+    private fun changeArmImage(imageResId: Int) {
+        when (imageResId) {
+            // 왼쪽팔
+            R.drawable.img_left_arm1, R.drawable.img_left_arm2 -> {
+                binding.leftArm.setImageResource(imageResId)
+                setupImageView(binding.leftArm, 300, 300, 0,100)
+                if (binding.leftArm.parent == null) {
+                    binding.coordiContainer.addView(binding.leftArm)
+                }
+            }
+            // 오른쪽 팔
+            R.drawable.img_right_arm1, R.drawable.img_right_arm2 -> {
+                binding.rightArm.setImageResource(imageResId)
+                setupImageView(binding.rightArm,300, 300, 100, 0)
+                if (binding.rightArm.parent == null) {
+                    binding.coordiContainer.addView(binding.rightArm)
+                }
+            }
+        }
     }
 
     /**
@@ -155,15 +204,6 @@ class CoordiFragment : Fragment() {
     }
 
     /**
-     * 코디 영역에 로컬 이미지 올리기
-     */
-    private fun addLocalImageToContainer(imageResId: Int) {
-        val imageView = ImageView(requireContext())
-        imageView.setImageResource(imageResId)
-        setupImageView(imageView)
-    }
-
-    /**
      * 코디 영역에 DB에 저장된 이미지 올리기
      */
     private fun addRemoteImageToContainer(clothId: Long, imageUrl: String) {
@@ -172,26 +212,31 @@ class CoordiFragment : Fragment() {
         }
         val imageView = ImageView(requireContext())
         Glide.with(this).load(imageUrl).into(imageView)
-        setupImageView(imageView)
+        setupImageView(imageView, 300, 300)
+        binding.coordiContainer.addView(imageView)
     }
 
     /**
      * 이미지뷰 설정
      */
-    private fun setupImageView(imageView: ImageView) {
+    private fun setupImageView(imageView: ImageView,
+                               width: Int = FrameLayout.LayoutParams.WRAP_CONTENT, height: Int = FrameLayout.LayoutParams.WRAP_CONTENT,
+                               marginStart: Int = 0, marginEnd: Int = 0) {
         imageView.layoutParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT
-        )
-
-        var rotationDegrees = 0f
+            width,
+            height
+        ).apply {
+            setMarginStart(marginStart)
+            setMarginEnd(marginEnd)
+            gravity = Gravity.CENTER
+        }
 
         /**
          * 이미지 뷰 터치 설정
          */
         imageView.setOnTouchListener(object : View.OnTouchListener {
-            private val gestureDetector = GestureDetector(requireContext(), GestureListener(imageView))
             private val scaleDetector = ScaleGestureDetector(requireContext(), ScaleListener(imageView))
+            private val rotateDetector = RotateGestureDetector()
             private var initialX = 0f
             private var initialY = 0f
             private var dX = 0f
@@ -201,8 +246,8 @@ class CoordiFragment : Fragment() {
              * 드래그 앤 드랍
              */
             override fun onTouch(v: View, event: MotionEvent): Boolean {
-                gestureDetector.onTouchEvent(event)
                 scaleDetector.onTouchEvent(event)
+                rotateDetector.onTouch(event)
 
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
@@ -222,11 +267,27 @@ class CoordiFragment : Fragment() {
             /**
              * 회전
              */
-            private inner class GestureListener(private val imageView: ImageView) : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(event: MotionEvent?): Boolean {
-                    rotationDegrees += 90f
-                    imageView.rotation = rotationDegrees
+            private inner class RotateGestureDetector : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+                private var previousAngle = 0f
+
+                fun onTouch(event: MotionEvent): Boolean {
+                    if (event.pointerCount == 2) {
+                        val angle = getRotationAngle(event)
+                        if (previousAngle != 0f) {
+                            val deltaAngle = angle - previousAngle
+                            imageView.rotation += deltaAngle
+                        }
+                        previousAngle = angle
+                    } else {
+                        previousAngle = 0f
+                    }
                     return true
+                }
+
+                private fun getRotationAngle(event: MotionEvent): Float {
+                    val dx = (event.getX(0) - event.getX(1)).toDouble()
+                    val dy = (event.getY(0) - event.getY(1)).toDouble()
+                    return Math.toDegrees(Math.atan2(dy, dx)).toFloat()
                 }
             }
 
@@ -241,8 +302,6 @@ class CoordiFragment : Fragment() {
                 }
             }
         })
-
-        binding.coordiContainer.addView(imageView)
     }
 
     /**
