@@ -22,8 +22,6 @@ import com.heendoongs.coordibattle.databinding.ItemClothBinding
 class HeendyAdapter(private val items: List<Int>, private val itemClick: (Int) -> Unit) :
     RecyclerView.Adapter<HeendyAdapter.ViewHolder>() {
 
-    //private val clothes = listOf(R.drawable.img_face1, R.drawable.img_face2, R.drawable.img_face3, R.drawable.img_face4, R.drawable.img_face5, R.drawable.img_face6)
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemClothBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
