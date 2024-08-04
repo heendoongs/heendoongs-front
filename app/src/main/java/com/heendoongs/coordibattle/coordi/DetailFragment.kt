@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.*
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.RetrofitConnection
@@ -43,6 +44,7 @@ import java.util.*
  * 2024.08.02   임원정       coordiId 연결
  * 2024.08.02   남진수       상세페이지 코디 수정기능
  * 2024.08.02   남진수       상세페이지 코디 삭제기능
+ * 2024.08.04   남진수       구글 애널리틱스 관련 설정 추가
  * </pre>
  */
 
@@ -58,6 +60,7 @@ class DetailFragment : Fragment() {
     private lateinit var titleEditText: EditText
     private var memberId: Long = 6002L // 실제 데이터로 교체 필요
     private var coordiId: Long? = null
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +68,7 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_detail, container, false)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         service = RetrofitConnection.getInstance().create(CoordiService::class.java)
         coordiId = arguments?.getLong("coordiId")
         loadCoordiDetails()
@@ -274,9 +278,22 @@ class DetailFragment : Fragment() {
         })
     }
 
+    private fun logItemClick(cloth: ClothDetailsResponseDTO) {
+        val bundle = Bundle().apply {
+            putString("cloth_id", cloth.clothId.toString())
+            putString("cloth_brand", cloth.brand)
+            putString("cloth_name", cloth.productName)
+            putString("coordi_id", coordiId.toString())
+        }
+        firebaseAnalytics.logEvent("cloth_item_click", bundle)
+        Log.d("FirebaseAnalytics", "Event logged: cloth_item_click - ${cloth.clothId}")
+    }
+
     private fun setupRecyclerView(clothes: List<ClothDetailsResponseDTO>) {
         val recyclerView = rootView.findViewById<RecyclerView>(R.id.clothes_recycler_view)
-        val adapter = DetailClothesAdapter(clothes, requireContext())
+        val adapter = DetailClothesAdapter(clothes, requireContext()) { cloth ->
+            logItemClick(cloth)
+        }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
