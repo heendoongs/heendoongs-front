@@ -73,7 +73,7 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
         }
 
         loadNickname()
-//        loadMyCloset(currentPage, pageSize)
+        loadMyCloset(currentPage, pageSize)
 
         return binding.root
     }
@@ -94,6 +94,7 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
                     println(response.body()!!.nickname)
                     if (myClosetResponse != null) {
                         binding.nickname.text = myClosetResponse.nickname
+                        binding.myCoordiList.text = myClosetResponse.nickname + "의 옷장"
                     } else {
                         showToast("데이터를 가져올 수 없습니다.")
                     }

@@ -53,5 +53,6 @@ data class MemberUpdateRequest(
 // 에러 코드
 data class ExceptionDto(
     val code: Int,
-    val message: String
+    val message: String,
+    val validationErrors: Map<String, String>? = null
 )
