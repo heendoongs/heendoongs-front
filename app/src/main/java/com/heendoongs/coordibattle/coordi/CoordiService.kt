@@ -74,7 +74,7 @@ interface CoordiService {
     ): Call<List<ClothesResponseDTO>>
 
     /**
-     *
+     * 코디 업로드
      */
     @POST("coordi")
     fun uploadCoordi(@Body request: CoordiCreateRequestDTO): Call<ResponseBody>

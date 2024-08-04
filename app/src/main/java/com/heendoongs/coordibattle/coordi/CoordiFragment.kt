@@ -141,10 +141,25 @@ class CoordiFragment : Fragment() {
             changeFaceImage(imageResId)
         }
         clothesAdapter = ClothesAdapter(requireContext(), emptyList()) { clothesId, imageUrl ->
-            addRemoteImageToContainer(clothesId, imageUrl)
+            val selectedTab = getCurrentSelectedTab() // 현재 선택된 탭의 type을 반환하는 메소드
+            addRemoteImageToContainer(clothesId, imageUrl, selectedTab)
         }
         binding.itemList.layoutManager = GridLayoutManager(context, 3) // 한 행에 3개 아이템 표시
         binding.itemList.adapter = heendyAdapter // 기본 흰디 얼굴 선택
+    }
+
+    /**
+     * 현재 선택된 탭의 type을 반환하는 메소드
+     */
+    private fun getCurrentSelectedTab(): String {
+        return when {
+            binding.faceIcon.isSelected -> "Face"
+            binding.armsIcon.isSelected -> "Arms"
+            binding.topIcon.isSelected -> "Top"
+            binding.bottomIcon.isSelected -> "Bottom"
+            binding.shoesIcon.isSelected -> "Shoe"
+            else -> ""
+        }
     }
 
     /**
@@ -264,7 +279,7 @@ class CoordiFragment : Fragment() {
     /**
      * 코디 영역에 DB에 저장된 이미지 올리기
      */
-    private fun addRemoteImageToContainer(clothId: Long, imageUrl: String) {
+    /*private fun addRemoteImageToContainer(clothId: Long, imageUrl: String) {
         if (!selectedClothIds.contains(clothId)) {
             selectedClothIds.add(clothId)
         }
@@ -272,6 +287,40 @@ class CoordiFragment : Fragment() {
         Glide.with(this).load(imageUrl).into(imageView)
         setupImageView(imageView, 300, 300)
         binding.coordiContainer.addView(imageView)
+    }*/
+    private fun addRemoteImageToContainer(clothId: Long, imageUrl: String, type: String) {
+        if (!selectedClothIds.contains(clothId)) {
+            selectedClothIds.add(clothId)
+        }
+
+        if (type == "Shoe") {
+            // Add left shoe
+            val leftShoeImageView = ImageView(requireContext())
+            Glide.with(this).load(imageUrl).into(leftShoeImageView)
+            setupImageView(leftShoeImageView, 200, 200, 0, 80)
+            binding.coordiContainer.addView(leftShoeImageView)
+            leftShoeImageView.setOnClickListener {
+                selectImageView(leftShoeImageView)
+            }
+
+            // Add right shoe with flipped image
+            val rightShoeImageView = ImageView(requireContext())
+            Glide.with(this).load(imageUrl).into(rightShoeImageView)
+            rightShoeImageView.scaleX = -1f // Flip the image horizontally
+            setupImageView(rightShoeImageView, 200, 200, 80, 0)
+            binding.coordiContainer.addView(rightShoeImageView)
+            rightShoeImageView.setOnClickListener {
+                selectImageView(rightShoeImageView)
+            }
+        } else {
+            val imageView = ImageView(requireContext())
+            Glide.with(this).load(imageUrl).into(imageView)
+            setupImageView(imageView, 300, 300)
+            binding.coordiContainer.addView(imageView)
+            imageView.setOnClickListener {
+                selectImageView(imageView)
+            }
+        }
     }
 
     private fun selectImageView(imageView: ImageView) {
