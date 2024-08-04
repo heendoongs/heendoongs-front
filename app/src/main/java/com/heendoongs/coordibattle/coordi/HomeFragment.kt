@@ -99,7 +99,7 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             selectedBattleId = if (position == 0) null else battles[position - 1].battleId
                             currentPage = 0
-//                            loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
+                            loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {

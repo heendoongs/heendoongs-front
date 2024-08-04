@@ -151,6 +151,17 @@
             android:layout_gravity="bottom|start"
             android:layout_margin="16dp"
             android:src="@drawable/ic_background_select" />
+
+        <!-- 삭제 버튼 -->
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_width="24dp"
+            android:layout_height="28dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            android:padding="3dp"
+            android:background="@drawable/ic_item_delete" />
     </FrameLayout>
 
     <!-- 하단 아이템 선택 메뉴 -->

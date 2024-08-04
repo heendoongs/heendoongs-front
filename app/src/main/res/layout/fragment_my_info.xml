@@ -267,7 +267,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btn_update"
         app:layout_constraintTop_toTopOf="@+id/btn_update"
-        app:srcCompat="@drawable/ic_delete_btn" />
+        app:srcCompat="@drawable/ic_member_delete_btn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
