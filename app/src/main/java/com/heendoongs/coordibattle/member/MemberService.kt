@@ -3,6 +3,8 @@ package com.heendoongs.coordibattle.member
 import com.heendoongs.coordibattle.battle.BattleDTO
 import com.heendoongs.coordibattle.battle.BattleResponseDTO
 import com.heendoongs.coordibattle.battle.MemberCoordiVoteRequestDTO
+import com.heendoongs.coordibattle.coordi.CoordiListResponseDTO
+import com.heendoongs.coordibattle.coordi.Page
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -31,14 +33,18 @@ interface MemberService {
         @Body signUpRequest: SignUpRequest
     ): Call<ResponseBody>
 
-    @GET("mycloset")
-    fun getMyCloset(
-        @Query("memberId") memberId: Long
-    ): Call<MyClosetResponse>
+    @GET("mycloset/list")
+    fun getMyClosetList(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Call<Page<CoordiListResponseDTO>>
+
+    @GET("mycloset/nickname")
+    fun getNickname(
+    ): Call<MyNicknameResponse>
 
     @GET("myinfo")
     fun getMyInfo(
-        @Query("memberId") memberId: Long
     ): Call<MyInfoResponse>
 
     @PUT("updateAccount")

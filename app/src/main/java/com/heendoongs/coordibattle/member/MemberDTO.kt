@@ -1,5 +1,7 @@
 package com.heendoongs.coordibattle.member
 
+import com.heendoongs.coordibattle.coordi.CoordiListResponseDTO
+
 /**
  * 멤버 API 관련 데이터 클래스
  * @author 조희정
@@ -31,9 +33,8 @@ data class SignUpRequest(
     val nickname: String
 )
 
-// 내 옷장 응답
-data class MyClosetResponse(
-    val memberId: Long,
+// 내 닉네임 응답
+data class MyNicknameResponse(
     val nickname: String
 )
 

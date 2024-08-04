@@ -7,9 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.heendoongs.coordibattle.MainActivity
+import com.heendoongs.coordibattle.R
+import com.heendoongs.coordibattle.battle.BattleService
+import com.heendoongs.coordibattle.coordi.*
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentMyClosetBinding
+import com.heendoongs.coordibattle.global.checkLoginAndNavigate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,10 +34,14 @@ import retrofit2.Response
  * </pre>
  */
 
-class MyClosetFragment :Fragment() {
+class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
 
     private lateinit var service: MemberService
     private lateinit var binding: FragmentMyClosetBinding
+
+    private lateinit var adapter: CoordiAdapter
+    private var currentPage = 0
+    private val pageSize = 6
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,69 +50,114 @@ class MyClosetFragment :Fragment() {
     ): View? {
         binding = FragmentMyClosetBinding.inflate(inflater, container, false)
 
-        // SharedPreferences에서 JWT 토큰과 memberId 가져오기
-        val sharedPref = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        val token = sharedPref.getString("jwt_token", null)
-        val memberId = sharedPref.getLong("memberId", -1)
-
-        if (token != null && memberId != null) {
-            // Retrofit 인스턴스 생성 시 토큰 포함
-            service = RetrofitConnection.getInstance().create(MemberService::class.java)
-
-            binding.btnMyInfoPage.setOnClickListener {
-                (requireActivity() as? MainActivity)?.replaceFragment(MyInfoFragment())
-            }
-
-            binding.btnLogout.setOnClickListener {
-                logout()
-            }
-
-            getMyCloset(memberId)
-        } else {
-            showToast("로그인 정보가 없습니다. 다시 로그인 해주세요.")
+        if (!checkLoginAndNavigate()) {
+            return binding.root
         }
 
+        // Retrofit 인스턴스 생성 시 토큰 포함
+        service = RetrofitConnection.getInstance().create(MemberService::class.java)
+
+        // RecyclerView 초기화
+        binding.recyclerView.layoutManager = GridLayoutManager(context, 2) // 한 행에 2개 아이템 표시
+
+        // 어댑터 초기화 및 설정
+        adapter = CoordiAdapter(requireContext(), mutableListOf(), this)
+        binding.recyclerView.adapter = adapter
+
+        binding.btnMyInfoPage.setOnClickListener {
+            (requireActivity() as? MainActivity)?.replaceFragment(MyInfoFragment())
+        }
+
+        binding.btnLogout.setOnClickListener {
+            logout()
+        }
+
+        loadNickname()
+//        loadMyCloset(currentPage, pageSize)
 
         return binding.root
     }
 
-    private fun getMyCloset(memberId: Long) {
-        // MyCloset 요청 보내기
-        service.getMyCloset(memberId).enqueue(object : Callback<MyClosetResponse> {
-            override fun onResponse(call: Call<MyClosetResponse>, response: Response<MyClosetResponse>) {
+    override fun onResume() {
+        super.onResume()
+        if (!checkLoginAndNavigate()) {
+            return
+        }
+    }
+
+    private fun loadNickname() {
+        service.getNickname().enqueue(object : Callback<MyNicknameResponse> {
+            override fun onResponse(call: Call<MyNicknameResponse>, response: Response<MyNicknameResponse>) {
                 if (response.isSuccessful) {
                     // 성공적인 응답 처리
                     val myClosetResponse = response.body()
+                    println(response.body()!!.nickname)
                     if (myClosetResponse != null) {
                         binding.nickname.text = myClosetResponse.nickname
                     } else {
                         showToast("데이터를 가져올 수 없습니다.")
                     }
                 } else {
-                    // 실패한 응답 처리
                     showToast("데이터 가져오기 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
                 }
             }
 
-            override fun onFailure(call: Call<MyClosetResponse>, t: Throwable) {
-                // 요청 실패 처리
+            override fun onFailure(call: Call<MyNicknameResponse>, t: Throwable) {
                 showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
             }
         })
     }
 
+    private fun loadMyCloset(page: Int, size: Int) {
+        service.getMyClosetList(page, size).enqueue(object : Callback<Page<CoordiListResponseDTO>> {
+            override fun onResponse(call: Call<Page<CoordiListResponseDTO>>, response: Response<Page<CoordiListResponseDTO>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val pageData = response.body()!!
+                    val newItems = pageData.content
+                    if (page == 0) {
+                        adapter.updateData(newItems) // 초기 로드 시 데이터 설정
+                    } else {
+                        adapter.appendData(newItems) // 추가 데이터 로드 시
+                    }
+
+                    // 데이터가 더 이상 없을 때 버튼 숨기기
+                    if (page >= pageData.totalPages - 1) {
+                        binding.btnMore.visibility = View.GONE
+                    } else {
+                        binding.btnMore.visibility = View.VISIBLE
+                    }
+                } else {
+                    Toast.makeText(context, "222 Failed to fetch data", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Page<CoordiListResponseDTO>>, t: Throwable) {
+                Toast.makeText(context, "222 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
     private fun logout() {
-        val sharedPref = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            remove("jwt_token")
-            remove("memberId")
-            apply()
-        }
+        val mainActivity = activity as? MainActivity
+        mainActivity?.getPreferenceUtil()?.clearTokens()
         showToast("로그아웃 되었습니다.")
-        (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment())
+        mainActivity?.replaceFragment(LogInFragment())
     }
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onItemClick(item: CoordiListResponseDTO) {
+        val bundle = Bundle().apply {
+            putLong("coordiId", item.coordiId)
+        }
+        val detailFragment = DetailFragment().apply {
+            arguments = bundle
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_container, detailFragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

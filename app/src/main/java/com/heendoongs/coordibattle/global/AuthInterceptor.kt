@@ -16,18 +16,50 @@ import okhttp3.Response
  * 2024.07.31  	조희정       최초 생성
  * </pre>
  */
-class AuthInterceptor : Interceptor {
+class AuthInterceptor(private val retrofitConnection: RetrofitConnection) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         val accessToken = MainApplication.prefs.getAccessToken()
 
-        return if (accessToken != null) {
-            val newRequest = originalRequest.newBuilder()
-                .header("Authorization", "Bearer $accessToken")
+        val authenticatedRequest = if (accessToken != null) {
+            originalRequest.newBuilder()
+                .header("Authorization", accessToken)
                 .build()
-            chain.proceed(newRequest)
         } else {
-            chain.proceed(originalRequest)
+            originalRequest
+        }
+
+        val response = chain.proceed(authenticatedRequest)
+
+        // Access token이 만료되었을 경우
+        if (response.code == 800) {
+            synchronized(this) {
+                // Refresh Token을 사용하여 새로운 Access Token을 가져옴
+                val newAccessToken = getNewAccessToken()
+                if (newAccessToken != null) {
+                    MainApplication.prefs.saveAccessToken(newAccessToken)
+
+                    // 새로운 Access Token을 사용하여 원래의 요청을 재시도
+                    val newRequest = originalRequest.newBuilder()
+                        .header("Authorization", newAccessToken)
+                        .build()
+
+                    return chain.proceed(newRequest)
+                }
+            }
+        }
+
+        return response
+    }
+
+    private fun getNewAccessToken(): String? {
+        val authService = retrofitConnection.getInstance().create(AuthService::class.java)
+        val response = authService.refreshToken().execute()
+
+        return if (response.isSuccessful) {
+            response.body()?.accessToken
+        } else {
+            null
         }
     }
 }

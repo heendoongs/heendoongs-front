@@ -15,7 +15,6 @@ import com.heendoongs.coordibattle.databinding.ActivityMainBinding
 import com.heendoongs.coordibattle.global.PreferenceUtil
 import com.heendoongs.coordibattle.member.LogInFragment
 import com.heendoongs.coordibattle.member.MyClosetFragment
-import dagger.hilt.android.HiltAndroidApp
 
 /**
  * 메인 액티비티
@@ -82,13 +81,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_home -> HomeFragment()
                 R.id.fragment_coordi -> CoordiFragment()
                 R.id.fragment_battle -> BattleFragment()
-                R.id.fragment_my_closet -> { LogInFragment()
-                    if (isLoggedIn()) {
-                        MyClosetFragment()
-                    } else {
-                        LogInFragment()
-                    }
-                }
+                R.id.fragment_my_closet -> MyClosetFragment()
                 else -> null
             }
             replaceFragment(fragment)
@@ -107,13 +100,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * 로그인 여부 확인
-     */
-    private fun isLoggedIn(): Boolean {
-        // sharedPreferences
-        val sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        val t = sharedPreferences.getString("jwt_token", null) != null
-        return t
+    fun getPreferenceUtil(): PreferenceUtil {
+        return prefs
     }
 }

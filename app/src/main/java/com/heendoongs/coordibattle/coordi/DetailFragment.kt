@@ -22,7 +22,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.*
 import com.heendoongs.coordibattle.R
-import com.heendoongs.coordibattle.RetrofitConnection
+import com.heendoongs.coordibattle.global.RetrofitConnection
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback

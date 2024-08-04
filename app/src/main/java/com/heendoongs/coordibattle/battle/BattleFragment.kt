@@ -11,11 +11,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.global.RetrofitConnection
+import com.heendoongs.coordibattle.global.checkLoginAndNavigate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +34,7 @@ import retrofit2.Response
  * 2024.07.26  	임원정       최초 생성
  * 2024.07.30  	남진수       배틀 페이지 리스트 조회
  * 2024.07.30  	남진수       배틀 투표 기능 추가
+ * 2024 08 04   조희정       로그인 체크 메소드 추
  * </pre>
  */
 
@@ -47,11 +50,23 @@ class BattleFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_battle, container, false)
 
+        if (!checkLoginAndNavigate()) {
+            return rootView
+        }
+
         service = RetrofitConnection.getInstance().create(BattleService::class.java)
 
         loadBattleData()
 
         return rootView
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!checkLoginAndNavigate()) {
+            Toast.makeText(requireContext(), "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
     }
 
     private fun loadBattleData() {

@@ -21,18 +21,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitConnection {
     private const val BASE_URL = "http://10.0.2.2:8080/"
     private var retrofit: Retrofit? = null
-    private var publicRetrofit: Retrofit? = null
 
 
     fun getInstance(): Retrofit {
-        // 로그
+        // 로그인이 필요한
         if (retrofit == null) {
             val loggingInterceptor = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             }
 
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(AuthInterceptor())
+                .addInterceptor(AuthInterceptor(this))
                 .addInterceptor(loggingInterceptor)
                 .build()
 
@@ -43,22 +42,5 @@ object RetrofitConnection {
                 .build()
         }
         return retrofit!!
-    }
-
-    fun getPublicClient(): Retrofit {
-        if (publicRetrofit == null) {
-            val loggingInterceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-
-            val okHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
-
-            publicRetrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient)
-                .build()
-        }
-        return publicRetrofit!!
     }
 }

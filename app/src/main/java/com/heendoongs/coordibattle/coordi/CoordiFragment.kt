@@ -22,8 +22,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.heendoongs.coordibattle.R
-import com.heendoongs.coordibattle.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentCoordiBinding
+import com.heendoongs.coordibattle.global.RetrofitConnection
+import com.heendoongs.coordibattle.global.checkLoginAndNavigate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,6 +49,7 @@ import java.nio.file.attribute.AclEntry.newBuilder
  * 2024.07.29   임원정       이미지 드래그앤드롭, 확대/축소, 이미지 저장 구현
  * 2024.08.02   임원정       아이템 탭 메뉴 동작 및 아이템 불러오기 구현
  * 2024.08.03   임원정       코디 업로드 기능 구현
+ * 2024.08.04   조희정       로그인 체크 메소드 추가
  * </pre>
  */
 
@@ -71,6 +73,10 @@ class CoordiFragment : Fragment() {
     ): View? {
         _binding = FragmentCoordiBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        if (!checkLoginAndNavigate()) {
+            return view
+        }
 
         service = RetrofitConnection.getInstance().create(CoordiService::class.java)
 
@@ -101,6 +107,14 @@ class CoordiFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!checkLoginAndNavigate()) {
+            Toast.makeText(requireContext(), "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
     }
 
     /**

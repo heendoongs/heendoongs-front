@@ -56,8 +56,8 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         val view = binding.root
 
         // Retrofit 설정
-        service = RetrofitConnection.getPublicClient().create(CoordiService::class.java)
-        battleService = RetrofitConnection.getPublicClient().create(BattleService::class.java)
+        service = RetrofitConnection.getInstance().create(CoordiService::class.java)
+        battleService = RetrofitConnection.getInstance().create(BattleService::class.java)
 
         // RecyclerView 초기화
         binding.recyclerView.layoutManager = GridLayoutManager(context, 2) // 한 행에 2개 아이템 표시
@@ -107,12 +107,14 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                         }
                     }
                 } else {
-                    Toast.makeText(context, "Failed to load battles", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "111 Failed to load battles", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<BattleTitleResponseDTO>>, t: Throwable) {
-                Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "333 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                println("===loadBanner 대실패...===")
+                println(t.message)
             }
         })
     }
@@ -168,12 +170,12 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                         binding.btnMore.visibility = View.VISIBLE
                     }
                 } else {
-                    Toast.makeText(context, "Failed to fetch data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "222 Failed to fetch data", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<Page<CoordiListResponseDTO>>, t: Throwable) {
-                Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "222 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -185,12 +187,14 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                 if (response.isSuccessful && response.body() != null) {
                     setupSlider(response.body()!!)
                 } else {
-                    Toast.makeText(context, "Failed to load banners", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "333 Failed to load banners", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<BannerResponseDTO>>, t: Throwable) {
-                Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "111 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                println("==== setupFilterSpinner 대실패... ===")
+                println(t.message)
             }
         })
     }

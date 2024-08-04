@@ -76,7 +76,7 @@ class LogInFragment : Fragment() {
                     }
 
                     showToast("로그인 성공! 환영합니다.")
-//                    (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment())
+                    (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment())
                 } else {
                     // 로그인 실패
                     showToast("로그인 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")

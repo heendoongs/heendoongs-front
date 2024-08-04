@@ -65,7 +65,7 @@ class MyInfoFragment : Fragment() {
     }
 
     private fun getMyInfo(memberId: Long) {
-        service.getMyInfo(memberId).enqueue(object : Callback<MyInfoResponse> {
+        service.getMyInfo().enqueue(object : Callback<MyInfoResponse> {
             override fun onResponse(call: Call<MyInfoResponse>, response: Response<MyInfoResponse>) {
                 if (response.isSuccessful) {
                     val myInfoResponse = response.body()
