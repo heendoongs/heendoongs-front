@@ -43,20 +43,20 @@ interface CoordiService {
      */
     @GET("coordi/like")
     fun likeCoordi(
-        @Query("memberId") memberId: Long,
+        @Query("memberId") memberId: Long?,
         @Query("coordiId") coordiId: Long
     ): Call<CoordiDetailsResponseDTO>
 
     @PATCH("coordi/update")
     fun updateCoordi(
-        @Query("memberId") memberId: Long,
+        @Query("memberId") memberId: Long?,
         @Query("coordiId") coordiId: Long,
         @Body requestDTO: CoordiUpdateRequestDTO
     ): Call<CoordiDetailsResponseDTO>
 
     @DELETE("coordi/delete")
     fun deleteCoordi(
-        @Query("memberId") memberId: Long,
+        @Query("memberId") memberId: Long?,
         @Query("coordiId") coordiId: Long?
     ): Call<ResponseBody>
 

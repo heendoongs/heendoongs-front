@@ -24,6 +24,7 @@ import com.google.gson.*
 import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.global.RetrofitConnection
+import com.heendoongs.coordibattle.member.LogInFragment
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -59,7 +60,7 @@ class DetailFragment : Fragment() {
     private lateinit var xButton: ImageButton
     private lateinit var titleTextView: TextView
     private lateinit var titleEditText: EditText
-    private var memberId: Long = 6002L // 실제 데이터로 교체 필요
+    private var memberId: Long? = null
     private var coordiId: Long? = null
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -73,7 +74,7 @@ class DetailFragment : Fragment() {
         service = RetrofitConnection.getInstance().create(CoordiService::class.java)
         coordiId = arguments?.getLong("coordiId")
 
-        val memberId = MainActivity.prefs.getMemberId()
+        memberId = MainActivity.prefs.getMemberId()
 
         loadCoordiDetails()
         return rootView
@@ -162,7 +163,17 @@ class DetailFragment : Fragment() {
 
                             voteButton.setOnClickListener {
                                 if (data.isVotingPeriod) {
-                                    likeCoordi(memberId, id)
+                                    if (memberId == -1L) {
+                                        Toast.makeText(context, "로그인 이후 사용해주세요", Toast.LENGTH_SHORT).show()
+                                        val loginFragment = LogInFragment()
+                                        parentFragmentManager.beginTransaction()
+                                            .replace(R.id.main_container, loginFragment)
+                                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                            .addToBackStack(null)
+                                            .commit()
+                                    } else {
+                                        likeCoordi(memberId, id)
+                                    }
                                 }
                             }
                         }
@@ -182,7 +193,7 @@ class DetailFragment : Fragment() {
     /**
      * 상세페이지 내 코디 투표(좋아요)
      */
-    private fun likeCoordi(memberId: Long, coordiId: Long) {
+    private fun likeCoordi(memberId: Long?, coordiId: Long) {
         val call = service.likeCoordi(memberId, coordiId)
         call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
             override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
@@ -236,7 +247,7 @@ class DetailFragment : Fragment() {
     /**
      * 상세페이지 제목 업데이트
      */
-    private fun updateCoordi(memberId: Long, coordiId: Long) {
+    private fun updateCoordi(memberId: Long?, coordiId: Long) {
         val newTitle = titleEditText.text.toString()
         if (newTitle != titleTextView.text.toString()) {
             val requestDTO = CoordiUpdateRequestDTO(newTitle)
@@ -281,7 +292,7 @@ class DetailFragment : Fragment() {
     /**
      * 상세페이지 삭제
      */
-    private fun deleteCoordi(memberId: Long, coordiId: Long?) {
+    private fun deleteCoordi(memberId: Long?, coordiId: Long?) {
         val call = service.deleteCoordi(memberId, coordiId)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
