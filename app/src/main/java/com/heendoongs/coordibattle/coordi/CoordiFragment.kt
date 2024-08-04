@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentCoordiBinding
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -335,8 +336,11 @@ class CoordiFragment : Fragment() {
     private fun toggleBackgroundSelectionLayout() {
         if (binding.backgroundSelectionLayout.visibility == View.GONE) {
             binding.backgroundSelectionLayout.visibility = View.VISIBLE
+            binding.itemListLayout.visibility = View.GONE
+
         } else {
             binding.backgroundSelectionLayout.visibility = View.GONE
+            binding.itemListLayout.visibility = View.VISIBLE
         }
     }
 
@@ -417,9 +421,17 @@ class CoordiFragment : Fragment() {
      * 코디 업로드
      */
     private fun uploadCoordi(title: String) {
+        // 배경 선택 버튼 숨김
+        binding.btnSelectBackground.visibility = View.INVISIBLE
+        binding.backgroundSelectionLayout.visibility = View.INVISIBLE
+
         val bitmap = Bitmap.createBitmap(binding.coordiContainer.width, binding.coordiContainer.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         binding.coordiContainer.draw(canvas)
+
+        // 가시성 복원
+        binding.btnSelectBackground.visibility = View.VISIBLE
+        binding.backgroundSelectionLayout.visibility = View.VISIBLE
 
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream)
@@ -427,23 +439,24 @@ class CoordiFragment : Fragment() {
         val encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT)
 
         val request = CoordiCreateRequestDTO(
-            memberId = 6002L, // 실제 데이터로 변경 예정
+//            memberId = 6002L, // 실제 데이터로 변경 예정
             title = title,
             coordiImage = encodedImage,
             clothIds = selectedClothIds
         )
 
-        service.uploadCoordi(request).enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        service.uploadCoordi(request).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(requireContext(), "업로드 성공!", Toast.LENGTH_SHORT).show()
+                    val responseBody = response.body()?.string()
+                    Toast.makeText(requireContext(), responseBody, Toast.LENGTH_SHORT).show()
                     navigateToHomeFragment()
                 } else {
                     Toast.makeText(requireContext(), "업로드 실패!", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Toast.makeText(requireContext(), "업로드 오류: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
@@ -462,9 +475,17 @@ class CoordiFragment : Fragment() {
      * 갤러리에 이미지 저장
      */
     private fun saveImageToGallery() {
+        // 배경 선택 버튼 숨김
+        binding.btnSelectBackground.visibility = View.INVISIBLE
+        binding.backgroundSelectionLayout.visibility = View.INVISIBLE
+
         val bitmap = Bitmap.createBitmap(binding.coordiContainer.width, binding.coordiContainer.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         binding.coordiContainer.draw(canvas)
+
+        // 가시성 복원
+        binding.btnSelectBackground.visibility = View.VISIBLE
+        binding.backgroundSelectionLayout.visibility = View.VISIBLE
 
         val resolver = requireContext().contentResolver
         val contentValues = ContentValues().apply {
