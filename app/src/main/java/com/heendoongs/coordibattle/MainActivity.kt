@@ -10,9 +10,9 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.heendoongs.coordibattle.battle.BattleFragment
 import com.heendoongs.coordibattle.coordi.CoordiFragment
-import com.heendoongs.coordibattle.coordi.DetailFragment
 import com.heendoongs.coordibattle.coordi.HomeFragment
 import com.heendoongs.coordibattle.databinding.ActivityMainBinding
+import com.heendoongs.coordibattle.global.PreferenceUtil
 import com.heendoongs.coordibattle.member.LogInFragment
 import com.heendoongs.coordibattle.member.MyClosetFragment
 
@@ -30,13 +30,19 @@ import com.heendoongs.coordibattle.member.MyClosetFragment
  * 2024.08.04   남진수       구글 애널리틱스 관련 설정 추가
  * </pre>
  */
-
 class MainActivity : AppCompatActivity() {
+    companion object{
+        lateinit var prefs : PreferenceUtil
+    }
+
     private lateinit var binding : ActivityMainBinding
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        prefs = PreferenceUtil(applicationContext)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -75,25 +81,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_home -> HomeFragment()
                 R.id.fragment_coordi -> CoordiFragment()
                 R.id.fragment_battle -> BattleFragment()
-                R.id.fragment_my_closet -> { LogInFragment()
-                    if (isLoggedIn()) {
-                        MyClosetFragment()
-                    } else {
-                        LogInFragment()
-                    }
-                }
+                R.id.fragment_my_closet -> MyClosetFragment()
                 else -> null
             }
             replaceFragment(fragment)
             true
         }
-    }
-
-    private fun isLoggedIn(): Boolean {
-        // sharedPreferences
-        val sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        val t = sharedPreferences.getString("jwt_token", null) != null
-        return t
     }
 
     /**
@@ -107,4 +100,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun getPreferenceUtil(): PreferenceUtil {
+        return prefs
+    }
 }

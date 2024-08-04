@@ -35,7 +35,6 @@ interface CoordiService {
      */
     @GET("coordi/details")
     fun getCoordiDetails(
-        @Query("memberId") memberId: Long,
         @Query("coordiId") coordiId: Long
     ): Call<CoordiDetailsResponseDTO>
 

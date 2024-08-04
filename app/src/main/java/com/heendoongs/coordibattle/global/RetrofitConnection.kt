@@ -1,4 +1,4 @@
-package com.heendoongs.coordibattle
+package com.heendoongs.coordibattle.global
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializationContext
@@ -28,20 +28,15 @@ import java.util.concurrent.TimeUnit
  */
 object RetrofitConnection {
     private const val BASE_URL = "http://10.0.2.2:8080/"
-    private var INSTANCE: Retrofit? = null
+    private var retrofit: Retrofit? = null
 
-    fun getInstance(token: String? = null): Retrofit {
-        if (INSTANCE == null || token != null) {
+    fun getInstance(): Retrofit {
+        if (retrofit == null) {
             val logging = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             }
 
             val clientBuilder = OkHttpClient.Builder().addInterceptor(logging)
-
-            if (token != null) {
-                val authInterceptor = AuthInterceptor(token)
-                clientBuilder.addInterceptor(authInterceptor)
-            }
 
             val client = clientBuilder
                 .connectTimeout(100, TimeUnit.SECONDS)
@@ -62,12 +57,12 @@ object RetrofitConnection {
                 .setLenient() // lenient 모드를 설정하여 잘못된 JSON을 허용 -> Base64용
                 .create()
 
-            INSTANCE = Retrofit.Builder()
+            retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
         }
-        return INSTANCE!!
+        return retrofit!!
     }
 }

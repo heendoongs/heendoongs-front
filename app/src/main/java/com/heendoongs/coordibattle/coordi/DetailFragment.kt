@@ -22,7 +22,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.*
 import com.heendoongs.coordibattle.R
-import com.heendoongs.coordibattle.RetrofitConnection
+import com.heendoongs.coordibattle.global.RetrofitConnection
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -77,7 +77,7 @@ class DetailFragment : Fragment() {
 
     private fun loadCoordiDetails() {
         coordiId?.let { id ->
-            val call = service.getCoordiDetails(memberId, id)
+            val call = service.getCoordiDetails(id)
             call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
                 override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
                     if (response.isSuccessful) {
@@ -133,7 +133,7 @@ class DetailFragment : Fragment() {
                                     showDeleteDialog()
                                 }
                                 checkButton.setOnClickListener {
-                                    updateTitle(memberId, id)
+                                    updateCoordi(memberId, id)
                                     toggleEditMode(false)
                                 }
                                 xButton.setOnClickListener {
@@ -162,30 +162,43 @@ class DetailFragment : Fragment() {
                                 }
                             }
                         }
+                    } else{
+                        Toast.makeText(context, "상세 페이지 로드 실패", Toast.LENGTH_SHORT).show()
+                        Log.e("DetailFragment", "loadCoordiDetails 실패: ${response.errorBody()?.string()}")
                     }
                 }
-
                 override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
-
+                    Toast.makeText(context, "상세 페이지 로드 실패", Toast.LENGTH_SHORT).show()
+                    Log.e("DetailFragment", "loadCoordiDetails 네트워크 요청 실패", t)
                 }
             })
         }
     }
 
-
+    /**
+     * 상세페이지 내 코디 투표(좋아요)
+     */
     private fun likeCoordi(memberId: Long, coordiId: Long) {
         val call = service.likeCoordi(memberId, coordiId)
         call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
             override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
-                loadCoordiDetails()
+                if (response.isSuccessful) {
+                    loadCoordiDetails()
+                } else {
+                    Toast.makeText(context, "코디 투표에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    Log.e("DetailFragment", "likeCoordi 실패: ${response.errorBody()?.string()}")
+                }
             }
-
             override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
-
+                Toast.makeText(context, "코디 투표에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Log.e("DetailFragment", "likeCoordi 네트워크 요청 실패", t)
             }
         })
     }
 
+    /**
+     * 상세페이지 제목 수정모드 설정
+     */
     private fun toggleEditMode(isEditMode: Boolean) {
         if (isEditMode) {
             titleTextView.visibility = View.INVISIBLE
@@ -208,35 +221,43 @@ class DetailFragment : Fragment() {
         }
     }
 
+    /**
+     * 상세페이지 제목 수정 취소 (X 표시)
+     */
     private fun cancelEditMode() {
         titleEditText.setText(titleTextView.text)
         toggleEditMode(false)
     }
 
-    private fun updateTitle(memberId: Long, coordiId: Long) {
+    /**
+     * 상세페이지 제목 업데이트
+     */
+    private fun updateCoordi(memberId: Long, coordiId: Long) {
         val newTitle = titleEditText.text.toString()
         if (newTitle != titleTextView.text.toString()) {
             val requestDTO = CoordiUpdateRequestDTO(newTitle)
-            updateCoordi(memberId, coordiId, requestDTO)
+            val call = service.updateCoordi(memberId, coordiId, requestDTO)
+            call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
+                override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(context, "제목이 수정되었습니다!", Toast.LENGTH_SHORT).show()
+                        loadCoordiDetails()
+                    } else {
+                        Toast.makeText(context, "제목 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        Log.e("DetailFragment", "updateCoordi 실패: ${response.errorBody()?.string()}")
+                    }
+                }
+                override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
+                    Toast.makeText(context, "제목 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    Log.e("DetailFragment", "updateCoordi 네트워크 요청 실패", t)
+                }
+            })
         }
     }
 
-    private fun updateCoordi(memberId: Long, coordiId: Long, requestDTO: CoordiUpdateRequestDTO){
-        val call = service.updateCoordi(memberId, coordiId, requestDTO)
-        call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
-            override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
-                if (response.isSuccessful) {
-                    Toast.makeText(context, "제목이 수정되었습니다!", Toast.LENGTH_SHORT).show()
-                    loadCoordiDetails()
-                }
-            }
-
-            override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
-
-            }
-        })
-    }
-
+    /**
+     * 삭제 다이얼로그 불러오기
+     */
     private fun showDeleteDialog() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_delete, null)
         val dialog = AlertDialog.Builder(requireContext()).create()
@@ -253,6 +274,9 @@ class DetailFragment : Fragment() {
         dialog.show()
     }
 
+    /**
+     * 상세페이지 삭제
+     */
     private fun deleteCoordi(memberId: Long, coordiId: Long?) {
         val call = service.deleteCoordi(memberId, coordiId)
         call.enqueue(object : Callback<ResponseBody> {
@@ -268,7 +292,7 @@ class DetailFragment : Fragment() {
                         .commit()
                 } else {
                     val errorBody = response.errorBody()?.string()
-                    Log.e("DetailFragment", "삭제 실패, error: $errorBody")
+                    Log.e("DetailFragment", "코디 삭제 실패, error: $errorBody")
                 }
             }
 
@@ -278,6 +302,9 @@ class DetailFragment : Fragment() {
         })
     }
 
+    /**
+     * 구글 애널리틱스 log
+     */
     private fun logItemClick(cloth: ClothDetailsResponseDTO) {
         val bundle = Bundle().apply {
             putString("cloth_id", cloth.clothId.toString())
@@ -289,6 +316,9 @@ class DetailFragment : Fragment() {
         Log.d("FirebaseAnalytics", "Event logged: cloth_item_click - ${cloth.clothId}")
     }
 
+    /**
+     * RecyclerView 불러오기
+     */
     private fun setupRecyclerView(clothes: List<ClothDetailsResponseDTO>) {
         val recyclerView = rootView.findViewById<RecyclerView>(R.id.clothes_recycler_view)
         val adapter = DetailClothesAdapter(clothes, requireContext()) { cloth ->
@@ -298,6 +328,9 @@ class DetailFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
 
+    /**
+     * Base64 디코드
+     */
     private fun decodeBase64ToBitmap(base64Str: String): Bitmap? {
         return try {
             val base64Data = base64Str.substringAfter(",")

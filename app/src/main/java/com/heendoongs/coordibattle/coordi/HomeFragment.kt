@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.heendoongs.coordibattle.R
-import com.heendoongs.coordibattle.RetrofitConnection
+import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.battle.BannerSliderAdapter
 import com.heendoongs.coordibattle.battle.BannerResponseDTO
 import com.heendoongs.coordibattle.battle.BattleService
@@ -107,12 +107,14 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                         }
                     }
                 } else {
-                    Toast.makeText(context, "Failed to load battles", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "111 Failed to load battles", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<BattleTitleResponseDTO>>, t: Throwable) {
-                Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "333 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                println("===loadBanner 대실패...===")
+                println(t.message)
             }
         })
     }
@@ -168,12 +170,12 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                         binding.btnMore.visibility = View.VISIBLE
                     }
                 } else {
-                    Toast.makeText(context, "Failed to fetch data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "222 Failed to fetch data", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<Page<CoordiListResponseDTO>>, t: Throwable) {
-                Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "222 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -185,12 +187,14 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                 if (response.isSuccessful && response.body() != null) {
                     setupSlider(response.body()!!)
                 } else {
-                    Toast.makeText(context, "Failed to load banners", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "333 Failed to load banners", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<BannerResponseDTO>>, t: Throwable) {
-                Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "111 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                println("==== setupFilterSpinner 대실패... ===")
+                println(t.message)
             }
         })
     }
