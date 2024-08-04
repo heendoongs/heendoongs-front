@@ -105,6 +105,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_bar" >
 
+        <!-- 몸 -->
         <ImageView
             android:id="@+id/body"
             android:layout_width="200dp"
@@ -113,14 +114,17 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="110dp"/>
 
+        <!-- 왼팔 -->
         <ImageView
             android:id="@+id/left_arm"
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:src="@drawable/img_left_arm1"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="120dp"
-            android:layout_marginStart="100dp"/>
+            android:layout_marginEnd="43dp"/>
 
+        <!-- 오른팔 -->
         <ImageView
             android:id="@+id/right_arm"
             android:layout_width="110dp"
@@ -130,7 +134,7 @@
             android:layout_marginTop="120dp"
             android:layout_marginStart="43dp"/>
 
-
+        <!-- 얼굴 -->
         <ImageView
             android:id="@+id/face"
             android:layout_width="110dp"
@@ -138,6 +142,15 @@
             android:src="@drawable/img_face1"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"/>
+
+        <!-- 배경 선택 버튼 -->
+        <ImageView
+            android:id="@+id/btn_select_background"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_background_select" />
     </FrameLayout>
 
     <!-- 하단 아이템 선택 메뉴 -->
@@ -209,5 +222,34 @@
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
             android:orientation="horizontal" />
+    </LinearLayout>
+
+    <!-- 배경 선택하기 영역 -->
+    <LinearLayout
+        android:id="@+id/background_selection_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/coordi_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btn_select_color"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="색상 선택" />
+
+        <Button
+            android:id="@+id/btn_select_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="이미지 선택" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

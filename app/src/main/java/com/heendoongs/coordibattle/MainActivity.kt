@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.heendoongs.coordibattle.battle.BattleFragment
 import com.heendoongs.coordibattle.coordi.CoordiFragment
 import com.heendoongs.coordibattle.coordi.HomeFragment
@@ -21,10 +24,11 @@ import dagger.hilt.android.HiltAndroidApp
  * @version 1.0
  *
  * <pre>
- * 수정일        	수정자        수정내용
+ * 수정일        수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.07.26  	임원정       최초 생성
  * 2024.07.30  	조희정       하단바 fragment_my_closet 연결 프레그먼트 변경
+ * 2024.08.04   남진수       구글 애널리틱스 관련 설정 추가
  * </pre>
  */
 class MainActivity : AppCompatActivity() {
@@ -33,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var binding : ActivityMainBinding
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,11 +49,20 @@ class MainActivity : AppCompatActivity() {
 
         makeStatusBarTransparent()
         setBottomNavigation()
+
+        /**
+         * 구글 애널리틱스 관련 설정
+         */
+        firebaseAnalytics = Firebase.analytics
+
+        FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true)
+        FirebaseAnalytics.getInstance(this).setSessionTimeoutDuration(1000000)
+        FirebaseAnalytics.getInstance(this).logEvent("debug_logging_enabled", null)
     }
 
     /**
      * 상태바, 하단바까지 화면 확장
-      */
+     */
     private fun makeStatusBarTransparent() {
         window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,

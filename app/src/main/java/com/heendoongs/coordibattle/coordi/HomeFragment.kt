@@ -14,6 +14,7 @@ import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.battle.BannerSliderAdapter
 import com.heendoongs.coordibattle.battle.BannerResponseDTO
 import com.heendoongs.coordibattle.battle.BattleService
+import com.heendoongs.coordibattle.battle.BattleTitleResponseDTO
 import com.heendoongs.coordibattle.databinding.FragmentHomeBinding
 import com.smarteist.autoimageslider.SliderView
 import retrofit2.Call
@@ -75,9 +76,6 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         setupFilterSpinner()
         setupSortSpinner()
 
-        // 처음 데이터 로드
-        loadCoordiList(currentPage, pageSize)
-
         // 배너 데이터 로드
         loadBanners()
 
@@ -86,11 +84,11 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
 
     private fun setupFilterSpinner() {
         // 배틀 필터 스피너 설정
-        battleService.getCurrentBattles().enqueue(object : Callback<List<BannerResponseDTO>> {
-            override fun onResponse(call: Call<List<BannerResponseDTO>>, response: Response<List<BannerResponseDTO>>) {
+        battleService.getBattleTitles().enqueue(object : Callback<List<BattleTitleResponseDTO>> {
+            override fun onResponse(call: Call<List<BattleTitleResponseDTO>>, response: Response<List<BattleTitleResponseDTO>>) {
                 if (response.isSuccessful && response.body() != null) {
                     val battles = response.body()!!
-                    val battleTitles = arrayOf("배틀별") + battles.map { it.battleTitle }.toTypedArray()
+                    val battleTitles = arrayOf("배틀별") + battles.map { it.title }.toTypedArray()
 
                     // 배열의 첫 번째 항목을 기본값으로 설정
                     val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, battleTitles)
@@ -101,7 +99,7 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             selectedBattleId = if (position == 0) null else battles[position - 1].battleId
                             currentPage = 0
-                            loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
+//                            loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -113,7 +111,7 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                 }
             }
 
-            override fun onFailure(call: Call<List<BannerResponseDTO>>, t: Throwable) {
+            override fun onFailure(call: Call<List<BattleTitleResponseDTO>>, t: Throwable) {
                 Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })

@@ -3,13 +3,14 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.emptyactivity"
+        applicationId "com.heendoongs.coordibattle"
         minSdk 26
         targetSdk 31
         versionCode 1
@@ -60,4 +61,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.0'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
+
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-analytics-ktx:20.0.2'
 }
