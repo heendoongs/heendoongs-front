@@ -15,6 +15,22 @@ class PreferenceUtil(context: Context) {
             putString("access_token", accessToken)
             apply()
         }
+
+        try {
+            val memberId = JwtUtils.getMemberIdFromJWT(accessToken)
+            if (memberId != null) {
+                saveMemberId(memberId)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun saveMemberId(memberId: Long) {
+        with(prefs.edit()) {
+            putLong("memberId", memberId)
+            apply()
+        }
     }
 
     fun saveRefreshToken(refreshToken: String) {
@@ -40,4 +56,7 @@ class PreferenceUtil(context: Context) {
         println("로그인 체크용 토큰 확인" + getAccessToken())
         return getAccessToken() != null
     }
+
+    // memberId 반환하기
+    fun getMemberId(): Long? = prefs.getLong("memberId", -1L)
 }

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.*
+import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import okhttp3.ResponseBody
@@ -71,6 +72,9 @@ class DetailFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         service = RetrofitConnection.getInstance().create(CoordiService::class.java)
         coordiId = arguments?.getLong("coordiId")
+
+        val memberId = MainActivity.prefs.getMemberId()
+
         loadCoordiDetails()
         return rootView
     }
