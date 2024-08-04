@@ -38,7 +38,7 @@ class BannerSliderAdapter(private val banners: List<BannerResponseDTO>, private 
         val banner = banners[position]
         with(viewHolder.binding) {
             bannerTitle.text = banner.battleTitle
-            bannerPeriod.text = "${banner.startDate} ~ ${banner.endDate}"
+            bannerPeriod.text = "${banner.startDate.toString()} ~ ${banner.endDate.toString()}"
             // 배너 이미지 어둡게
             bannerImage.setColorFilter(Color.parseColor("#E3E3E3"), PorterDuff.Mode.MULTIPLY)
 

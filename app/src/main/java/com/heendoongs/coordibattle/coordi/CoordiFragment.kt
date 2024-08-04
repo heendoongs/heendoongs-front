@@ -2,9 +2,14 @@ package com.heendoongs.coordibattle.coordi
 
 import ClothesAdapter
 import android.R.attr.*
+import android.app.Activity
 import android.content.ContentValues
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -13,7 +18,6 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -25,6 +29,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+//import com.flask.colorpicker.ColorPickerDialog
+//import com.flask.colorpicker.OnColorSelectedListener
+//import com.github.dhaval2404.colorpicker.ColorPickerDialog
+import java.nio.file.attribute.AclEntry.newBuilder
+
 
 /**
  * 옷입히기 프래그먼트
@@ -45,6 +54,10 @@ import java.io.IOException
 class CoordiFragment : Fragment() {
     private var _binding: FragmentCoordiBinding? = null
     private val binding get() = _binding!!
+
+    companion object {
+        private const val GALLERY_REQUEST_CODE = 1
+    }
 
     private lateinit var heendyAdapter: HeendyAdapter
     private lateinit var clothesAdapter: ClothesAdapter
@@ -70,6 +83,21 @@ class CoordiFragment : Fragment() {
 
         binding.btnUpload.setOnClickListener {
             showUploadDialog()
+        }
+
+        // 배경 선택 버튼 클릭 리스너
+        binding.btnSelectBackground.setOnClickListener {
+            toggleBackgroundSelectionLayout()
+        }
+
+        // 색상 선택 버튼 클릭 리스너
+        binding.btnSelectColor.setOnClickListener {
+//            showColorPicker()
+        }
+
+        // 이미지 선택 버튼 클릭 리스너
+        binding.btnSelectImage.setOnClickListener {
+            openGalleryForImage()
         }
 
         return view
@@ -302,6 +330,65 @@ class CoordiFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun toggleBackgroundSelectionLayout() {
+        if (binding.backgroundSelectionLayout.visibility == View.GONE) {
+            binding.backgroundSelectionLayout.visibility = View.VISIBLE
+        } else {
+            binding.backgroundSelectionLayout.visibility = View.GONE
+        }
+    }
+
+//    private fun showColorPicker() {
+//        val colorPicker = ColorPickerDialogBuilder
+//            .with(context)
+//            .setTitle("색상 선택")
+//            .initialColor(Color.WHITE)
+//            .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+//            .density(12)
+//            .setPositiveButton("확인") { dialog, selectedColor, allColors ->
+//                binding.coordiContainer.setBackgroundColor(selectedColor)
+//            }
+//            .setNegativeButton("취소") { dialog, which -> }
+//            .build()
+//        colorPicker.show()
+//    }
+//    private fun showColorPicker() {
+//    ColorPickerDialog.Builder(context)
+//        .setDialogType(ColorPickerDialog.TYPE_PRESETS)
+//        .setAllowCustom(true)
+//        .setShowAlphaSlider(true)
+//        .setDialogId(0)
+//        .setPresets(arrayOf(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW))
+//        .setOnColorSelectedListener(OnColorSelectedListener { selectedColor ->
+//            binding.coordiContainer.setBackgroundColor(selectedColor)
+//        })
+//        .show(parentFragmentManager, "color_dialog")
+//    }
+
+    private fun openGalleryForImage() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                setBackgroundImage(uri)
+            }
+        }
+    }
+
+    private fun setBackgroundImage(imageUri: Uri) {
+        try {
+            val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
+            binding.coordiContainer.background = BitmapDrawable(resources, bitmap)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 
     /**

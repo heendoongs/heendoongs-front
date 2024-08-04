@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter
  * </pre>
  */
 object RetrofitConnection {
-    private const val BASE_URL = "http://10.0.2.2:8080/"
+    private const val BASE_URL = "http://192.168.54.83:8080/"
     private var INSTANCE: Retrofit? = null
 
     fun getInstance(token: String? = null): Retrofit {
