@@ -1,11 +1,11 @@
 package com.heendoongs.coordibattle.coordi
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class CoordiDetailsResponseDTO(
     val memberId: Long,
     val nickname: String,
-    val createDate: LocalDate,
+    val createDate: LocalDateTime,
     val coordiImage: String,
     val coordiTitle: String,
     val clothesList: List<ClothDetailsResponseDTO>,

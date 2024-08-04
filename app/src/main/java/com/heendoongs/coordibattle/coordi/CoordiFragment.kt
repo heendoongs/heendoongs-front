@@ -503,8 +503,6 @@ class CoordiFragment : Fragment() {
         service.uploadCoordi(request).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 val responseBody = response.body()?.string()
-
-                println(response)
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), responseBody, Toast.LENGTH_SHORT).show()
                     navigateToHomeFragment()

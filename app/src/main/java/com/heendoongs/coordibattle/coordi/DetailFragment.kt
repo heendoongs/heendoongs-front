@@ -138,7 +138,7 @@ class DetailFragment : Fragment() {
                                     showDeleteDialog()
                                 }
                                 checkButton.setOnClickListener {
-                                    updateCoordi(memberId, id)
+                                    updateCoordi(id)
                                     toggleEditMode(false)
                                 }
                                 xButton.setOnClickListener {
@@ -172,7 +172,7 @@ class DetailFragment : Fragment() {
                                             .addToBackStack(null)
                                             .commit()
                                     } else {
-                                        likeCoordi(memberId, id)
+                                        likeCoordi(id)
                                     }
                                 }
                             }
@@ -193,8 +193,8 @@ class DetailFragment : Fragment() {
     /**
      * 상세페이지 내 코디 투표(좋아요)
      */
-    private fun likeCoordi(memberId: Long?, coordiId: Long) {
-        val call = service.likeCoordi(memberId, coordiId)
+    private fun likeCoordi(coordiId: Long) {
+        val call = service.likeCoordi(coordiId)
         call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
             override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
                 if (response.isSuccessful) {
@@ -247,11 +247,11 @@ class DetailFragment : Fragment() {
     /**
      * 상세페이지 제목 업데이트
      */
-    private fun updateCoordi(memberId: Long?, coordiId: Long) {
+    private fun updateCoordi(coordiId: Long) {
         val newTitle = titleEditText.text.toString()
         if (newTitle != titleTextView.text.toString()) {
             val requestDTO = CoordiUpdateRequestDTO(newTitle)
-            val call = service.updateCoordi(memberId, coordiId, requestDTO)
+            val call = service.updateCoordi(coordiId, requestDTO)
             call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
                 override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
                     if (response.isSuccessful) {
@@ -280,7 +280,7 @@ class DetailFragment : Fragment() {
         dialog.setView(dialogView)
 
         dialogView.findViewById<ImageButton>(R.id.dialog_ok_button).setOnClickListener {
-            deleteCoordi(memberId, coordiId)
+            deleteCoordi(coordiId)
             dialog.dismiss()
         }
         dialogView.findViewById<ImageButton>(R.id.dialog_cancel_button).setOnClickListener {
@@ -292,8 +292,8 @@ class DetailFragment : Fragment() {
     /**
      * 상세페이지 삭제
      */
-    private fun deleteCoordi(memberId: Long?, coordiId: Long?) {
-        val call = service.deleteCoordi(memberId, coordiId)
+    private fun deleteCoordi(coordiId: Long?) {
+        val call = service.deleteCoordi(coordiId)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
