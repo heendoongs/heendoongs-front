@@ -468,8 +468,8 @@ class CoordiFragment : Fragment() {
             clothIds = selectedClothIds
         )
 
-        service.uploadCoordi(request).enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        service.uploadCoordi(request).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 println()
 //                val responseBody = response.body()?.string()
                 println("살려줘")
@@ -482,7 +482,7 @@ class CoordiFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Toast.makeText(requireContext(), "업로드 오류: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
