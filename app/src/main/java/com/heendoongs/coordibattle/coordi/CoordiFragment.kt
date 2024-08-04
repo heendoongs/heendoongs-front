@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -18,6 +19,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -29,12 +31,9 @@ import com.heendoongs.coordibattle.global.checkLoginAndNavigate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import yuku.ambilwarna.AmbilWarnaDialog
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-//import com.flask.colorpicker.ColorPickerDialog
-//import com.flask.colorpicker.OnColorSelectedListener
-//import com.github.dhaval2404.colorpicker.ColorPickerDialog
-import java.nio.file.attribute.AclEntry.newBuilder
 
 
 /**
@@ -67,6 +66,7 @@ class CoordiFragment : Fragment() {
     private lateinit var service: CoordiService
 
     private var selectedClothIds = mutableListOf<Long>()
+    private var defaultColor = Color.WHITE
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,7 +99,7 @@ class CoordiFragment : Fragment() {
 
         // 색상 선택 버튼 클릭 리스너
         binding.btnSelectColor.setOnClickListener {
-//            showColorPicker()
+            showColorPicker()
         }
 
         // 이미지 선택 버튼 클릭 리스너
@@ -347,6 +347,9 @@ class CoordiFragment : Fragment() {
         })
     }
 
+    /**
+     * 배경 선택 레이아웃
+     */
     private fun toggleBackgroundSelectionLayout() {
         if (binding.backgroundSelectionLayout.visibility == View.GONE) {
             binding.backgroundSelectionLayout.visibility = View.VISIBLE
@@ -358,32 +361,18 @@ class CoordiFragment : Fragment() {
         }
     }
 
-//    private fun showColorPicker() {
-//        val colorPicker = ColorPickerDialogBuilder
-//            .with(context)
-//            .setTitle("색상 선택")
-//            .initialColor(Color.WHITE)
-//            .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-//            .density(12)
-//            .setPositiveButton("확인") { dialog, selectedColor, allColors ->
-//                binding.coordiContainer.setBackgroundColor(selectedColor)
-//            }
-//            .setNegativeButton("취소") { dialog, which -> }
-//            .build()
-//        colorPicker.show()
-//    }
-//    private fun showColorPicker() {
-//    ColorPickerDialog.Builder(context)
-//        .setDialogType(ColorPickerDialog.TYPE_PRESETS)
-//        .setAllowCustom(true)
-//        .setShowAlphaSlider(true)
-//        .setDialogId(0)
-//        .setPresets(arrayOf(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW))
-//        .setOnColorSelectedListener(OnColorSelectedListener { selectedColor ->
-//            binding.coordiContainer.setBackgroundColor(selectedColor)
-//        })
-//        .show(parentFragmentManager, "color_dialog")
-//    }
+    private fun showColorPicker() {
+        AmbilWarnaDialog(context, defaultColor, object : AmbilWarnaDialog.OnAmbilWarnaListener {
+            override fun onOk(dialog: AmbilWarnaDialog?, color: Int) {
+                defaultColor = color
+                binding.coordiContainer.setBackgroundColor(color)
+            }
+
+            override fun onCancel(dialog: AmbilWarnaDialog?) {
+                // Do nothing
+            }
+        }).show()
+    }
 
     private fun openGalleryForImage() {
         val intent = Intent(Intent.ACTION_PICK)
@@ -403,10 +392,32 @@ class CoordiFragment : Fragment() {
     private fun setBackgroundImage(imageUri: Uri) {
         try {
             val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
-            binding.coordiContainer.background = BitmapDrawable(resources, bitmap)
+            val rotatedBitmap = rotateImageIfRequired(bitmap, imageUri)
+            binding.coordiContainer.background = BitmapDrawable(resources, rotatedBitmap)
         } catch (e: IOException) {
             e.printStackTrace()
         }
+    }
+
+    private fun rotateImageIfRequired(img: Bitmap, selectedImage: Uri): Bitmap {
+        val input = requireContext().contentResolver.openInputStream(selectedImage)
+        val ei = input?.let { ExifInterface(it) }
+        val orientation = ei?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+
+        return when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotateImage(img, 90)
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotateImage(img, 180)
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotateImage(img, 270)
+            else -> img
+        }
+    }
+
+    private fun rotateImage(img: Bitmap, degree: Int): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(degree.toFloat())
+        val rotatedImg = Bitmap.createBitmap(img, 0, 0, img.width, img.height, matrix, true)
+        img.recycle()
+        return rotatedImg
     }
 
     /**
@@ -443,7 +454,6 @@ class CoordiFragment : Fragment() {
         val canvas = Canvas(bitmap)
         binding.coordiContainer.draw(canvas)
 
-        // 가시성 복원
         binding.btnSelectBackground.visibility = View.VISIBLE
         binding.backgroundSelectionLayout.visibility = View.VISIBLE
 
@@ -453,37 +463,32 @@ class CoordiFragment : Fragment() {
         val encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT)
 
         val request = CoordiCreateRequestDTO(
-//            memberId = 6002L, // 실제 데이터로 변경 예정
             title = title,
             coordiImage = encodedImage,
             clothIds = selectedClothIds
         )
 
-        service.uploadCoordi(request).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        service.uploadCoordi(request).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                println()
+//                val responseBody = response.body()?.string()
+                println("살려줘")
+                println(response)
                 if (response.isSuccessful) {
-                    val responseBody = response.body()?.string()
-                    Toast.makeText(requireContext(), responseBody, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "업로드 성공", Toast.LENGTH_SHORT).show()
                     navigateToHomeFragment()
                 } else {
-                    Toast.makeText(requireContext(), "업로드 실패!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "업로드 실패", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<String>, t: Throwable) {
                 Toast.makeText(requireContext(), "업로드 오류: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun navigateToHomeFragment() {
-        val homeFragment = HomeFragment()
 
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.main_container, homeFragment)
-            .addToBackStack(null)
-            .commit()
-    }
 
     /**
      * 갤러리에 이미지 저장
@@ -492,18 +497,18 @@ class CoordiFragment : Fragment() {
         // 배경 선택 버튼 숨김
         binding.btnSelectBackground.visibility = View.INVISIBLE
         binding.backgroundSelectionLayout.visibility = View.INVISIBLE
-
+        
+        // bitmap으로 변환
         val bitmap = Bitmap.createBitmap(binding.coordiContainer.width, binding.coordiContainer.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         binding.coordiContainer.draw(canvas)
 
-        // 가시성 복원
         binding.btnSelectBackground.visibility = View.VISIBLE
         binding.backgroundSelectionLayout.visibility = View.VISIBLE
 
         val resolver = requireContext().contentResolver
         val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, "DressUp_${System.currentTimeMillis()}.jpg")
+            put(MediaStore.MediaColumns.DISPLAY_NAME, "Heendy's Coordi Battle_${System.currentTimeMillis()}.jpg")
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
         }
@@ -519,6 +524,18 @@ class CoordiFragment : Fragment() {
         } ?: run {
             Toast.makeText(requireContext(), "이미지 저장 실패!", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    /**
+     * 업로드 성공 시 홈프래그먼트로 전환
+     */
+    private fun navigateToHomeFragment() {
+        val homeFragment = HomeFragment()
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_container, homeFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDestroyView() {

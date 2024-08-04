@@ -80,5 +80,5 @@ interface CoordiService {
      *
      */
     @POST("coordi")
-    fun uploadCoordi(@Body request: CoordiCreateRequestDTO): Call<ResponseBody>
+    fun uploadCoordi(@Body request: CoordiCreateRequestDTO): Call<String>
 }
