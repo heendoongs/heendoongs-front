@@ -72,7 +72,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_id_heart"
         app:srcCompat="@drawable/ic_heart" />
@@ -112,12 +112,22 @@
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/pw" />
 
+    <TextView
+        android:id="@+id/login_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dongle_bold"
+        android:textColor="@color/red"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/edit_pw"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pw" />
+
     <!--    버튼-->
     <ImageButton
         android:id="@+id/btn_sign_up_page"
         android:layout_width="130dp"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="32dp"
         android:background="@android:color/transparent"
         android:scaleType="centerInside"
         android:backgroundTint="#FF8A00"

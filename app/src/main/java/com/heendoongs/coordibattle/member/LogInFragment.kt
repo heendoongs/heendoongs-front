@@ -12,6 +12,8 @@ import com.heendoongs.coordibattle.MainApplication
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentLogInBinding
 import okhttp3.ResponseBody
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -78,8 +80,28 @@ class LogInFragment : Fragment() {
                     showToast("로그인 성공! 환영합니다.")
                     (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment())
                 } else {
-                    // 로그인 실패
-                    showToast("로그인 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                    val errorBody = response.errorBody()?.string()
+                    if (errorBody != null) {
+                        try {
+                            val errorJson = JSONObject(errorBody)
+                            val error = errorJson.optString("error")
+                            val errorMessage = errorJson.optString("message")
+
+                            if (error == "Unauthorized" && errorMessage == "자격 증명에 실패하였습니다.") {
+                                binding.loginError.text = "아이디 또는 비밀번호를 확인하세요"
+                                binding.loginError.visibility = View.VISIBLE
+                            } else {
+                                showToast("로그인 실패")
+                                Log.e("Login", "로그인 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                            }
+                        } catch (e: JSONException) {
+                            showToast("로그인 실패")
+                            Log.e("Login", "로그인 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                        }
+                    } else {
+                        showToast("로그인 실패")
+                        Log.e("Login", "로그인 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                    }
                 }
             }
 

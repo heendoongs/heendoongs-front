@@ -45,11 +45,8 @@ class MyInfoFragment : Fragment() {
 
         service = RetrofitConnection.getInstance().create(MemberService::class.java)
 
-        //memberId 가져오기
-        val memberId = MainActivity.prefs.getMemberId()!!
-
         binding.btnUpdate.setOnClickListener {
-//            update()
+            update()
         }
 
         binding.btnDelete.setOnClickListener {
@@ -84,7 +81,7 @@ class MyInfoFragment : Fragment() {
         })
     }
 
-    private fun update(memberId: Long) {
+    private fun update() {
         val password = binding.editPw.text.toString()
         val passwordCheck = binding.editPwChk.text.toString()
         val nickname = binding.editNickname.text.toString()
