@@ -77,7 +77,7 @@ class DetailFragment : Fragment() {
 
     private fun loadCoordiDetails() {
         coordiId?.let { id ->
-            val call = service.getCoordiDetails(memberId, id)
+            val call = service.getCoordiDetails(id)
             call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
                 override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
                     if (response.isSuccessful) {
