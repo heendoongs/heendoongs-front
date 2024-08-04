@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
@@ -53,6 +54,14 @@ object RetrofitConnection {
                         LocalDate.parse(
                             json.asJsonPrimitive.asString,
                             DateTimeFormatter.ISO_LOCAL_DATE
+                        )
+                    },
+                ).registerTypeAdapter(
+                    LocalDateTime::class.java,
+                    JsonDeserializer { json: JsonElement, type: Type?, jsonDeserializationContext: JsonDeserializationContext? ->
+                        LocalDateTime.parse(
+                            json.asJsonPrimitive.asString,
+                            DateTimeFormatter.ISO_DATE_TIME
                         )
                     }
                 )
