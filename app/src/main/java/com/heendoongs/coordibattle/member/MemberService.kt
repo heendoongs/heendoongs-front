@@ -54,7 +54,6 @@ interface MemberService {
 
     @DELETE("deleteAccount")
     fun deleteAccount(
-        @Query("memberId") memberId: Long
     ): Call<ResponseBody>
 
 }

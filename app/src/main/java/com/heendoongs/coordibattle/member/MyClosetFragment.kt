@@ -98,6 +98,7 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
                         showToast("데이터를 가져올 수 없습니다.")
                     }
                 } else {
+                    println("#@#@#@#" + response.message())
                     showToast("데이터 가져오기 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
                 }
             }

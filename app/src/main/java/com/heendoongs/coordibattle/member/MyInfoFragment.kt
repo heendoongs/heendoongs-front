@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.heendoongs.coordibattle.MainActivity
+import com.heendoongs.coordibattle.coordi.HomeFragment
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentMyInfoBinding
 import okhttp3.ResponseBody
@@ -44,27 +45,24 @@ class MyInfoFragment : Fragment() {
 
         service = RetrofitConnection.getInstance().create(MemberService::class.java)
 
-        // SharedPreferences에서 JWT 토큰과 memberId 가져오기
-        val sharedPref = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        val token = sharedPref.getString("jwt_token", null)
-        val memberId = sharedPref.getLong("memberId", -1)
-
+        //memberId 가져오기
+        val memberId = MainActivity.prefs.getMemberId()!!
 
         binding.btnUpdate.setOnClickListener {
-            update(memberId)
+//            update()
         }
 
         binding.btnDelete.setOnClickListener {
-            delete(memberId)
+            delete()
         }
 
         messageInit()
-        getMyInfo(memberId)
+        getMyInfo()
 
         return binding.root
     }
 
-    private fun getMyInfo(memberId: Long) {
+    private fun getMyInfo() {
         service.getMyInfo().enqueue(object : Callback<MyInfoResponse> {
             override fun onResponse(call: Call<MyInfoResponse>, response: Response<MyInfoResponse>) {
                 if (response.isSuccessful) {
@@ -107,7 +105,7 @@ class MyInfoFragment : Fragment() {
             return
         }
 
-        val updateRequest = MemberUpdateRequest(memberId, password, nickname)
+        val updateRequest = MemberUpdateRequest(password, nickname)
 
         // 회원정보 수정 요청 보내기
         service.updateAccount(updateRequest).enqueue(object : Callback<ResponseBody> {
@@ -134,22 +132,18 @@ class MyInfoFragment : Fragment() {
         })
     }
 
-    private fun delete(memberId: Long) {
+    private fun delete() {
 
         // 회원 탈퇴 요청 보내기
-        service.deleteAccount(memberId).enqueue(object : Callback<ResponseBody> {
+        service.deleteAccount().enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     showToast("회원 탈퇴 완료")
-                    val sharedPref = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
-                    with(sharedPref.edit()) {
-                        remove("jwt_token")
-                        remove("memberId")
-                        apply()
-                    }
+                    val mainActivity = activity as? MainActivity
+                    mainActivity?.getPreferenceUtil()?.clearTokens()
                     (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment())
                 } else {
-                    showToast("회원 탈퇴 오류.")
+                    showToast("회원 탈퇴 오류")
                 }
             }
 

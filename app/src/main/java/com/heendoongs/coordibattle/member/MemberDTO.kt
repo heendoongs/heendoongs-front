@@ -46,7 +46,6 @@ data class MyInfoResponse(
 
 // 회원 업데이트
 data class MemberUpdateRequest(
-    val memberId: Long,
     val password: String,
     val nickname: String
 )
