@@ -9,11 +9,11 @@
         android:id="@+id/myInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="56dp"
         android:fontFamily="@font/dongle_bold"
         android:text="내 정보"
         android:textColor="@color/white"
-        android:textSize="72dp"
+        android:textSize="56dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,7 +21,7 @@
         app:outlineShadowDy="8"
         app:outlineShadowRadius="2"
         app:textStrokeColor="@color/black"
-        app:textStrokeWidth="18" />
+        app:textStrokeWidth="14" />
 
     <!--    아이디 입력   -->
 
@@ -29,25 +29,12 @@
         android:id="@+id/img_id_heart"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="56dp"
         app:layout_constraintBottom_toBottomOf="@+id/id"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/id"
         app:srcCompat="@drawable/ic_heart" />
 
-
-    <TextView
-        android:id="@+id/edit_id"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="52dp"
-        android:fontFamily="@font/dongle_bold"
-        android:inputType="textPersonName"
-        android:textColor="@color/black"
-        android:textSize="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/id"
-        app:layout_constraintTop_toBottomOf="@+id/id" />
 
     <com.heendoongs.coordibattle.view.OutLineTextView
         android:id="@+id/id"
@@ -67,12 +54,25 @@
         app:textStrokeColor="@color/light_pink"
         app:textStrokeWidth="6" />
 
+    <TextView
+        android:id="@+id/edit_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="52dp"
+        android:fontFamily="@font/dongle_bold"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/img_id_heart"
+        app:layout_constraintTop_toBottomOf="@+id/id" />
+
 
     <ImageView
         android:id="@+id/img_pw_heart"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="56dp"
         android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_id"
@@ -103,14 +103,14 @@
         android:layout_height="40dp"
         android:layout_marginEnd="52dp"
         android:background="@drawable/input_text"
-        android:fontFamily="@font/dongle_bold"
+        android:fontFamily="@font/dongle_regular"
         android:hint="@string/pw_input"
         android:inputType="textPassword"
         android:paddingLeft="10dp"
         android:textColor="@color/black"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/pw"
+        app:layout_constraintStart_toStartOf="@+id/img_pw_heart"
         app:layout_constraintTop_toBottomOf="@+id/pw" />
 
     <!--    비밀번호 확인-->
@@ -119,7 +119,7 @@
         android:id="@+id/img_pw_chk_heart"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="56dp"
         android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_pw"
@@ -149,14 +149,14 @@
         android:layout_height="40dp"
         android:layout_marginEnd="52dp"
         android:background="@drawable/input_text"
-        android:fontFamily="@font/dongle_bold"
+        android:fontFamily="@font/dongle_regular"
         android:hint="@string/pw_chk_input"
         android:inputType="textPassword"
         android:paddingLeft="10dp"
         android:textColor="@color/black"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/pw_chk"
+        app:layout_constraintStart_toStartOf="@+id/img_pw_chk_heart"
         app:layout_constraintTop_toBottomOf="@+id/pw_chk" />
 
     <TextView
@@ -175,7 +175,7 @@
         android:id="@+id/img_nickname_heart"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="56dp"
         android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk"
@@ -205,14 +205,14 @@
         android:layout_height="40dp"
         android:layout_marginEnd="52dp"
         android:background="@drawable/input_text"
-        android:fontFamily="@font/dongle_bold"
+        android:fontFamily="@font/dongle_regular"
         android:hint="@string/nickname_input"
         android:inputType="textPersonName"
         android:paddingLeft="10dp"
         android:textColor="@color/black"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/nickname"
+        app:layout_constraintStart_toStartOf="@+id/img_nickname_heart"
         app:layout_constraintTop_toBottomOf="@+id/nickname" />
 
 

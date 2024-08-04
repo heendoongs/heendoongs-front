@@ -14,7 +14,7 @@
         android:fontFamily="@font/dongle_bold"
         android:text=""
         android:textColor="@color/black"
-        android:textSize="60dp"
+        android:textSize="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:outlineShadowColor="#75000000"
