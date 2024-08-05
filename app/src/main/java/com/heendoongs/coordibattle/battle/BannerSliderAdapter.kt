@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
+import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.coordi.CoordiFragment
 import com.heendoongs.coordibattle.databinding.ItemBannerBinding
@@ -51,34 +52,26 @@ class BannerSliderAdapter(private val banners: List<BannerResponseDTO>, private 
                     bannerButton.text = "옷 입히기"
                     bannerImage.setOnClickListener {
                         val fragment = CoordiFragment()
-                        val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
-                        fragmentTransaction.replace(R.id.main_container, fragment)
-                        fragmentTransaction.addToBackStack(null)
-                        fragmentTransaction.commit()
+                        val mainActivity = context as MainActivity
+                        mainActivity.replaceFragment(fragment, R.id.fragment_coordi)
                     }
                     bannerButton.setOnClickListener {
                         val fragment = CoordiFragment()
-                        val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
-                        fragmentTransaction.replace(R.id.main_container, fragment)
-                        fragmentTransaction.addToBackStack(null)
-                        fragmentTransaction.commit()
+                        val mainActivity = context as MainActivity
+                        mainActivity.replaceFragment(fragment, R.id.fragment_coordi)
                     }
                 }
                 'V' -> {
                     bannerButton.text = "투표하기"
                     bannerImage.setOnClickListener {
                         val fragment = BattleFragment()
-                        val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
-                        fragmentTransaction.replace(R.id.main_container, fragment)
-                        fragmentTransaction.addToBackStack(null)
-                        fragmentTransaction.commit()
+                        val mainActivity = context as MainActivity
+                        mainActivity.replaceFragment(fragment, R.id.fragment_battle)
                     }
                     bannerButton.setOnClickListener {
                         val fragment = BattleFragment()
-                        val fragmentTransaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
-                        fragmentTransaction.replace(R.id.main_container, fragment)
-                        fragmentTransaction.addToBackStack(null)
-                        fragmentTransaction.commit()
+                        val mainActivity = context as MainActivity
+                        mainActivity.replaceFragment(fragment, R.id.fragment_battle)
                     }
                 }
             }

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.heendoongs.coordibattle.MainActivity
+import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentSignUpBinding
 import okhttp3.ResponseBody
@@ -89,7 +90,7 @@ class SignUpFragment : Fragment() {
                 if (response.isSuccessful) {
                     showToast("회원가입 성공!")
                     messageInit()
-                    (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment())
+                    (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment(), R.id.fragment_home)
                 } else {
                     // 회원가입 실패 처리
                     val errorBody = response.errorBody()?.string()

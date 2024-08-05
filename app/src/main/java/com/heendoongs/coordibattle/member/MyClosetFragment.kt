@@ -65,7 +65,7 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
         binding.recyclerView.adapter = adapter
 
         binding.btnMyInfoPage.setOnClickListener {
-            (requireActivity() as? MainActivity)?.replaceFragment(MyInfoFragment())
+            (requireActivity() as? MainActivity)?.replaceFragment(MyInfoFragment(), R.id.fragment_my_closet)
         }
 
         binding.btnLogout.setOnClickListener {
@@ -149,7 +149,7 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
         val mainActivity = activity as? MainActivity
         mainActivity?.getPreferenceUtil()?.clearTokens()
         showToast("로그아웃 되었습니다.")
-        mainActivity?.replaceFragment(LogInFragment())
+        mainActivity?.replaceFragment(LogInFragment(), R.id.fragment_my_closet)
     }
 
     private fun showToast(message: String) {

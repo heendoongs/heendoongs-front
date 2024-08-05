@@ -47,6 +47,7 @@
             android:id="@+id/battle_image_top"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             />
     </androidx.cardview.widget.CardView>
 
@@ -64,7 +65,7 @@
 
     <TextView
         android:id="@+id/battle_description_top_text"
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="40dp"
@@ -72,6 +73,8 @@
         android:fontFamily="@font/dongle_bold"
         android:textColor="@color/black"
         android:textSize="25sp"
+        android:maxLines="1"
+        android:ellipsize="end"
         app:layout_constraintStart_toStartOf="@id/battle_description_top"
         app:layout_constraintTop_toTopOf="@id/battle_description_top"
         />
@@ -104,6 +107,7 @@
             android:id="@+id/battle_image_bottom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             />
     </androidx.cardview.widget.CardView>
 
@@ -121,7 +125,7 @@
 
     <TextView
         android:id="@+id/battle_description_bottom_text"
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
@@ -129,6 +133,8 @@
         android:fontFamily="@font/dongle_bold"
         android:textColor="@color/black"
         android:textSize="25sp"
+        android:maxLines="1"
+        android:ellipsize="end"
         app:layout_constraintStart_toStartOf="@id/battle_description_bottom"
         app:layout_constraintTop_toTopOf="@id/battle_description_bottom"
         />

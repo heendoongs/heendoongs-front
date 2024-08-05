@@ -130,6 +130,9 @@ class DetailFragment : Fragment() {
                                 }
                             }
 
+                            println("ㅠㅠ"+data.memberId)
+                            println("ㅜㅜ"+memberId)
+
                             if (data.isCoordiPeriod && Objects.equals(memberId, data.memberId)) {
                                 updateButton.setOnClickListener {
                                     toggleEditMode(true)
@@ -166,11 +169,8 @@ class DetailFragment : Fragment() {
                                     if (memberId == -1L) {
                                         Toast.makeText(context, "로그인 이후 사용해주세요", Toast.LENGTH_SHORT).show()
                                         val loginFragment = LogInFragment()
-                                        parentFragmentManager.beginTransaction()
-                                            .replace(R.id.main_container, loginFragment)
-                                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                            .addToBackStack(null)
-                                            .commit()
+                                        val mainActivity = activity as MainActivity
+                                        mainActivity.replaceFragment(loginFragment, R.id.fragment_my_closet)
                                     } else {
                                         likeCoordi(id)
                                     }
@@ -300,11 +300,8 @@ class DetailFragment : Fragment() {
                     val responseBody = response.body()?.string()
                     Toast.makeText(context, responseBody, Toast.LENGTH_SHORT).show()
                     val homeFragment = HomeFragment()
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.main_container, homeFragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .addToBackStack(null)
-                        .commit()
+                    val mainActivity = activity as MainActivity
+                    mainActivity.replaceFragment(homeFragment, R.id.fragment_my_closet)
                 } else {
                     val errorBody = response.errorBody()?.string()
                     Log.e("DetailFragment", "코디 삭제 실패, error: $errorBody")
