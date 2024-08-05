@@ -15,7 +15,6 @@ package com.heendoongs.coordibattle.battle
  */
 
 data class MemberCoordiVoteRequestDTO(
-    val memberId: Long,
     val winnerCoordiId: Long,
     val loserCoordiId: Long
 )
