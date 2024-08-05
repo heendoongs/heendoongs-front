@@ -1,4 +1,4 @@
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -237,11 +237,11 @@
     </LinearLayout>
 
     <!-- 배경 선택하기 영역 -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/background_selection_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="16dp"
         android:background="@color/white"
         android:visibility="gone"
@@ -250,18 +250,83 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
-            android:id="@+id/btn_select_color"
-            android:layout_width="0dp"
+        <com.heendoongs.coordibattle.view.OutLineTextView
+            android:id="@+id/title_select_background"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="색상 선택" />
+            android:fontFamily="@font/dongle_bold"
+            android:text="배경 선택하기"
+            android:textColor="@color/blue"
+            android:textSize="40sp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:outlineShadowColor="#25000000"
+            app:outlineShadowDy="8"
+            app:outlineShadowRadius="2"
+            app:textStrokeColor="@color/white"
+            app:textStrokeWidth="10" />
 
-        <Button
-            android:id="@+id/btn_select_image"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="이미지 선택" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_select_background">
+
+            <LinearLayout
+                android:id="@+id/btn_select_color"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/selector_item_tab"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_color_picker" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dongle_bold"
+                    android:text="색 고르기"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_select_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/selector_item_tab"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_gallery" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dongle_bold"
+                    android:text="이미지"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="24sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
