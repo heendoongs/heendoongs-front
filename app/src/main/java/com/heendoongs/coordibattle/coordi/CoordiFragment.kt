@@ -25,6 +25,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.databinding.FragmentCoordiBinding
@@ -566,15 +568,27 @@ class CoordiFragment : Fragment() {
 
         service.uploadCoordi(request).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                val responseBody = response.body()?.string()
                 if (response.isSuccessful) {
+                    val responseBody = response.body()?.string()
                     Toast.makeText(requireContext(), responseBody, Toast.LENGTH_SHORT).show()
 
                     val homeFragment = HomeFragment()
                     val mainActivity = activity as MainActivity
                     mainActivity.replaceFragment(homeFragment, R.id.fragment_home)
                 } else {
-                    Toast.makeText(requireContext(), responseBody, Toast.LENGTH_SHORT).show()
+                    val errorBody = response.errorBody()?.string()
+                    val errorMap = errorBody?.let {
+                        val gson = Gson()
+                        val type = object : TypeToken<Map<String, String>>() {}.type
+                        gson.fromJson<Map<String, String>>(it, type)
+                    }
+                    if (errorMap != null) {
+                        for ((field, message) in errorMap) {
+                            Toast.makeText(requireContext(), "$message", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "코디 업로드 실패", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
@@ -583,7 +597,6 @@ class CoordiFragment : Fragment() {
             }
         })
     }
-
 
 
     /**
