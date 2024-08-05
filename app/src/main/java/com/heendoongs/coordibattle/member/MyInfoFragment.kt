@@ -114,7 +114,7 @@ class MyInfoFragment : Fragment() {
                 if (response.isSuccessful) {
                     showToast("회원 정보 수정 완료!")
                     messageInit()
-                    (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment())
+                    (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment(), R.id.fragment_my_closet)
                 } else {
                     // 회원 정보 수정 실패
                     val errorBody = response.errorBody()?.string()
