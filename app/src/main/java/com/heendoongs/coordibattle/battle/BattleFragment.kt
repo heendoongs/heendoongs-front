@@ -14,10 +14,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
+import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.global.checkLoginAndNavigate
+import com.heendoongs.coordibattle.member.LogInFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,6 +46,7 @@ class BattleFragment : Fragment() {
     private lateinit var rootView: View
     private lateinit var service: BattleService
     private var isClickable: Boolean = true
+    private var memberId: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,11 +57,10 @@ class BattleFragment : Fragment() {
         if (!checkLoginAndNavigate()) {
             return rootView
         }
-
+        memberId = MainActivity.prefs.getMemberId()
         service = RetrofitConnection.getInstance().create(BattleService::class.java)
 
         loadBattleData()
-
         return rootView
     }
 
@@ -70,11 +73,8 @@ class BattleFragment : Fragment() {
     }
 
     private fun loadBattleData() {
-//        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-//        val memberId = sharedPref?.getLong("USER_ID", 0L) ?: 0L
-        val memberId = 2L
-        if (memberId != 0L) {
-            val call = service.getBattleCoordies(memberId)
+        if (memberId != -1L) {
+            val call = service.getBattleCoordies()
             call.enqueue(object : Callback<List<BattleDTO>> {
                 @SuppressLint("SetTextI18n")
                 override fun onResponse(call: Call<List<BattleDTO>>, response: Response<List<BattleDTO>>) {
@@ -98,7 +98,7 @@ class BattleFragment : Fragment() {
                                 rootView.findViewById<LinearLayout>(R.id.battle_layout_top).setOnClickListener {
                                     if (isClickable) {
                                         isClickable = false
-                                        postBattleResult(memberId, firstCoordi.coordiId, secondCoordi.coordiId)
+                                        postBattleResult(firstCoordi.coordiId, secondCoordi.coordiId)
                                         animateImageAndRefresh(rootView.findViewById(R.id.battle_image_top))
                                     }
                                 }
@@ -106,7 +106,7 @@ class BattleFragment : Fragment() {
                                 rootView.findViewById<LinearLayout>(R.id.battle_layout_bottom).setOnClickListener {
                                     if (isClickable) {
                                         isClickable = false
-                                        postBattleResult(memberId, secondCoordi.coordiId, firstCoordi.coordiId)
+                                        postBattleResult(secondCoordi.coordiId, firstCoordi.coordiId)
                                         animateImageAndRefresh(rootView.findViewById(R.id.battle_image_bottom))
                                     }
                                 }
@@ -119,6 +119,14 @@ class BattleFragment : Fragment() {
 
                 }
             })
+        } else {
+            Toast.makeText(context, "로그인 이후 사용해주세요", Toast.LENGTH_SHORT).show()
+            val loginFragment = LogInFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_container, loginFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
@@ -130,8 +138,8 @@ class BattleFragment : Fragment() {
         }
     }
 
-    private fun postBattleResult(memberId: Long, winnerCoordiId: Long, loserCoordiId: Long) {
-        val voteRequest = MemberCoordiVoteRequestDTO(memberId, winnerCoordiId, loserCoordiId)
+    private fun postBattleResult(winnerCoordiId: Long, loserCoordiId: Long) {
+        val voteRequest = MemberCoordiVoteRequestDTO(winnerCoordiId, loserCoordiId)
         val call = service.postBattleResult(voteRequest)
         call.enqueue(object : Callback<BattleResponseDTO> {
             override fun onResponse(call: Call<BattleResponseDTO>, response: Response<BattleResponseDTO>) {

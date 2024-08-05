@@ -21,6 +21,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.heendoongs.coordibattle.R
@@ -66,7 +67,10 @@ class CoordiFragment : Fragment() {
     private lateinit var service: CoordiService
 
     private var selectedClothIds = mutableListOf<Long>()
-    private var defaultColor = Color.WHITE
+    private var defaultColor = Color.parseColor("#FFF6DE")
+
+    // 선택된 아이템
+    private var selectedImageView: ImageView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,10 +88,12 @@ class CoordiFragment : Fragment() {
         setupItemTabs()
         setupRecyclerView()
 
+        // 이미지 저장 버튼 클릭 리스너
         binding.btnSave.setOnClickListener {
             saveImageToGallery()
         }
 
+        // 코디 업로드 버튼 클릭 리스나
         binding.btnUpload.setOnClickListener {
             showUploadDialog()
         }
@@ -105,6 +111,15 @@ class CoordiFragment : Fragment() {
         // 이미지 선택 버튼 클릭 리스너
         binding.btnSelectImage.setOnClickListener {
             openGalleryForImage()
+        }
+
+        // 삭제 버튼 클릭 리스너
+        binding.btnDelete.setOnClickListener {
+            selectedImageView?.let {
+                binding.coordiContainer.removeView(it)
+                binding.btnDelete.visibility = View.GONE
+                selectedImageView = null
+            }
         }
 
         return view
@@ -126,10 +141,25 @@ class CoordiFragment : Fragment() {
             changeFaceImage(imageResId)
         }
         clothesAdapter = ClothesAdapter(requireContext(), emptyList()) { clothesId, imageUrl ->
-            addRemoteImageToContainer(clothesId, imageUrl)
+            val selectedTab = getCurrentSelectedTab() // 현재 선택된 탭의 type을 반환하는 메소드
+            addRemoteImageToContainer(clothesId, imageUrl, selectedTab)
         }
         binding.itemList.layoutManager = GridLayoutManager(context, 3) // 한 행에 3개 아이템 표시
         binding.itemList.adapter = heendyAdapter // 기본 흰디 얼굴 선택
+    }
+
+    /**
+     * 현재 선택된 탭의 type을 반환하는 메소드
+     */
+    private fun getCurrentSelectedTab(): String {
+        return when {
+            binding.faceIcon.isSelected -> "Face"
+            binding.armsIcon.isSelected -> "Arms"
+            binding.topIcon.isSelected -> "Top"
+            binding.bottomIcon.isSelected -> "Bottom"
+            binding.shoesIcon.isSelected -> "Shoe"
+            else -> ""
+        }
     }
 
     /**
@@ -249,7 +279,7 @@ class CoordiFragment : Fragment() {
     /**
      * 코디 영역에 DB에 저장된 이미지 올리기
      */
-    private fun addRemoteImageToContainer(clothId: Long, imageUrl: String) {
+    /*private fun addRemoteImageToContainer(clothId: Long, imageUrl: String) {
         if (!selectedClothIds.contains(clothId)) {
             selectedClothIds.add(clothId)
         }
@@ -257,6 +287,57 @@ class CoordiFragment : Fragment() {
         Glide.with(this).load(imageUrl).into(imageView)
         setupImageView(imageView, 300, 300)
         binding.coordiContainer.addView(imageView)
+    }*/
+    private fun addRemoteImageToContainer(clothId: Long, imageUrl: String, type: String) {
+        if (!selectedClothIds.contains(clothId)) {
+            selectedClothIds.add(clothId)
+        }
+
+        if (type == "Shoe") {
+            // Add left shoe
+            val leftShoeImageView = ImageView(requireContext())
+            Glide.with(this).load(imageUrl).into(leftShoeImageView)
+            setupImageView(leftShoeImageView, 200, 200, 0, 80)
+            binding.coordiContainer.addView(leftShoeImageView)
+            leftShoeImageView.setOnClickListener {
+                selectImageView(leftShoeImageView)
+            }
+
+            // Add right shoe with flipped image
+            val rightShoeImageView = ImageView(requireContext())
+            Glide.with(this).load(imageUrl).into(rightShoeImageView)
+            rightShoeImageView.scaleX = -1f // Flip the image horizontally
+            setupImageView(rightShoeImageView, 200, 200, 80, 0)
+            binding.coordiContainer.addView(rightShoeImageView)
+            rightShoeImageView.setOnClickListener {
+                selectImageView(rightShoeImageView)
+            }
+        } else {
+            val imageView = ImageView(requireContext())
+            Glide.with(this).load(imageUrl).into(imageView)
+            setupImageView(imageView, 300, 300)
+            binding.coordiContainer.addView(imageView)
+            imageView.setOnClickListener {
+                selectImageView(imageView)
+            }
+        }
+    }
+
+    private fun selectImageView(imageView: ImageView) {
+        // 이미지가 이미 선택된 상태라면 선택 해제
+        if (selectedImageView == imageView) {
+            selectedImageView?.background = null
+            selectedImageView = null
+            binding.btnDelete.visibility = View.GONE
+        } else {
+            // 새로운 이미지를 선택하면 이전 선택된 이미지의 테두리 제거
+            selectedImageView?.background = null
+            // 현재 선택된 이미지에 테두리 추가
+            selectedImageView = imageView.apply {
+                setBackgroundResource(R.drawable.shape_selected_item_boarder)
+            }
+            binding.btnDelete.visibility = View.VISIBLE
+        }
     }
 
     /**
@@ -298,6 +379,8 @@ class CoordiFragment : Fragment() {
                         initialY = v.y
                         dX = event.rawX - initialX
                         dY = event.rawY - initialY
+
+                        selectImageView(imageView)
                     }
                     MotionEvent.ACTION_MOVE -> {
                         v.x = event.rawX - dX
@@ -354,13 +437,17 @@ class CoordiFragment : Fragment() {
         if (binding.backgroundSelectionLayout.visibility == View.GONE) {
             binding.backgroundSelectionLayout.visibility = View.VISIBLE
             binding.itemListLayout.visibility = View.GONE
-
+            binding.btnSelectBackground.setImageResource(R.drawable.ic_item_select)
         } else {
             binding.backgroundSelectionLayout.visibility = View.GONE
             binding.itemListLayout.visibility = View.VISIBLE
+            binding.btnSelectBackground.setImageResource(R.drawable.ic_background_select)
         }
     }
 
+    /**
+     * 배경색 선택 : color picker
+     */
     private fun showColorPicker() {
         AmbilWarnaDialog(context, defaultColor, object : AmbilWarnaDialog.OnAmbilWarnaListener {
             override fun onOk(dialog: AmbilWarnaDialog?, color: Int) {
@@ -374,6 +461,9 @@ class CoordiFragment : Fragment() {
         }).show()
     }
 
+    /**
+     * 배경 이미지 선택 : 갤러리
+     */
     private fun openGalleryForImage() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
@@ -446,16 +536,7 @@ class CoordiFragment : Fragment() {
      * 코디 업로드
      */
     private fun uploadCoordi(title: String) {
-        // 배경 선택 버튼 숨김
-        binding.btnSelectBackground.visibility = View.INVISIBLE
-        binding.backgroundSelectionLayout.visibility = View.INVISIBLE
-
-        val bitmap = Bitmap.createBitmap(binding.coordiContainer.width, binding.coordiContainer.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        binding.coordiContainer.draw(canvas)
-
-        binding.btnSelectBackground.visibility = View.VISIBLE
-        binding.backgroundSelectionLayout.visibility = View.VISIBLE
+        val bitmap = getBitmapWithoutSelection()
 
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream)
@@ -470,15 +551,12 @@ class CoordiFragment : Fragment() {
 
         service.uploadCoordi(request).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                println()
-//                val responseBody = response.body()?.string()
-                println("살려줘")
-                println(response)
+                val responseBody = response.body()?.string()
                 if (response.isSuccessful) {
-                    Toast.makeText(requireContext(), "업로드 성공", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), responseBody, Toast.LENGTH_SHORT).show()
                     navigateToHomeFragment()
                 } else {
-                    Toast.makeText(requireContext(), "업로드 실패", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), responseBody, Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -494,17 +572,7 @@ class CoordiFragment : Fragment() {
      * 갤러리에 이미지 저장
      */
     private fun saveImageToGallery() {
-        // 배경 선택 버튼 숨김
-        binding.btnSelectBackground.visibility = View.INVISIBLE
-        binding.backgroundSelectionLayout.visibility = View.INVISIBLE
-        
-        // bitmap으로 변환
-        val bitmap = Bitmap.createBitmap(binding.coordiContainer.width, binding.coordiContainer.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        binding.coordiContainer.draw(canvas)
-
-        binding.btnSelectBackground.visibility = View.VISIBLE
-        binding.backgroundSelectionLayout.visibility = View.VISIBLE
+        val bitmap = getBitmapWithoutSelection()
 
         val resolver = requireContext().contentResolver
         val contentValues = ContentValues().apply {
@@ -526,6 +594,29 @@ class CoordiFragment : Fragment() {
         }
     }
 
+    private fun getBitmapWithoutSelection(): Bitmap {
+        val originalDrawable = selectedImageView?.background
+        val deleteButtonVisibility = binding.btnDelete.visibility
+
+        selectedImageView?.background = null
+        binding.btnDelete.visibility = View.GONE
+
+        binding.btnSelectBackground.visibility = View.INVISIBLE
+        binding.backgroundSelectionLayout.visibility = View.INVISIBLE
+
+        val bitmap = Bitmap.createBitmap(binding.coordiContainer.width, binding.coordiContainer.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        binding.coordiContainer.draw(canvas)
+
+        selectedImageView?.background = originalDrawable
+        binding.btnDelete.visibility = deleteButtonVisibility
+        binding.btnSelectBackground.visibility = View.VISIBLE
+        binding.backgroundSelectionLayout.visibility = View.VISIBLE
+
+        return bitmap
+    }
+
+
     /**
      * 업로드 성공 시 홈프래그먼트로 전환
      */
@@ -534,6 +625,7 @@ class CoordiFragment : Fragment() {
 
         parentFragmentManager.beginTransaction()
             .replace(R.id.main_container, homeFragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .addToBackStack(null)
             .commit()
     }
