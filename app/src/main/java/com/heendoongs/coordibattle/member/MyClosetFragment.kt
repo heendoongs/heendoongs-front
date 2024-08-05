@@ -2,6 +2,7 @@ package com.heendoongs.coordibattle.member
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,7 +96,7 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
         service.getNickname().enqueue(object : Callback<MyNicknameResponse> {
             override fun onResponse(call: Call<MyNicknameResponse>, response: Response<MyNicknameResponse>) {
                 if (response.isSuccessful) {
-                    // 성공적인 응답 처리
+                    // 성공
                     val myClosetResponse = response.body()
                     println(response.body()!!.nickname)
                     if (myClosetResponse != null) {
@@ -103,15 +104,16 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
                         binding.myCoordiList.text = myClosetResponse.nickname + "의 옷장"
                     } else {
                         showToast("데이터를 가져올 수 없습니다.")
+                        Log.e("loadNickname", "닉네임 데이터 가져오기 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
                     }
                 } else {
-                    println("#@#@#@#" + response.message())
-                    showToast("데이터 가져오기 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                    showToast("닉네임 데이터 가져오기 실패")
+                    Log.e("loadNickname", "닉네임 데이터 가져오기 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<MyNicknameResponse>, t: Throwable) {
-                showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
+                showToast("네트워크 오류가 발생했습니다. 다시 시도해주세요.")
             }
         })
     }
@@ -135,12 +137,13 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
                         binding.btnMore.visibility = View.VISIBLE
                     }
                 } else {
-                    Toast.makeText(context, "222 Failed to fetch data", Toast.LENGTH_SHORT).show()
+                    showToast("내 코디 데이터 가져오기 실패")
+                    Log.e("loadMyCloset", "내 코디 데이터 가져오기 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<Page<CoordiListResponseDTO>>, t: Throwable) {
-                Toast.makeText(context, "222 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                showToast("네트워크 오류가 발생했습니다. 다시 시도해주세요.")
             }
         })
     }

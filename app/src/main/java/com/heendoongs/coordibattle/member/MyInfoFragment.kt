@@ -3,6 +3,7 @@ package com.heendoongs.coordibattle.member
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,10 +73,12 @@ class MyInfoFragment : Fragment() {
                         binding.editId.text = myInfoResponse.loginId
                         binding.editNickname.setText(myInfoResponse.nickname)
                     } else {
-                        showToast("데이터를 가져올 수 없습니다.")
+                        showToast("내 정보를 가져올 수 없습니다.")
+                        Log.e("getMyInfo", "내 정보 데이터 가져오기 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
                     }
                 } else {
                     showToast("데이터를 가져올 수 없습니다.")
+                    Log.e("getMyInfo", "내 정보 데이터 가져오기 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
                 }
             }
 
@@ -166,6 +169,7 @@ class MyInfoFragment : Fragment() {
                     (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment(), R.id.fragment_home)
                 } else {
                     showToast("회원 탈퇴 중 오류가 발생했습니다. 다시 시도해주세요")
+                    Log.e("deleteAccount", "회원 탈퇴 실패. 상태 코드: ${response.code()}, 메시지: ${response.message()}")
                 }
             }
 

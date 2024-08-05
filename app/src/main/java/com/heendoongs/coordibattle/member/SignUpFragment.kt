@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -47,6 +48,8 @@ class SignUpFragment : Fragment() {
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
 
         service = RetrofitConnection.getInstance().create(MemberService::class.java)
+
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
         binding.btnSignUp.setOnClickListener {
             signUp()
@@ -90,7 +93,7 @@ class SignUpFragment : Fragment() {
                 if (response.isSuccessful) {
                     showToast("회원가입 성공!")
                     messageInit()
-                    (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment(), R.id.fragment_home)
+                    (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment(), R.id.fragment_my_closet)
                 } else {
                     // 회원가입 실패 처리
                     val errorBody = response.errorBody()?.string()
@@ -127,7 +130,6 @@ class SignUpFragment : Fragment() {
         visibleMessage.text = message
         visibleMessage.visibility = View.VISIBLE
     }
-
     private fun addNicknameTextWatcher() {
         binding.editNickname.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

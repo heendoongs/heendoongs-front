@@ -1,5 +1,6 @@
 package com.heendoongs.coordibattle.coordi
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.battle.BannerSliderAdapter
@@ -47,6 +49,14 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
     private val pageSize = 6
     private var selectedBattleId: Long? = null
     private var selectedSortOrder: String = "RANKING" // 기본 정렬 순서
+    private var mainActivity: MainActivity? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            mainActivity = context
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +64,9 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        // 로딩 다이얼로그 표시
+        mainActivity?.showLoading()
 
         // Retrofit 설정
         service = RetrofitConnection.getInstance().create(CoordiService::class.java)
@@ -75,9 +88,12 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         // 필터 및 정렬 스피너 설정
         setupFilterSpinner()
         setupSortSpinner()
-
+        
         // 배너 데이터 로드
-        loadBanners()
+        loadBanners() {
+            // 로딩 다이얼로그 해제
+            mainActivity?.hideLoading()
+        }
 
         return view
     }
@@ -181,17 +197,20 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
     }
 
     // 배너 가져오기
-    private fun loadBanners() {
+    private fun loadBanners(onLoadComplete: () -> Unit = {}) {
         battleService.getCurrentBattles().enqueue(object : Callback<List<BannerResponseDTO>> {
             override fun onResponse(call: Call<List<BannerResponseDTO>>, response: Response<List<BannerResponseDTO>>) {
                 if (response.isSuccessful && response.body() != null) {
                     setupSlider(response.body()!!)
+                    onLoadComplete()
                 } else {
+                    onLoadComplete()
                     Toast.makeText(context, "333 Failed to load banners", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<BannerResponseDTO>>, t: Throwable) {
+                onLoadComplete()
                 Toast.makeText(context, "111 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
                 println("==== setupFilterSpinner 대실패... ===")
                 println(t.message)
