@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private var isReplacingFragment = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,17 +75,19 @@ class MainActivity : AppCompatActivity() {
      */
     private fun setBottomNavigation() {
         binding.bottomNavigationView.selectedItemId = R.id.fragment_home
-        replaceFragment(HomeFragment())
+        replaceFragment(HomeFragment(), R.id.fragment_home)
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            val fragment : Fragment? = when (item.itemId){
-                R.id.fragment_home -> HomeFragment()
-                R.id.fragment_coordi -> CoordiFragment()
-                R.id.fragment_battle -> BattleFragment()
-                R.id.fragment_my_closet -> MyClosetFragment()
-                else -> null
+            if (!isReplacingFragment) {
+                val fragment : Fragment? = when (item.itemId) {
+                    R.id.fragment_home -> HomeFragment()
+                    R.id.fragment_coordi -> CoordiFragment()
+                    R.id.fragment_battle -> BattleFragment()
+                    R.id.fragment_my_closet -> MyClosetFragment()
+                    else -> null
+                }
+                replaceFragment(fragment, item.itemId)
             }
-            replaceFragment(fragment)
             true
         }
     }
@@ -92,11 +95,14 @@ class MainActivity : AppCompatActivity() {
     /**
      * 프래그먼트 교체
      */
-    fun replaceFragment(fragment : Fragment?) {
-        if(fragment!=null) {
+    fun replaceFragment(fragment : Fragment?, itemId: Int) {
+        if(fragment != null) {
+            isReplacingFragment = true
             supportFragmentManager.beginTransaction()
                 .replace(R.id.main_container, fragment)
                 .commit()
+            binding.bottomNavigationView.selectedItemId = itemId
+            isReplacingFragment = false
         }
     }
 

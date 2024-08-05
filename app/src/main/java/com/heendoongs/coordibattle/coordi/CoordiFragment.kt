@@ -24,11 +24,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.databinding.FragmentCoordiBinding
 import okhttp3.ResponseBody
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.global.checkLoginAndNavigate
+import com.heendoongs.coordibattle.member.LogInFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -554,7 +556,10 @@ class CoordiFragment : Fragment() {
                 val responseBody = response.body()?.string()
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), responseBody, Toast.LENGTH_SHORT).show()
-                    navigateToHomeFragment()
+
+                    val homeFragment = HomeFragment()
+                    val mainActivity = activity as MainActivity
+                    mainActivity.replaceFragment(homeFragment, R.id.fragment_home)
                 } else {
                     Toast.makeText(requireContext(), responseBody, Toast.LENGTH_SHORT).show()
                 }
