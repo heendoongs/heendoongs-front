@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.heendoongs.coordibattle.MainActivity
+import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.coordi.HomeFragment
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentMyInfoBinding
@@ -138,7 +139,7 @@ class MyInfoFragment : Fragment() {
                     showToast("회원 탈퇴 완료")
                     val mainActivity = activity as? MainActivity
                     mainActivity?.getPreferenceUtil()?.clearTokens()
-                    (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment())
+                    (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment(), R.id.fragment_home)
                 } else {
                     showToast("회원 탈퇴 오류")
                 }
