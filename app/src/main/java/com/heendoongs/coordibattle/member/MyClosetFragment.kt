@@ -72,6 +72,12 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
             logout()
         }
 
+
+        binding.btnMore.setOnClickListener {
+            currentPage++
+            loadMyCloset(currentPage, pageSize)
+        }
+
         loadNickname()
         loadMyCloset(currentPage, pageSize)
 

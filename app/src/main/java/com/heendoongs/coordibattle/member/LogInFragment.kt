@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.MainApplication
+import com.heendoongs.coordibattle.coordi.HomeFragment
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentLogInBinding
 import okhttp3.ResponseBody
@@ -78,7 +79,7 @@ class LogInFragment : Fragment() {
                     }
 
                     showToast("로그인 성공! 환영합니다.")
-                    (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment())
+                    (requireActivity() as? MainActivity)?.replaceFragment(HomeFragment())
                 } else {
                     val errorBody = response.errorBody()?.string()
                     if (errorBody != null) {

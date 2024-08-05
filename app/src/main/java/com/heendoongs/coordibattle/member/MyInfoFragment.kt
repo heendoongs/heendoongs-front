@@ -1,16 +1,20 @@
 package com.heendoongs.coordibattle.member
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.heendoongs.coordibattle.MainActivity
+import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.coordi.HomeFragment
+import com.heendoongs.coordibattle.databinding.DialogDeleteBinding
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentMyInfoBinding
 import okhttp3.ResponseBody
@@ -50,7 +54,7 @@ class MyInfoFragment : Fragment() {
         }
 
         binding.btnDelete.setOnClickListener {
-            delete()
+            showDeleteDialog()
         }
 
         messageInit()
@@ -76,7 +80,7 @@ class MyInfoFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<MyInfoResponse>, t: Throwable) {
-                showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
+                showToast("네트워크 오류가 발생했습니다. 다시 시도해주세요.")
             }
         })
     }
@@ -108,10 +112,11 @@ class MyInfoFragment : Fragment() {
         service.updateAccount(updateRequest).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    showToast("회원 정보 수정 완료")
+                    showToast("회원 정보 수정 완료!")
                     messageInit()
+                    (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment())
                 } else {
-                    // 회원가입 실패 처리
+                    // 회원 정보 수정 실패
                     val errorBody = response.errorBody()?.string()
                     val exceptionDto = Gson().fromJson(errorBody, ExceptionDto::class.java)
 
@@ -124,9 +129,29 @@ class MyInfoFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
+                showToast("네트워크 오류가 발생했습니다. 다시 시도해주세요.")
             }
         })
+    }
+
+    private fun showDeleteDialog() {
+        val dialogBinding = DialogDeleteBinding.inflate(LayoutInflater.from(context))
+
+        val dialog = AlertDialog.Builder(requireContext()).create()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setView(dialogBinding.root)
+
+        dialogBinding.dialogDeleteText.text = "정말 탈퇴하시겠습니까?"
+        dialogBinding.dialogDeleteOk.text = "탈퇴하기"
+
+        dialogBinding.dialogOkButton.setOnClickListener {
+            delete()
+            dialog.dismiss()
+        }
+        dialogBinding.dialogCancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun delete() {
@@ -135,17 +160,17 @@ class MyInfoFragment : Fragment() {
         service.deleteAccount().enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    showToast("회원 탈퇴 완료")
+                    showToast("탈퇴가 완료되었습니다. 또 만나요!")
                     val mainActivity = activity as? MainActivity
                     mainActivity?.getPreferenceUtil()?.clearTokens()
                     (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment())
                 } else {
-                    showToast("회원 탈퇴 오류")
+                    showToast("회원 탈퇴 중 오류가 발생했습니다. 다시 시도해주세요")
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
+                showToast("네트워크 오류가 발생했습니다. 다시 시도해주세요.")
             }
         })
     }
