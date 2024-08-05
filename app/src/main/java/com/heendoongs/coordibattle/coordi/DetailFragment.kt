@@ -94,7 +94,7 @@ class DetailFragment : Fragment() {
                             titleEditText.setText(data.coordiTitle)
 
                             rootView.findViewById<TextView>(R.id.coordi_detail_nickname).text = data.nickname
-                            rootView.findViewById<TextView>(R.id.coordi_detail_create_date).text = data.createDate.toString()
+                            rootView.findViewById<TextView>(R.id.coordi_detail_create_date).text = data.createDate.toLocalDate().toString()
                             rootView.findViewById<TextView>(R.id.coordi_detail_vote_count).text = data.voteCount.toString()
 
                             val voteButton = rootView.findViewById<ImageButton>(R.id.coordi_detail_vote_button)
