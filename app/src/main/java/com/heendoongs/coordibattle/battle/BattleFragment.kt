@@ -3,11 +3,13 @@ package com.heendoongs.coordibattle.battle
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -53,6 +55,8 @@ class BattleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_battle, container, false)
+
+        requireActivity().window.statusBarColor = Color.parseColor("#FFF6DE")
 
         if (!checkLoginAndNavigate()) {
             return rootView
@@ -228,5 +232,10 @@ class BattleFragment : Fragment() {
                 }, 1500)
             }
             .start()
+    }
+
+    override fun onDestroyView() {
+        requireActivity().window.statusBarColor = Color.WHITE
+        super.onDestroyView()
     }
 }

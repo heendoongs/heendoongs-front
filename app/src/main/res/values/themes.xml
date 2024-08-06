@@ -2,12 +2,12 @@
     <!-- 상태바 투명 테마 -->
     <style name="TransparentStatusTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!--drawerlayout statusbar -->
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <!-- Navigation Bar를 투명하게 만들기 -->
+        <item name="android:navigationBarColor">@color/orange</item>
     </style>
 
-    <!-- 커스텀 텍스트 스타일 정의 -->
+<!-- 커스텀 텍스트 스타일 정의 -->
     <style name="BottomNavigationTextAppearance" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/dongle_regular</item>
         <item name="android:textSize">19dp</item>
@@ -21,15 +21,6 @@
         <item name="itemTextColor">@color/bottom_nav_color</item>
         <item name="itemIconTint">@color/bottom_nav_color</item>
     </style>
-
-    <!-- 스피너 스타일 정의 -->
-<!--    <style name="Widget.My.Spinner" parent="Widget.AppCompat.Spinner">-->
-<!--        <item name="android:overlapAnchor">false</item>-->
-<!--        <item name="overlapAnchor"> false</item>-->
-<!--        <item name="android:spinnerMode">dropdown</item>-->
-<!--        <item name="android:dropDownWidth">match_parent</item>-->
-<!--        <item name="android:background">@drawable/bg_spinner</item>-->
-<!--    </style>-->
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">

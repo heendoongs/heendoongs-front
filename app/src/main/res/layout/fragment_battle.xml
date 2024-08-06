@@ -7,7 +7,6 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/parent_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,17 +22,18 @@
         android:elevation="11dp"
         />
 
-    <View
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/battle_background"
+        android:scaleType="fitXY"
         />
 
     <ImageView
         android:id="@+id/battle_logo"
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -45,9 +45,9 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/battle_logo"
+        android:layout_marginTop="24dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="140dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="10dp" >
         <ImageView
@@ -107,7 +107,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="56dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="10dp" >
         <ImageView
@@ -181,15 +181,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/battle_guideline"
         />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/battle_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="400dp"
-        />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/battle_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.50" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
