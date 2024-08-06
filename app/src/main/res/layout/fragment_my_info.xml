@@ -78,7 +78,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_id"
         app:srcCompat="@drawable/ic_heart" />
@@ -236,7 +236,7 @@
 
         <ImageButton
             android:id="@+id/btn_update"
-            android:layout_width="150dp"
+            android:layout_width="130dp"
             android:layout_height="50dp"
             android:layout_marginTop="48dp"
             android:background="@android:color/transparent"
@@ -250,7 +250,7 @@
 
         <ImageButton
             android:id="@+id/btn_delete"
-            android:layout_width="150dp"
+            android:layout_width="130dp"
             android:layout_height="50dp"
             android:layout_marginLeft="15dp"
             android:background="@android:color/transparent"

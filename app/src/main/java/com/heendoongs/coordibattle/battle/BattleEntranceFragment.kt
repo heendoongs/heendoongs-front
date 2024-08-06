@@ -1,11 +1,13 @@
 package com.heendoongs.coordibattle.battle
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -25,6 +27,7 @@ class BattleEntranceFragment : Fragment()  {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_battle_entrance, container, false)
+        requireActivity().window.statusBarColor = Color.parseColor("#FFF6DE")
 
         if (!checkLoginAndNavigate()) {
             return rootView
@@ -46,9 +49,9 @@ class BattleEntranceFragment : Fragment()  {
     }
 
     private fun  loadBattleEntrance() {
-        val startBtn = rootView.findViewById<Button>(R.id.battle_entrance_start_btn)
-        val helpBtn = rootView.findViewById<Button>(R.id.battle_entrance_help_btn)
-        val homeBtn = rootView.findViewById<Button>(R.id.battle_entrance_home_btn)
+        val startBtn = rootView.findViewById<ImageView>(R.id.battle_entrance_start_btn)
+        val helpBtn = rootView.findViewById<ImageView>(R.id.battle_entrance_help_btn)
+        val homeBtn = rootView.findViewById<ImageView>(R.id.battle_entrance_home_btn)
 
         startBtn.setOnClickListener {
             val fragment = BattleFragment()
@@ -71,5 +74,10 @@ class BattleEntranceFragment : Fragment()  {
             val mainActivity = context as MainActivity
             mainActivity.replaceFragment(fragment, R.id.fragment_home)
         }
+    }
+
+    override fun onDestroyView() {
+        requireActivity().window.statusBarColor = Color.WHITE
+        super.onDestroyView()
     }
 }
