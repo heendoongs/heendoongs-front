@@ -9,14 +9,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
-import android.text.TextWatcher
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -48,6 +43,7 @@ import java.util.*
  * 2024.08.02   남진수       상세페이지 코디 수정기능
  * 2024.08.02   남진수       상세페이지 코디 삭제기능
  * 2024.08.04   남진수       구글 애널리틱스 관련 설정 추가
+ * 2024.08.06   남진수       ProgressBar 설정
  * </pre>
  */
 
@@ -66,6 +62,7 @@ class DetailFragment : Fragment() {
     private var memberId: Long? = null
     private var coordiId: Long? = null
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,6 +73,7 @@ class DetailFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         service = RetrofitConnection.getInstance().create(CoordiService::class.java)
         coordiId = arguments?.getLong("coordiId")
+        progressBar = rootView.findViewById(R.id.progress_bar)
 
         memberId = MainActivity.prefs.getMemberId()
 
@@ -85,9 +83,11 @@ class DetailFragment : Fragment() {
 
     private fun loadCoordiDetails() {
         coordiId?.let { id ->
+            progressBar.visibility = View.VISIBLE
             val call = service.getCoordiDetails(id)
             call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
                 override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
+                    progressBar.visibility = View.GONE
                     if (response.isSuccessful) {
                         val coordiDetails = response.body()
                         coordiDetails?.let { data ->
@@ -106,11 +106,7 @@ class DetailFragment : Fragment() {
                             checkButton = rootView.findViewById(R.id.coordi_detail_check_button)
                             xButton  = rootView.findViewById(R.id.coordi_detail_x_button)
 
-                            checkButton.visibility = View.INVISIBLE
-                            xButton.visibility = View.INVISIBLE
-                            checkButton.isClickable = false
-                            xButton.isClickable = false
-
+                            rootView.findViewById<ImageView>(R.id.coordi_detail_vote_heart).visibility = View.VISIBLE
                             voteCount.text = data.voteCount.toString()
 
                             if (!data.isVotingPeriod) {
@@ -136,6 +132,9 @@ class DetailFragment : Fragment() {
                             }
 
                             if (data.isCoordiPeriod && Objects.equals(memberId, data.memberId)) {
+                                updateButton.visibility = View.VISIBLE;
+                                deleteButton.visibility = View.VISIBLE;
+
                                 updateButton.setOnClickListener {
                                     toggleEditMode(true)
                                 }
@@ -149,11 +148,6 @@ class DetailFragment : Fragment() {
                                 xButton.setOnClickListener {
                                     cancelEditMode()
                                 }
-                            } else{
-                                updateButton.visibility = View.INVISIBLE;
-                                deleteButton.visibility = View.INVISIBLE;
-                                updateButton.isClickable = false
-                                deleteButton.isClickable = false
                             }
 
                             val bitmap = decodeBase64ToBitmap(data.coordiImage)

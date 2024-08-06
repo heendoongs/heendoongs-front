@@ -37,7 +37,8 @@ import retrofit2.Response
  * 2024.07.26  	임원정       최초 생성
  * 2024.07.30  	남진수       배틀 페이지 리스트 조회
  * 2024.07.30  	남진수       배틀 투표 기능 추가
- * 2024 08 04   조희정       로그인 체크 메소드 추
+ * 2024 08 04   조희정       로그인 체크 메소드 추가
+ * 2024.08.06  	남진수       ProgressBar 추가
  * </pre>
  */
 
@@ -47,12 +48,16 @@ class BattleFragment : Fragment() {
     private lateinit var service: BattleService
     private var isClickable: Boolean = true
     private var memberId: Long? = null
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_battle, container, false)
+
+        progressBar = rootView.findViewById(R.id.progress_bar)
+        progressBar.visibility = View.VISIBLE
 
         if (!checkLoginAndNavigate()) {
             return rootView
@@ -78,10 +83,13 @@ class BattleFragment : Fragment() {
             call.enqueue(object : Callback<List<BattleDTO>> {
                 @SuppressLint("SetTextI18n")
                 override fun onResponse(call: Call<List<BattleDTO>>, response: Response<List<BattleDTO>>) {
+                    progressBar.visibility = View.GONE
                     if (response.isSuccessful) {
                         val battleDataList = response.body()
                         battleDataList?.let { data ->
                             if (data.size >= 2) {
+                                val battleConstraintLayout = rootView.findViewById<ConstraintLayout>(R.id.parent_layout)
+                                battleConstraintLayout.isVisible = true
                                 val firstCoordi = data[0]
                                 val secondCoordi = data[1]
 

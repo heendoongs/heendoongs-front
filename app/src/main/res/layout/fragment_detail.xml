@@ -43,6 +43,7 @@
         app:layout_constraintTop_toTopOf="@+id/coordi_detail_title_text"
         app:layout_constraintBottom_toBottomOf="@+id/coordi_detail_title_text"
         android:src="@drawable/ic_coordi_detail_update"
+        android:visibility="gone"
         />
 
     <ImageButton
@@ -69,6 +70,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/coordi_detail_title_text"
         app:layout_constraintTop_toTopOf="@+id/coordi_detail_title_text"
         android:src="@drawable/ic_coordi_detail_delete"
+        android:visibility="gone"
         />
 
     <ImageButton
@@ -82,7 +84,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/coordi_detail_title_text"
         app:layout_constraintTop_toTopOf="@+id/coordi_detail_title_text"
-        app:srcCompat="@drawable/ic_x" />
+        app:srcCompat="@drawable/ic_x"
+        />
 
     <ImageView
         android:id="@+id/coordi_detail_image"
@@ -106,6 +109,7 @@
         app:layout_constraintTop_toTopOf="@id/coordi_detail_nickname"
         app:layout_constraintBottom_toBottomOf="@id/coordi_detail_create_date"
         android:src="@drawable/ic_coordi_detail_heart"
+        android:visibility="gone"
         />
 
     <TextView
@@ -172,5 +176,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
