@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.MainApplication
 import com.heendoongs.coordibattle.R
+import com.heendoongs.coordibattle.coordi.HomeFragment
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentLogInBinding
 import okhttp3.ResponseBody
@@ -79,16 +80,15 @@ class LogInFragment : Fragment() {
                     }
 
                     showToast("로그인 성공! 환영합니다.")
-                    (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment(), R.id.fragment_my_closet)
+                    (requireActivity() as? MainActivity)?.replaceFragment(HomeFragment(), R.id.fragment_home)
                 } else {
                     val errorBody = response.errorBody()?.string()
                     if (errorBody != null) {
                         try {
                             val errorJson = JSONObject(errorBody)
                             val error = errorJson.optString("error")
-                            val errorMessage = errorJson.optString("message")
 
-                            if (error == "Unauthorized" && errorMessage == "자격 증명에 실패하였습니다.") {
+                            if (error == "Unauthorized") {
                                 binding.loginError.text = "아이디 또는 비밀번호를 확인하세요"
                                 binding.loginError.visibility = View.VISIBLE
                             } else {
@@ -108,7 +108,7 @@ class LogInFragment : Fragment() {
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 // 요청 실패 처리
-                showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
+                showToast("네트워크 오류가 발생했습니다. 다시 시도해주세요.")
             }
         })
     }

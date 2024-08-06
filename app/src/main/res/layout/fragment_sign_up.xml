@@ -6,17 +6,19 @@
     android:layout_height="match_parent">
 
     <!--    로고    -->
+
+    <!--    아이디 입력   -->
+
     <ImageView
         android:id="@+id/thanks_bubble"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_width="150dp"
+        android:layout_height="35dp"
         android:layout_marginTop="32dp"
         android:src="@drawable/ic_thanks_bubble"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.34"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <!--    아이디 입력   -->
 
     <LinearLayout
         android:id="@+id/title_signup"
@@ -27,8 +29,8 @@
         app:layout_constraintTop_toBottomOf="@+id/thanks_bubble">
 
         <ImageView
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             app:srcCompat="@drawable/img_face4" />
 
         <com.heendoongs.coordibattle.view.OutLineTextView
@@ -40,7 +42,7 @@
             android:fontFamily="@font/dongle_bold"
             android:text="회원가입"
             android:textColor="@color/white"
-            android:textSize="56dp"
+            android:textSize="48dp"
             app:outlineShadowColor="#75000000"
             app:outlineShadowDy="8"
             app:outlineShadowRadius="2"
@@ -48,8 +50,8 @@
             app:textStrokeWidth="14" />
 
         <ImageView
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             app:srcCompat="@drawable/ic_two_paws" />
 
     </LinearLayout>
@@ -58,7 +60,7 @@
         android:id="@+id/id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/dongle_bold"
         android:text="@string/id"
@@ -77,7 +79,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="4dp"
-        android:layout_marginEnd="52dp"
+        android:layout_marginEnd="40dp"
         android:background="@drawable/input_text"
         android:fontFamily="@font/dongle_regular"
         android:hint="@string/id_input"
@@ -93,7 +95,7 @@
         android:id="@+id/img_id_heart"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="40dp"
         app:layout_constraintBottom_toBottomOf="@+id/id"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/id"
@@ -127,7 +129,7 @@
         android:id="@+id/edit_pw"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="52dp"
+        android:layout_marginEnd="40dp"
         android:background="@drawable/input_text"
         android:fontFamily="@font/dongle_regular"
         android:hint="@string/pw_input"
@@ -143,7 +145,7 @@
         android:id="@+id/pw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:fontFamily="@font/dongle_bold"
         android:text="@string/password"
         android:textColor="@color/pink"
@@ -162,7 +164,7 @@
         android:id="@+id/img_pw_heart"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_id"
@@ -172,7 +174,7 @@
         android:id="@+id/img_pw_chk_heart"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_pw"
@@ -200,7 +202,7 @@
         android:id="@+id/edit_pw_chk"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="52dp"
+        android:layout_marginEnd="40dp"
         android:background="@drawable/input_text"
         android:fontFamily="@font/dongle_regular"
         android:hint="@string/pw_chk_input"
@@ -218,7 +220,7 @@
         android:id="@+id/img_nickname_heart"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk"
@@ -246,7 +248,7 @@
         android:id="@+id/edit_nickname"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="52dp"
+        android:layout_marginEnd="40dp"
         android:background="@drawable/input_text"
         android:fontFamily="@font/dongle_regular"
         android:hint="@string/nickname_input"
@@ -269,29 +271,17 @@
         app:layout_constraintStart_toStartOf="@+id/edit_nickname"
         app:layout_constraintTop_toBottomOf="@+id/edit_nickname" />
 
-    <TextView
-        android:id="@+id/nickname_chk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:fontFamily="@font/dongle_bold"
-        android:text="@string/nickname_chk"
-        android:textColor="@color/dark_gray"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/nickname"
-        app:layout_constraintStart_toEndOf="@+id/nickname" />
-
     <!--    버튼-->
 
     <ImageView
         android:id="@+id/btn_sign_up"
-        android:layout_width="200dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="48dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/dongle_bold"
         android:scaleType="centerInside"
         android:text="@string/sign_in"
         android:textSize="35dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_nickname"

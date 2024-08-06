@@ -1,5 +1,6 @@
 package com.heendoongs.coordibattle.coordi
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.battle.BannerSliderAdapter

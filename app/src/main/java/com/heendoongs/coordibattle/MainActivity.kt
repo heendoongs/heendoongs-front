@@ -2,13 +2,13 @@ package com.heendoongs.coordibattle
 
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Surface
-import android.view.View
 import android.view.WindowManager
 import androidx.core.view.WindowCompat
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -21,7 +21,7 @@ import com.heendoongs.coordibattle.databinding.ActivityMainBinding
 import com.heendoongs.coordibattle.global.PreferenceUtil
 import com.heendoongs.coordibattle.member.LogInFragment
 import com.heendoongs.coordibattle.member.MyClosetFragment
-import java.lang.reflect.Modifier
+
 
 /**
  * 메인 액티비티
@@ -50,10 +50,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        // Shared Preference 설정파일
         prefs = PreferenceUtil(applicationContext)
 
+        // 뷰 바인딩
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         makeStatusBarTransparent()
         setBottomNavigation()
 
@@ -119,6 +122,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+
+        if(currentFocus is EditText) {
+            currentFocus!!.clearFocus()
+        }
+
+        return super.dispatchTouchEvent(ev)
+    }
+
+    /**
+     * SHared Preference 가져오기
+     */
     fun getPreferenceUtil(): PreferenceUtil {
         return prefs
     }

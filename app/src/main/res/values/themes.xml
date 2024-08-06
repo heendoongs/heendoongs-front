@@ -32,5 +32,4 @@
         <item name="android:checkboxStyle">@style/customCheckboxFontStyle</item>
     </style>
 
-
 </resources>
