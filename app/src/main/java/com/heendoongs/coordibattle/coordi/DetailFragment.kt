@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.*
+import com.google.gson.reflect.TypeToken
 import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.global.RetrofitConnection
@@ -56,6 +57,7 @@ class DetailFragment : Fragment() {
     private lateinit var checkButton: ImageButton
     private lateinit var xButton: ImageButton
     private lateinit var voteButton: ImageButton
+    private lateinit var voteDisabledButton: ImageButton
     private lateinit var titleTextView: TextView
     private lateinit var titleEditText: EditText
     private lateinit var voteCount: TextView
@@ -101,6 +103,7 @@ class DetailFragment : Fragment() {
 
                             voteCount = rootView.findViewById(R.id.coordi_detail_vote_count)
                             voteButton = rootView.findViewById(R.id.coordi_detail_vote_button)
+                            voteDisabledButton = rootView.findViewById(R.id.coordi_detail_vote_button_disabled)
                             updateButton = rootView.findViewById(R.id.coordi_detail_update_button)
                             deleteButton = rootView.findViewById(R.id.coordi_detail_delete_button)
                             checkButton = rootView.findViewById(R.id.coordi_detail_check_button)
@@ -110,11 +113,12 @@ class DetailFragment : Fragment() {
                             voteCount.text = data.voteCount.toString()
 
                             if (!data.isVotingPeriod) {
-                                voteButton.setImageDrawable(context?.let {
+                                voteDisabledButton.setImageDrawable(context?.let {
                                     ContextCompat.getDrawable(
                                         it, R.drawable.coordi_detail_vote_disabled
                                     )
                                 })
+                                voteDisabledButton.visibility = View.VISIBLE
                             } else {
                                 if (data.isVoted) {
                                     voteButton.setImageDrawable(context?.let {
@@ -129,6 +133,7 @@ class DetailFragment : Fragment() {
                                         )
                                     })
                                 }
+                                voteButton.visibility = View.VISIBLE
                             }
 
                             if (data.isCoordiPeriod && Objects.equals(memberId, data.memberId)) {
@@ -207,6 +212,7 @@ class DetailFragment : Fragment() {
                             )
                         })
                     }
+                    voteButton.visibility = View.VISIBLE
                     voteCount.text = response.body()!!.voteCount.toString()
                 } else {
                     Toast.makeText(context, "코디 투표에 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -265,10 +271,19 @@ class DetailFragment : Fragment() {
                 override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
                     if (response.isSuccessful) {
                         Toast.makeText(context, "제목이 수정되었습니다!", Toast.LENGTH_SHORT).show()
-                        loadCoordiDetails()
+                        titleTextView.text = response.body()?.coordiTitle
+                        titleEditText.setText(response.body()?.coordiTitle)
                     } else {
-                        Toast.makeText(context, "제목 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                        Log.e("DetailFragment", "updateCoordi 실패: ${response.errorBody()?.string()}")
+                        val errorBody = response.errorBody()?.string()
+                        val errorMap = errorBody?.let {
+                            val gson = Gson()
+                            val type = object : TypeToken<Map<String, String>>() {}.type
+                            gson.fromJson<Map<String, String>>(it, type)
+                        }
+
+                        val errorMessage = errorMap?.get("message") ?: "제목은 1자 이상 15자 이하로 작성해 주세요."
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                        Log.e("DetailFragment", "updateCoordi 실패: $errorMessage")
                     }
                 }
                 override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {

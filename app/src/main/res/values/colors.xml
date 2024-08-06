@@ -12,4 +12,5 @@
     <color name="selected_nav">#623500</color>
     <color name="battle_background">#FFF6DE</color>
     <color name="blue">#2498E0</color>
+    <color name="light_gray">#EEEEEE</color>
 </resources>
