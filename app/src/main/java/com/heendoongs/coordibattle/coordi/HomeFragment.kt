@@ -68,6 +68,8 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         adapter = CoordiAdapter(requireContext(), mutableListOf(), this)
         binding.recyclerView.adapter = adapter
 
+        binding.progressBar.visibility = View.VISIBLE
+
         // 더보기 버튼
         binding.btnMore.setOnClickListener {
             currentPage++
@@ -153,7 +155,8 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         call.enqueue(object : Callback<Page<CoordiListResponseDTO>> {
             override fun onResponse(call: Call<Page<CoordiListResponseDTO>>, response: Response<Page<CoordiListResponseDTO>>) {
                 if (!isAdded) return
-
+                binding.progressBar.visibility = View.GONE
+                binding.btnMore.visibility = View.VISIBLE
                 if (response.isSuccessful && response.body() != null) {
                     val pageData = response.body()!!
                     val newItems = pageData.content

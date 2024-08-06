@@ -64,6 +64,7 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
         // 어댑터 초기화 및 설정
         adapter = CoordiAdapter(requireContext(), mutableListOf(), this)
         binding.recyclerView.adapter = adapter
+        binding.progressBar.visibility = View.VISIBLE
 
         binding.btnMyInfoPage.setOnClickListener {
             (requireActivity() as? MainActivity)?.replaceFragment(MyInfoFragment(), R.id.fragment_my_closet)
@@ -121,6 +122,9 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
     private fun loadMyCloset(page: Int, size: Int) {
         service.getMyClosetList(page, size).enqueue(object : Callback<Page<CoordiListResponseDTO>> {
             override fun onResponse(call: Call<Page<CoordiListResponseDTO>>, response: Response<Page<CoordiListResponseDTO>>) {
+                binding.progressBar.visibility = View.INVISIBLE
+                binding.recyclerView.visibility = View.VISIBLE
+                binding.btnMore.visibility = View.VISIBLE
                 if (response.isSuccessful && response.body() != null) {
                     val pageData = response.body()!!
                     val newItems = pageData.content
