@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import android.text.TextWatcher
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -58,8 +59,10 @@ class DetailFragment : Fragment() {
     private lateinit var deleteButton: ImageButton
     private lateinit var checkButton: ImageButton
     private lateinit var xButton: ImageButton
+    private lateinit var voteButton: ImageButton
     private lateinit var titleTextView: TextView
     private lateinit var titleEditText: EditText
+    private lateinit var voteCount: TextView
     private var memberId: Long? = null
     private var coordiId: Long? = null
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -95,9 +98,9 @@ class DetailFragment : Fragment() {
 
                             rootView.findViewById<TextView>(R.id.coordi_detail_nickname).text = data.nickname
                             rootView.findViewById<TextView>(R.id.coordi_detail_create_date).text = data.createDate.toLocalDate().toString()
-                            rootView.findViewById<TextView>(R.id.coordi_detail_vote_count).text = data.voteCount.toString()
 
-                            val voteButton = rootView.findViewById<ImageButton>(R.id.coordi_detail_vote_button)
+                            voteCount = rootView.findViewById(R.id.coordi_detail_vote_count)
+                            voteButton = rootView.findViewById(R.id.coordi_detail_vote_button)
                             updateButton = rootView.findViewById(R.id.coordi_detail_update_button)
                             deleteButton = rootView.findViewById(R.id.coordi_detail_delete_button)
                             checkButton = rootView.findViewById(R.id.coordi_detail_check_button)
@@ -107,6 +110,8 @@ class DetailFragment : Fragment() {
                             xButton.visibility = View.INVISIBLE
                             checkButton.isClickable = false
                             xButton.isClickable = false
+
+                            voteCount.text = data.voteCount.toString()
 
                             if (!data.isVotingPeriod) {
                                 voteButton.setImageDrawable(context?.let {
@@ -195,7 +200,20 @@ class DetailFragment : Fragment() {
         call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
             override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
                 if (response.isSuccessful) {
-                    loadCoordiDetails()
+                    if (response.body()?.isVoted == true) {
+                        voteButton.setImageDrawable(context?.let {
+                            ContextCompat.getDrawable(
+                                it, R.drawable.coordi_detail_vote_voted
+                            )
+                        })
+                    } else {
+                        voteButton.setImageDrawable(context?.let {
+                            ContextCompat.getDrawable(
+                                it, R.drawable.coordi_detail_vote_not_voted
+                            )
+                        })
+                    }
+                    voteCount.text = response.body()!!.voteCount.toString()
                 } else {
                     Toast.makeText(context, "코디 투표에 실패했습니다.", Toast.LENGTH_SHORT).show()
                     Log.e("DetailFragment", "likeCoordi 실패: ${response.errorBody()?.string()}")
