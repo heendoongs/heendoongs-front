@@ -52,7 +52,7 @@ interface MemberService {
         @Body memberUpdateRequest : MemberUpdateRequest
     ): Call<ResponseBody>
 
-    @DELETE("deleteAccount")
+    @POST("deleteAccount")
     fun deleteAccount(
     ): Call<ResponseBody>
 

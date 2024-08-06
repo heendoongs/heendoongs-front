@@ -74,6 +74,11 @@ class SignUpFragment : Fragment() {
             return
         }
 
+        if (password.isEmpty() || passwordCheck.isEmpty()) {
+            showMessage(binding.pwNotMatch, "비밀번호를 입력해주세요")
+            return
+        }
+
         if (nickname.isEmpty()) {
             showMessage(binding.existNickname, "닉네임을 입력해주세요")
             return

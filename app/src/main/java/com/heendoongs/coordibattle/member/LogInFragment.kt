@@ -49,6 +49,7 @@ class LogInFragment : Fragment() {
         service = RetrofitConnection.getInstance().create(MemberService::class.java)
 
         binding.btnLogin.setOnClickListener {
+            binding.loginError.visibility = View.GONE
             login()
         }
 

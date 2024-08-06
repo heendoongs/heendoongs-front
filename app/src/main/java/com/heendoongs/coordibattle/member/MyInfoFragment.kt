@@ -61,12 +61,13 @@ class MyInfoFragment : Fragment() {
         }
 
         messageInit()
-        getMyInfo()
+        addNicknameTextWatcher()
+        loadMyInfo()
 
         return binding.root
     }
 
-    private fun getMyInfo() {
+    private fun loadMyInfo() {
         service.getMyInfo().enqueue(object : Callback<MyInfoResponse> {
             override fun onResponse(call: Call<MyInfoResponse>, response: Response<MyInfoResponse>) {
                 if (response.isSuccessful) {
@@ -125,7 +126,7 @@ class MyInfoFragment : Fragment() {
                     val errorBody = response.errorBody()?.string()
                     val exceptionDto = Gson().fromJson(errorBody, ExceptionDto::class.java)
 
-                    // 에러 유형에 따라 메시지 표시
+                    // 에러 메시지
                     when (exceptionDto.code) {
                         602 -> showMessage(binding.existNickname, exceptionDto.message)
                         else -> showToast(exceptionDto.message)
