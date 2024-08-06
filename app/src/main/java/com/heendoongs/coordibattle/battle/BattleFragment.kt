@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
+import com.heendoongs.coordibattle.coordi.CoordiEntranceFragment
 import com.heendoongs.coordibattle.coordi.CoordiFragment
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.global.checkLoginAndNavigate
@@ -129,7 +130,7 @@ class BattleFragment : Fragment() {
                                 endOfBattleScreen.isVisible = true
                                 val endOfBattleBtn = rootView.findViewById<ImageView>(R.id.end_of_battle_btn)
                                 endOfBattleBtn.setOnClickListener {
-                                    val coordiFragment = CoordiFragment()
+                                    val coordiFragment = CoordiEntranceFragment()
                                     val mainActivity = activity as MainActivity
                                     mainActivity.replaceFragment(coordiFragment, R.id.fragment_coordi)
                                 }
