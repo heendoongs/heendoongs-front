@@ -62,4 +62,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-analytics-ktx:20.0.2'
 
+    implementation 'com.github.yukuku:ambilwarna:2.0.1'
 }
