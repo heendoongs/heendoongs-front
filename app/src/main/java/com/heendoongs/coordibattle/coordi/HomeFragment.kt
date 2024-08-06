@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -65,6 +66,8 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         // 어댑터 초기화 및 설정
         adapter = CoordiAdapter(requireContext(), mutableListOf(), this)
         binding.recyclerView.adapter = adapter
+
+        binding.progressBar.visibility = View.VISIBLE
 
         // 더보기 버튼
         binding.btnMore.setOnClickListener {
@@ -156,6 +159,8 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
 
         call.enqueue(object : Callback<Page<CoordiListResponseDTO>> {
             override fun onResponse(call: Call<Page<CoordiListResponseDTO>>, response: Response<Page<CoordiListResponseDTO>>) {
+                binding.progressBar.visibility = View.GONE
+                binding.btnMore.visibility = View.VISIBLE
                 if (response.isSuccessful && response.body() != null) {
                     val pageData = response.body()!!
                     val newItems = pageData.content
