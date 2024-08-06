@@ -88,27 +88,24 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         // 배틀 필터 스피너 설정
         battleService.getBattleTitles().enqueue(object : Callback<List<BattleTitleResponseDTO>> {
             override fun onResponse(call: Call<List<BattleTitleResponseDTO>>, response: Response<List<BattleTitleResponseDTO>>) {
+                if (!isAdded) return  // Fragment가 여전히 활성 상태인지 확인
                 if (response.isSuccessful && response.body() != null) {
                     val battles = response.body()!!
                     val battleTitles = arrayOf("배틀별") + battles.map { it.title }.toTypedArray()
 
                     // 배열의 첫 번째 항목을 기본값으로 설정
-                    if (isAdded) { // Fragment가 현재 Activity에 추가된 상태인지 확인
-                        val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, battleTitles)
-                        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
-                        binding.spinnerBattleFilter.adapter = adapter
+                    val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, battleTitles)
+                    adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
+                    binding.spinnerBattleFilter.adapter = adapter
 
-                        binding.spinnerBattleFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                                selectedBattleId = if (position == 0) null else battles[position - 1].battleId
-                                currentPage = 0
-                                loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
-                            }
-
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-                                // 선택된 항목이 없을 때 동작
-                            }
+                    binding.spinnerBattleFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                            selectedBattleId = if (position == 0) null else battles[position - 1].battleId
+                            currentPage = 0
+                            loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
                         }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {}
                     }
                 } else {
                     Toast.makeText(context, "Failed to load battles", Toast.LENGTH_SHORT).show()
@@ -116,6 +113,7 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
             }
 
             override fun onFailure(call: Call<List<BattleTitleResponseDTO>>, t: Throwable) {
+                if (!isAdded) return
                 Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
@@ -123,26 +121,22 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
 
     private fun setupSortSpinner() {
         val sortOptions = resources.getStringArray(R.array.sort_options)
-        if (isAdded) {
-            val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, sortOptions)
-            adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
-            binding.spinnerSort.adapter = adapter
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, sortOptions)
+        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
+        binding.spinnerSort.adapter = adapter
 
-            // 기본값으로 "RANKING"을 선택
-            binding.spinnerSort.setSelection(sortOptions.indexOf("랭킹순"))
+        // 기본값으로 "RANKING"을 선택
+        binding.spinnerSort.setSelection(sortOptions.indexOf("랭킹순"))
 
 
-            binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    selectedSortOrder = if (position == 0) "RANKING" else "RECENT"
-                    currentPage = 0
-                    loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // 선택된 항목이 없을 때 동작
-                }
+        binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedSortOrder = if (position == 0) "RANKING" else "RECENT"
+                currentPage = 0
+                loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
             }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
@@ -158,6 +152,8 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
 
         call.enqueue(object : Callback<Page<CoordiListResponseDTO>> {
             override fun onResponse(call: Call<Page<CoordiListResponseDTO>>, response: Response<Page<CoordiListResponseDTO>>) {
+                if (!isAdded) return
+
                 if (response.isSuccessful && response.body() != null) {
                     val pageData = response.body()!!
                     val newItems = pageData.content
@@ -179,6 +175,7 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
             }
 
             override fun onFailure(call: Call<Page<CoordiListResponseDTO>>, t: Throwable) {
+                if (!isAdded) return
                 Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
@@ -188,6 +185,8 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
     private fun loadBanners() {
         battleService.getCurrentBattles().enqueue(object : Callback<List<BannerResponseDTO>> {
             override fun onResponse(call: Call<List<BannerResponseDTO>>, response: Response<List<BannerResponseDTO>>) {
+                if (!isAdded) return
+
                 if (response.isSuccessful && response.body() != null) {
                     setupSlider(response.body()!!)
                 } else {
@@ -196,6 +195,7 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
             }
 
             override fun onFailure(call: Call<List<BannerResponseDTO>>, t: Throwable) {
+                if (!isAdded) return
                 Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })

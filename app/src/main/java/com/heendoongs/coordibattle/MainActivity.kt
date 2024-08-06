@@ -1,13 +1,12 @@
 package com.heendoongs.coordibattle
 
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.view.WindowCompat
+import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.fragment.app.Fragment
@@ -22,7 +21,7 @@ import com.heendoongs.coordibattle.databinding.ActivityMainBinding
 import com.heendoongs.coordibattle.global.PreferenceUtil
 import com.heendoongs.coordibattle.member.LogInFragment
 import com.heendoongs.coordibattle.member.MyClosetFragment
-import com.heendoongs.coordibattle.view.ProgressDialog
+
 
 /**
  * 메인 액티비티
@@ -49,6 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         // Shared Preference 설정파일
         prefs = PreferenceUtil(applicationContext)
@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 하단바 설정
         makeStatusBarTransparent()
         setBottomNavigation()
 
@@ -75,10 +74,16 @@ class MainActivity : AppCompatActivity() {
      * 상태바, 하단바까지 화면 확장
      */
     private fun makeStatusBarTransparent() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
+        /*window.apply {
+            setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
+        }*/
+        window.apply {
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = Color.WHITE
+        }
     }
 
     /**
