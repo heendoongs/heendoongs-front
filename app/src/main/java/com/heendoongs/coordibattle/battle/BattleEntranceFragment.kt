@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -48,9 +49,9 @@ class BattleEntranceFragment : Fragment()  {
     }
 
     private fun  loadBattleEntrance() {
-        val startBtn = rootView.findViewById<Button>(R.id.battle_entrance_start_btn)
-        val helpBtn = rootView.findViewById<Button>(R.id.battle_entrance_help_btn)
-        val homeBtn = rootView.findViewById<Button>(R.id.battle_entrance_home_btn)
+        val startBtn = rootView.findViewById<ImageView>(R.id.battle_entrance_start_btn)
+        val helpBtn = rootView.findViewById<ImageView>(R.id.battle_entrance_help_btn)
+        val homeBtn = rootView.findViewById<ImageView>(R.id.battle_entrance_home_btn)
 
         startBtn.setOnClickListener {
             val fragment = BattleFragment()
