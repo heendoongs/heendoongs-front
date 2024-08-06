@@ -3,6 +3,8 @@ package com.heendoongs.coordibattle.member
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -137,6 +139,9 @@ class MyInfoFragment : Fragment() {
         })
     }
 
+    /**
+     * 탈퇴 확인 다이얼로그
+     */
     private fun showDeleteDialog() {
         val dialogBinding = DialogDeleteBinding.inflate(LayoutInflater.from(context))
 
@@ -193,6 +198,27 @@ class MyInfoFragment : Fragment() {
         // 전달된 메시지 설정하고 VISIBLE로 설정
         visibleMessage.text = message
         visibleMessage.visibility = View.VISIBLE
+    }
+
+    /**
+     * 닉네임 3글자가 넘어가면 경고메시지
+     */
+    private fun addNicknameTextWatcher() {
+        binding.editNickname.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.length > 3) {
+                    showMessage(binding.existNickname, "닉네임은 3글자 이하로 입력해주세요.")
+                    binding.btnUpdate.isEnabled = false
+                } else {
+                    binding.existNickname.visibility = View.GONE
+                    binding.btnUpdate.isEnabled = true
+                }
+            }
+        })
     }
 
     private fun showToast(message: String) {

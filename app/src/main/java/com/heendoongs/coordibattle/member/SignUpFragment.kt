@@ -130,6 +130,10 @@ class SignUpFragment : Fragment() {
         visibleMessage.text = message
         visibleMessage.visibility = View.VISIBLE
     }
+
+    /**
+     * 닉네임 3글자가 넘어가면 경고메시지
+     */
     private fun addNicknameTextWatcher() {
         binding.editNickname.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

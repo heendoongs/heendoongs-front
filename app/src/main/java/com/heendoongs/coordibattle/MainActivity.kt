@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var isReplacingFragment = false
-    private var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,11 +60,6 @@ class MainActivity : AppCompatActivity() {
         // 하단바 설정
         makeStatusBarTransparent()
         setBottomNavigation()
-
-        // 로딩 다이얼로그 생성
-        progressDialog = ProgressDialog(this)
-        progressDialog?.setCancelable(false)
-        progressDialog?.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
 
         /**
          * 구글 애널리틱스 관련 설정
@@ -132,14 +126,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         return super.dispatchTouchEvent(ev)
-    }
-
-    fun showLoading() {
-        progressDialog?.show()
-    }
-
-    fun hideLoading() {
-        progressDialog?.dismiss()
     }
 
     /**
