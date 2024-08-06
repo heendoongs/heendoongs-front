@@ -167,7 +167,7 @@ class DetailFragment : Fragment() {
 
                             voteButton.setOnClickListener {
                                 if (data.isVotingPeriod) {
-                                    if (memberId == -1L) {
+                                    if (memberId == -1L || memberId == null) {
                                         Toast.makeText(context, "로그인 이후 사용해주세요", Toast.LENGTH_SHORT).show()
                                         val loginFragment = LogInFragment()
                                         val mainActivity = activity as MainActivity

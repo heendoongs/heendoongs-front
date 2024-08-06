@@ -48,6 +48,7 @@ class PreferenceUtil(context: Context) {
         with(prefs.edit()) {
             remove("access_token")
             remove("refresh_token")
+            remove("memberId")
             apply()
         }
     }
