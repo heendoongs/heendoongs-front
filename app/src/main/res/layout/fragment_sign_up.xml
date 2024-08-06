@@ -12,52 +12,52 @@
 
     <!--    로고    -->
 
-    <ImageView
-        android:id="@+id/thanks_bubble"
-        android:layout_width="150dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="32dp"
-        android:src="@drawable/ic_thanks_bubble"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.34"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/title_signup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/thanks_bubble">
-
         <ImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            app:srcCompat="@drawable/img_face4" />
+            android:id="@+id/thanks_bubble"
+            android:layout_width="150dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_thanks_bubble"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.353"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <com.heendoongs.coordibattle.view.OutLineTextView
-            android:id="@+id/myInfo"
-            android:layout_width="130dp"
+        <LinearLayout
+            android:id="@+id/title_signup"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginLeft="8dp"
-            android:fontFamily="@font/dongle_bold"
-            android:text="회원가입"
-            android:textColor="@color/white"
-            android:textSize="48dp"
-            app:outlineShadowColor="#75000000"
-            app:outlineShadowDy="8"
-            app:outlineShadowRadius="2"
-            app:textStrokeColor="@color/black"
-            app:textStrokeWidth="14" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/thanks_bubble">
 
-        <ImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            app:srcCompat="@drawable/ic_two_paws" />
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                app:srcCompat="@drawable/img_face4" />
 
-    </LinearLayout>
+            <com.heendoongs.coordibattle.view.OutLineTextView
+                android:id="@+id/myInfo"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dongle_bold"
+                android:gravity="center"
+                android:text="회원가입"
+                android:textColor="@color/white"
+                android:textSize="48dp"
+                app:outlineShadowColor="#75000000"
+                app:outlineShadowDy="8"
+                app:outlineShadowRadius="2"
+                app:textStrokeColor="@color/black"
+                app:textStrokeWidth="14" />
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                app:srcCompat="@drawable/ic_two_paws" />
+
+        </LinearLayout>
 
     <com.heendoongs.coordibattle.view.OutLineTextView
         android:id="@+id/id"
@@ -81,7 +81,6 @@
         android:id="@+id/edit_id"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="4dp"
         android:layout_marginEnd="40dp"
         android:background="@drawable/input_text"
         android:fontFamily="@font/dongle_regular"
@@ -279,7 +278,7 @@
     <ImageView
         android:id="@+id/btn_sign_up"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:fontFamily="@font/dongle_bold"
         android:scaleType="centerInside"
         android:text="@string/sign_in"

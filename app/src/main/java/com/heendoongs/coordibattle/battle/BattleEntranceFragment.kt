@@ -1,5 +1,6 @@
 package com.heendoongs.coordibattle.battle
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ class BattleEntranceFragment : Fragment()  {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_battle_entrance, container, false)
+        requireActivity().window.statusBarColor = Color.parseColor("#FFF6DE")
 
         if (!checkLoginAndNavigate()) {
             return rootView
@@ -71,5 +73,10 @@ class BattleEntranceFragment : Fragment()  {
             val mainActivity = context as MainActivity
             mainActivity.replaceFragment(fragment, R.id.fragment_home)
         }
+    }
+
+    override fun onDestroyView() {
+        requireActivity().window.statusBarColor = Color.WHITE
+        super.onDestroyView()
     }
 }
