@@ -1,6 +1,5 @@
 package com.heendoongs.coordibattle.coordi
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.battle.BannerSliderAdapter
@@ -88,7 +86,7 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         // 필터 및 정렬 스피너 설정
         setupFilterSpinner()
         setupSortSpinner()
-        
+
         // 배너 데이터 로드
         loadBanners() {
             // 로딩 다이얼로그 해제
@@ -107,53 +105,55 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                     val battleTitles = arrayOf("배틀별") + battles.map { it.title }.toTypedArray()
 
                     // 배열의 첫 번째 항목을 기본값으로 설정
-                    val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, battleTitles)
-                    adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
-                    binding.spinnerBattleFilter.adapter = adapter
+                    if (isAdded) { // Fragment가 현재 Activity에 추가된 상태인지 확인
+                        val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, battleTitles)
+                        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
+                        binding.spinnerBattleFilter.adapter = adapter
 
-                    binding.spinnerBattleFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                            selectedBattleId = if (position == 0) null else battles[position - 1].battleId
-                            currentPage = 0
-                            loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
-                        }
+                        binding.spinnerBattleFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                selectedBattleId = if (position == 0) null else battles[position - 1].battleId
+                                currentPage = 0
+                                loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
+                            }
 
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
-                            // 선택된 항목이 없을 때 동작
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                // 선택된 항목이 없을 때 동작
+                            }
                         }
                     }
                 } else {
-                    Toast.makeText(context, "111 Failed to load battles", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Failed to load battles", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<BattleTitleResponseDTO>>, t: Throwable) {
-                Toast.makeText(context, "333 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
-                println("===loadBanner 대실패...===")
-                println(t.message)
+                Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
     }
 
     private fun setupSortSpinner() {
         val sortOptions = resources.getStringArray(R.array.sort_options)
-        val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, sortOptions)
-        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
-        binding.spinnerSort.adapter = adapter
+        if (isAdded) {
+            val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, sortOptions)
+            adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
+            binding.spinnerSort.adapter = adapter
 
-        // 기본값으로 "RANKING"을 선택
-        binding.spinnerSort.setSelection(sortOptions.indexOf("랭킹순"))
+            // 기본값으로 "RANKING"을 선택
+            binding.spinnerSort.setSelection(sortOptions.indexOf("랭킹순"))
 
 
-        binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedSortOrder = if (position == 0) "RANKING" else "RECENT"
-                currentPage = 0
-                loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
-            }
+            binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    selectedSortOrder = if (position == 0) "RANKING" else "RECENT"
+                    currentPage = 0
+                    loadCoordiList(currentPage, pageSize) // 페이지를 0으로 초기화
+                }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // 선택된 항목이 없을 때 동작
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // 선택된 항목이 없을 때 동작
+                }
             }
         }
     }
@@ -186,12 +186,12 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                         binding.btnMore.visibility = View.VISIBLE
                     }
                 } else {
-                    Toast.makeText(context, "222 Failed to fetch data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Failed to fetch data", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<Page<CoordiListResponseDTO>>, t: Throwable) {
-                Toast.makeText(context, "222 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -205,15 +205,13 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                     onLoadComplete()
                 } else {
                     onLoadComplete()
-                    Toast.makeText(context, "333 Failed to load banners", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Failed to load banners", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<BannerResponseDTO>>, t: Throwable) {
                 onLoadComplete()
-                Toast.makeText(context, "111 Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
-                println("==== setupFilterSpinner 대실패... ===")
-                println(t.message)
+                Toast.makeText(context, "Error connecting to the server: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
     }

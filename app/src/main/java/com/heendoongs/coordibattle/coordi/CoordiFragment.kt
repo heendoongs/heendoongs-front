@@ -19,11 +19,14 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.children
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.databinding.FragmentCoordiBinding
@@ -118,6 +121,12 @@ class CoordiFragment : Fragment() {
         // 삭제 버튼 클릭 리스너
         binding.btnDelete.setOnClickListener {
             selectedImageView?.let {
+                // Remove the clothId from selectedClothIds
+                val clothId = it.tag as? Long
+                if (clothId != null) {
+                    selectedClothIds.remove(clothId)
+                }
+                // Remove the ImageView from coordiContainer
                 binding.coordiContainer.removeView(it)
                 binding.btnDelete.visibility = View.GONE
                 selectedImageView = null
@@ -244,7 +253,7 @@ class CoordiFragment : Fragment() {
             // 왼쪽팔
             R.drawable.img_left_arm1, R.drawable.img_left_arm2 -> {
                 binding.leftArm.setImageResource(imageResId)
-                setupImageView(binding.leftArm, 320, 340, 0,130)
+                setupImageView(binding.leftArm, 320, 330, 0,130, 360, "Arms")
                 if (binding.leftArm.parent == null) {
                     binding.coordiContainer.addView(binding.leftArm)
                 }
@@ -252,7 +261,7 @@ class CoordiFragment : Fragment() {
             // 오른쪽 팔
             R.drawable.img_right_arm1, R.drawable.img_right_arm2 -> {
                 binding.rightArm.setImageResource(imageResId)
-                setupImageView(binding.rightArm,320, 340, 130, 0)
+                setupImageView(binding.rightArm,320, 330, 130, 0, 360,"Arms")
                 if (binding.rightArm.parent == null) {
                     binding.coordiContainer.addView(binding.rightArm)
                 }
@@ -281,49 +290,44 @@ class CoordiFragment : Fragment() {
     /**
      * 코디 영역에 DB에 저장된 이미지 올리기
      */
-    /*private fun addRemoteImageToContainer(clothId: Long, imageUrl: String) {
-        if (!selectedClothIds.contains(clothId)) {
-            selectedClothIds.add(clothId)
-        }
-        val imageView = ImageView(requireContext())
-        Glide.with(this).load(imageUrl).into(imageView)
-        setupImageView(imageView, 300, 300)
-        binding.coordiContainer.addView(imageView)
-    }*/
     private fun addRemoteImageToContainer(clothId: Long, imageUrl: String, type: String) {
         if (!selectedClothIds.contains(clothId)) {
             selectedClothIds.add(clothId)
         }
 
-        if (type == "Shoe") {
-            // Add left shoe
-            val leftShoeImageView = ImageView(requireContext())
-            Glide.with(this).load(imageUrl).into(leftShoeImageView)
-            setupImageView(leftShoeImageView, 200, 200, 0, 80)
-            binding.coordiContainer.addView(leftShoeImageView)
-            leftShoeImageView.setOnClickListener {
-                selectImageView(leftShoeImageView)
-            }
+        when (type) {
+            "Shoe" -> {
+                // Add left shoe
+                val leftShoeImageView = ImageView(requireContext())
+                Glide.with(this).load(imageUrl).into(leftShoeImageView)
+                setupImageView(leftShoeImageView, 200, 200, 0, 80, 860, type)
+                binding.coordiContainer.addView(leftShoeImageView)
 
-            // Add right shoe with flipped image
-            val rightShoeImageView = ImageView(requireContext())
-            Glide.with(this).load(imageUrl).into(rightShoeImageView)
-            rightShoeImageView.scaleX = -1f // Flip the image horizontally
-            setupImageView(rightShoeImageView, 200, 200, 80, 0)
-            binding.coordiContainer.addView(rightShoeImageView)
-            rightShoeImageView.setOnClickListener {
-                selectImageView(rightShoeImageView)
+                // Add right shoe with flipped image
+                val rightShoeImageView = ImageView(requireContext())
+                Glide.with(this).load(imageUrl).into(rightShoeImageView)
+                rightShoeImageView.scaleX = -1f // Flip the image horizontally
+                setupImageView(rightShoeImageView, 200, 200, 80, 0, 860, type)
+                binding.coordiContainer.addView(rightShoeImageView)
             }
-        } else {
-            val imageView = ImageView(requireContext())
-            Glide.with(this).load(imageUrl).into(imageView)
-            setupImageView(imageView, 300, 300)
-            binding.coordiContainer.addView(imageView)
-            imageView.setOnClickListener {
-                selectImageView(imageView)
+            "Bottom" -> {
+                val imageView = ImageView(requireContext())
+                Glide.with(this).load(imageUrl).into(imageView)
+                setupImageView(imageView, 320, 320, 0,0, 530, type)
+                binding.coordiContainer.addView(imageView)
+            }
+            "Top" -> {
+                val imageView = ImageView(requireContext())
+                Glide.with(this).load(imageUrl).into(imageView)
+                setupImageView(imageView, 350, 350, 0, 0, 330, type)
+                binding.coordiContainer.addView(imageView)
             }
         }
+
+        // 얼굴은 항상 최상단
+        binding.face.bringToFront()
     }
+    
 
     private fun selectImageView(imageView: ImageView) {
         // 이미지가 이미 선택된 상태라면 선택 해제
@@ -331,6 +335,7 @@ class CoordiFragment : Fragment() {
             selectedImageView?.background = null
             selectedImageView = null
             binding.btnDelete.visibility = View.GONE
+
         } else {
             // 새로운 이미지를 선택하면 이전 선택된 이미지의 테두리 제거
             selectedImageView?.background = null
@@ -339,6 +344,8 @@ class CoordiFragment : Fragment() {
                 setBackgroundResource(R.drawable.shape_selected_item_boarder)
             }
             binding.btnDelete.visibility = View.VISIBLE
+            imageView.bringToFront()
+            binding.face.bringToFront()
         }
     }
 
@@ -347,22 +354,26 @@ class CoordiFragment : Fragment() {
      */
     private fun setupImageView(imageView: ImageView,
                                width: Int = FrameLayout.LayoutParams.WRAP_CONTENT, height: Int = FrameLayout.LayoutParams.WRAP_CONTENT,
-                               marginStart: Int = 0, marginEnd: Int = 0) {
+                               marginStart: Int = 0, marginEnd: Int = 0, marginTop: Int = 0,
+                               type: String) {
         imageView.layoutParams = FrameLayout.LayoutParams(
             width,
             height
         ).apply {
+            topMargin = marginTop
             setMarginStart(marginStart)
             setMarginEnd(marginEnd)
-            gravity = Gravity.CENTER
+            gravity = Gravity.CENTER_HORIZONTAL
         }
+
+        imageView.tag = type
 
         /**
          * 이미지 뷰 터치 설정
          */
         imageView.setOnTouchListener(object : View.OnTouchListener {
             private val scaleDetector = ScaleGestureDetector(requireContext(), ScaleListener(imageView))
-            private val rotateDetector = RotateGestureDetector()
+            private val rotateDetector = RotateGestureDetector(imageView)
             private var initialX = 0f
             private var initialY = 0f
             private var dX = 0f
@@ -395,7 +406,7 @@ class CoordiFragment : Fragment() {
             /**
              * 회전
              */
-            private inner class RotateGestureDetector : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            private inner class RotateGestureDetector(private val imageView: ImageView) : ScaleGestureDetector.SimpleOnScaleGestureListener() {
                 private var previousAngle = 0f
 
                 fun onTouch(event: MotionEvent): Boolean {
@@ -403,7 +414,11 @@ class CoordiFragment : Fragment() {
                         val angle = getRotationAngle(event)
                         if (previousAngle != 0f) {
                             val deltaAngle = angle - previousAngle
-                            imageView.rotation += deltaAngle
+                            if (imageView.scaleX < 0f) {    // 좌우반전된 이미지(오른쪽 신발)의 경우, 각도 계산 반대로
+                                imageView.rotation -= deltaAngle
+                            } else {
+                                imageView.rotation += deltaAngle
+                            }
                         }
                         previousAngle = angle
                     } else {
@@ -553,15 +568,27 @@ class CoordiFragment : Fragment() {
 
         service.uploadCoordi(request).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                val responseBody = response.body()?.string()
                 if (response.isSuccessful) {
+                    val responseBody = response.body()?.string()
                     Toast.makeText(requireContext(), responseBody, Toast.LENGTH_SHORT).show()
 
                     val homeFragment = HomeFragment()
                     val mainActivity = activity as MainActivity
                     mainActivity.replaceFragment(homeFragment, R.id.fragment_home)
                 } else {
-                    Toast.makeText(requireContext(), responseBody, Toast.LENGTH_SHORT).show()
+                    val errorBody = response.errorBody()?.string()
+                    val errorMap = errorBody?.let {
+                        val gson = Gson()
+                        val type = object : TypeToken<Map<String, String>>() {}.type
+                        gson.fromJson<Map<String, String>>(it, type)
+                    }
+                    if (errorMap != null) {
+                        for ((field, message) in errorMap) {
+                            Toast.makeText(requireContext(), "$message", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "코디 업로드 실패", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
@@ -570,7 +597,6 @@ class CoordiFragment : Fragment() {
             }
         })
     }
-
 
 
     /**

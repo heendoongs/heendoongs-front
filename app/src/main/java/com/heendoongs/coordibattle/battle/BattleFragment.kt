@@ -8,16 +8,16 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.heendoongs.coordibattle.MainActivity
 import com.heendoongs.coordibattle.R
+import com.heendoongs.coordibattle.coordi.CoordiFragment
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.global.checkLoginAndNavigate
 import com.heendoongs.coordibattle.member.LogInFragment
@@ -109,6 +109,18 @@ class BattleFragment : Fragment() {
                                         postBattleResult(secondCoordi.coordiId, firstCoordi.coordiId)
                                         animateImageAndRefresh(rootView.findViewById(R.id.battle_image_bottom))
                                     }
+                                }
+                            } else{
+                                val battleConstraintLayout = rootView.findViewById<ConstraintLayout>(R.id.parent_layout)
+                                battleConstraintLayout.isVisible = false
+                                battleConstraintLayout.isClickable = false
+                                val endOfBattleScreen = rootView.findViewById<ConstraintLayout>(R.id.end_of_battle_screen)
+                                endOfBattleScreen.isVisible = true
+                                val endOfBattleBtn = rootView.findViewById<ImageView>(R.id.end_of_battle_btn)
+                                endOfBattleBtn.setOnClickListener {
+                                    val coordiFragment = CoordiFragment()
+                                    val mainActivity = activity as MainActivity
+                                    mainActivity.replaceFragment(coordiFragment, R.id.fragment_coordi)
                                 }
                             }
                         }

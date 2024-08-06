@@ -130,9 +130,6 @@ class DetailFragment : Fragment() {
                                 }
                             }
 
-                            println("ㅠㅠ"+data.memberId)
-                            println("ㅜㅜ"+memberId)
-
                             if (data.isCoordiPeriod && Objects.equals(memberId, data.memberId)) {
                                 updateButton.setOnClickListener {
                                     toggleEditMode(true)

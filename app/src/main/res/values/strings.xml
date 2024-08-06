@@ -15,6 +15,7 @@
     <string name="dialog_delete_text">정말 삭제하시겠습니까?</string>
     <string name="dialog_delete_ok">삭제하기</string>
     <string name="dialog_delete_cancel">취소하기</string>
+    <string name="end_of_battle">모든 배틀을 진행하셨군요!\n이제 옷입히기를 해볼까요?</string>
 
     <!-- 배틀 필터 기본 옵션 -->
     <string-array name="battle_filter_options">

@@ -64,12 +64,12 @@ class BannerSliderAdapter(private val banners: List<BannerResponseDTO>, private 
                 'V' -> {
                     bannerButton.text = "투표하기"
                     bannerImage.setOnClickListener {
-                        val fragment = BattleFragment()
+                        val fragment = BattleEntranceFragment()
                         val mainActivity = context as MainActivity
                         mainActivity.replaceFragment(fragment, R.id.fragment_battle)
                     }
                     bannerButton.setOnClickListener {
-                        val fragment = BattleFragment()
+                        val fragment = BattleEntranceFragment()
                         val mainActivity = context as MainActivity
                         mainActivity.replaceFragment(fragment, R.id.fragment_battle)
                     }
