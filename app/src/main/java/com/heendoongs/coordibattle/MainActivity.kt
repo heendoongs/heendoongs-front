@@ -15,6 +15,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.heendoongs.coordibattle.battle.BattleEntranceFragment
 import com.heendoongs.coordibattle.battle.BattleFragment
+import com.heendoongs.coordibattle.coordi.CoordiEntranceFragment
 import com.heendoongs.coordibattle.coordi.CoordiFragment
 import com.heendoongs.coordibattle.coordi.HomeFragment
 import com.heendoongs.coordibattle.databinding.ActivityMainBinding
@@ -97,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             if (!isReplacingFragment) {
                 val fragment : Fragment? = when (item.itemId) {
                     R.id.fragment_home -> HomeFragment()
-                    R.id.fragment_coordi -> CoordiFragment()
+                    R.id.fragment_coordi -> CoordiEntranceFragment()
                     R.id.fragment_battle -> BattleEntranceFragment()
                     R.id.fragment_my_closet -> MyClosetFragment()
                     else -> null
