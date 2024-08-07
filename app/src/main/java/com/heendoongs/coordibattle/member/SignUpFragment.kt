@@ -55,7 +55,7 @@ class SignUpFragment : Fragment() {
             signUp()
         }
 
-        addTextChangedListenerToTextViews(binding.existId, binding.noPw, binding.existNickname, binding.pwNotMatch)
+        messageInit()
         addNicknameTextWatcher()
 
         return binding.root
@@ -70,28 +70,23 @@ class SignUpFragment : Fragment() {
 
         // null값 확인
         if (loginId.isEmpty()) {
-            binding.existId.text = "아이디를 입력해주세요"
+            showMessage(binding.existId, "아이디를 입력해주세요")
             return
         }
 
-        if (password.isEmpty()) {
-            binding.noPw.text = "비밀번호를 입력해주세요"
+        if (password.isEmpty() || passwordCheck.isEmpty()) {
+            showMessage(binding.pwNotMatch, "비밀번호를 입력해주세요")
             return
         }
 
-        if (passwordCheck.isEmpty()) {
-            binding.pwNotMatch.text = "비밀번호 확인을 입력해주세요"
+        if (nickname.isEmpty()) {
+            showMessage(binding.existNickname, "닉네임을 입력해주세요")
             return
         }
 
         // 비밀번호 확인
         if (password != passwordCheck) {
-            binding.pwNotMatch.text = "비밀번호가 일치하지 않습니다."
-            return
-        }
-
-        if (nickname.isEmpty()) {
-            binding.existNickname.text = "닉네임을 입력해주세요"
+            showMessage(binding.pwNotMatch, "비밀번호가 일치하지 않습니다.")
             return
         }
 
@@ -102,6 +97,7 @@ class SignUpFragment : Fragment() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     showToast("회원가입 성공!")
+                    messageInit()
                     (requireActivity() as? MainActivity)?.replaceFragment(LogInFragment(), R.id.fragment_my_closet)
                 } else {
                     // 회원가입 실패 처리
@@ -110,8 +106,8 @@ class SignUpFragment : Fragment() {
 
                     // 에러 유형에 따라 메시지 표시
                     when (exceptionDto.code) {
-                        601 -> binding.existId.text = exceptionDto.message
-                        602 -> binding.existNickname.text = exceptionDto.message
+                        601 -> showMessage(binding.existId, exceptionDto.message)
+                        602 -> showMessage(binding.existNickname, exceptionDto.message)
                         else -> showToast(exceptionDto.message)
                     }
                 }
@@ -121,6 +117,23 @@ class SignUpFragment : Fragment() {
                 showToast("네트워크 오류가 발생했습니다. 다시 시도하세요.")
             }
         })
+    }
+
+    // 에러 메시지 초기화
+    private fun messageInit() {
+        binding.existId.visibility = View.GONE
+        binding.existNickname.visibility = View.GONE
+        binding.pwNotMatch.visibility = View.GONE
+    }
+
+    // 에러 메시지 보여주기
+    private fun showMessage(visibleMessage: TextView, message: String) {
+        // 모든 메시지를 GONE으로 설정
+        messageInit()
+
+        // 전달된 메시지 설정하고 VISIBLE로 설정
+        visibleMessage.text = message
+        visibleMessage.visibility = View.VISIBLE
     }
 
     /**
@@ -134,7 +147,7 @@ class SignUpFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {
                 if (s != null && s.length > 3) {
-                    binding.existNickname.text = "닉네임은 3글자 이하로 입력해주세요."
+                    showMessage(binding.existNickname, "닉네임은 3글자 이하로 입력해주세요.")
                     binding.btnSignUp.isEnabled = false
                 } else {
                     binding.existNickname.visibility = View.GONE
@@ -142,28 +155,6 @@ class SignUpFragment : Fragment() {
                 }
             }
         })
-    }
-
-    /**
-     * edittext에 입력 시 에러 메시지 삭제
-     */
-    private fun addTextChangedListenerToTextViews(vararg textViews: TextView) {
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.existId.visibility = View.GONE
-                binding.noPw.visibility = View.GONE
-                binding.pwNotMatch.visibility = View.GONE
-                binding.existNickname.visibility = View.GONE
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        }
-
-        for (textView in textViews) {
-            textView.addTextChangedListener(textWatcher)
-        }
     }
 
 

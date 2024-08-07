@@ -61,7 +61,7 @@ class MyInfoFragment : Fragment() {
             showDeleteDialog()
         }
 
-        addTextChangedListenerToTextViews(binding.noPw, binding.existNickname, binding.pwNotMatch)
+        messageInit()
         addNicknameTextWatcher()
         loadMyInfo()
 
@@ -97,24 +97,19 @@ class MyInfoFragment : Fragment() {
         val passwordCheck = binding.editPwChk.text.toString()
         val nickname = binding.editNickname.text.toString()
 
-        if (password.isEmpty()) {
-            binding.noPw.text = "비밀번호를 입력해주세요"
+        if (password.isEmpty() || passwordCheck.isEmpty()) {
+            showMessage(binding.pwNotMatch, "비밀번호를 입력해주세요")
             return
         }
 
-        if (passwordCheck.isEmpty()) {
-            binding.pwNotMatch.text = "비밀번호 확인을 입력해주세요"
+        if (nickname.isEmpty()) {
+            showMessage(binding.existNickname, "닉네임을 입력해주세요")
             return
         }
 
         // 비밀번호 확인
         if (password != passwordCheck) {
-            binding.pwNotMatch.text = "비밀번호가 일치하지 않습니다."
-            return
-        }
-
-        if (nickname.isEmpty()) {
-            binding.existNickname.text = "닉네임을 입력해주세요"
+            showMessage(binding.pwNotMatch, "비밀번호가 일치하지 않습니다.")
             return
         }
 
@@ -125,6 +120,7 @@ class MyInfoFragment : Fragment() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     showToast("회원 정보 수정 완료!")
+                    messageInit()
                     (requireActivity() as? MainActivity)?.replaceFragment(MyClosetFragment(), R.id.fragment_my_closet)
                 } else {
                     // 회원 정보 수정 실패
@@ -133,7 +129,7 @@ class MyInfoFragment : Fragment() {
 
                     // 에러 메시지
                     when (exceptionDto.code) {
-                        602 -> binding.existNickname.text = exceptionDto.message
+                        602 -> showMessage(binding.existNickname, exceptionDto.message)
                         else -> showToast(exceptionDto.message)
                     }
                 }
@@ -190,6 +186,21 @@ class MyInfoFragment : Fragment() {
         })
     }
 
+    // 에러 메시지 초기화
+    private fun messageInit() {
+        binding.existNickname.visibility = View.GONE
+        binding.pwNotMatch.visibility = View.GONE
+    }
+
+    // 에러 메시지 보여주기
+    private fun showMessage(visibleMessage: TextView, message: String) {
+        // 모든 메시지를 GONE으로 설정
+        messageInit()
+
+        // 전달된 메시지 설정하고 VISIBLE로 설정
+        visibleMessage.text = message
+        visibleMessage.visibility = View.VISIBLE
+    }
 
     /**
      * 닉네임 3글자가 넘어가면 경고메시지
@@ -202,7 +213,7 @@ class MyInfoFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {
                 if (s != null && s.length > 3) {
-                    binding.existNickname.text = "닉네임은 3글자 이하로 입력해주세요."
+                    showMessage(binding.existNickname, "닉네임은 3글자 이하로 입력해주세요.")
                     binding.btnUpdate.isEnabled = false
                 } else {
                     binding.existNickname.visibility = View.GONE
@@ -210,27 +221,6 @@ class MyInfoFragment : Fragment() {
                 }
             }
         })
-    }
-
-    /**
-     * edittext에 입력 시 에러 메시지 삭제
-     */
-    private fun addTextChangedListenerToTextViews(vararg textViews: TextView) {
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.noPw.visibility = View.GONE
-                binding.pwNotMatch.visibility = View.GONE
-                binding.existNickname.visibility = View.GONE
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        }
-
-        for (textView in textViews) {
-            textView.addTextChangedListener(textWatcher)
-        }
     }
 
     private fun showToast(message: String) {
