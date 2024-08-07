@@ -50,6 +50,11 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
     private var selectedBattleId: Long? = null
     private var selectedSortOrder: String = "RANKING" // 기본 정렬 순서
 
+    companion object {
+        private const val KEY_SELECTED_BATTLE_ID = "selectedBattleId"
+        private const val KEY_SELECTED_SORT_ORDER = "selectedSortOrder"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,6 +87,15 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
 
         // 배너 데이터 로드
         loadBanners()
+
+        // 상태 복원
+        if (savedInstanceState != null) {
+            val selectedBattlePosition = savedInstanceState.getInt("selectedBattlePosition", 0)
+            val selectedSortOrderPosition = savedInstanceState.getInt("selectedSortOrderPosition", 0)
+            println("selectedBattlePosition: "+selectedBattlePosition)
+            binding.spinnerBattleFilter.setSelection(selectedBattlePosition)
+            binding.spinnerSort.setSelection(selectedSortOrderPosition)
+        }
 
         return view
     }
@@ -224,6 +238,24 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
             .replace(R.id.main_container, detailFragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("selectedBattlePosition", binding.spinnerBattleFilter.selectedItemPosition)
+        outState.putInt("selectedSortOrderPosition", binding.spinnerSort.selectedItemPosition)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            val selectedBattlePosition = savedInstanceState.getInt("selectedBattlePosition", 0)
+            val selectedSortOrderPosition = savedInstanceState.getInt("selectedSortOrderPosition", 0)
+
+            // 배틀 스피너와 정렬 스피너의 상태를 복원합니다.
+            binding.spinnerBattleFilter.setSelection(selectedBattlePosition)
+            binding.spinnerSort.setSelection(selectedSortOrderPosition)
+        }
     }
 
     override fun onDestroyView() {
