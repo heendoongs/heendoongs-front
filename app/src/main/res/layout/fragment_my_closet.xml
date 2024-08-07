@@ -106,11 +106,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+
+
         <LinearLayout
             android:id="@+id/scroller_linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/empty_closet"
+                android:layout_width="match_parent"
+                android:layout_height="360dp"
+                android:src="@drawable/bg_empty_closet"
+                android:visibility="gone"
+                android:layout_marginTop="40dp"
+                android:layout_gravity="center"
+                />
 
             <!-- 코디 리스트 RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
@@ -144,8 +156,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recycler_view"
                 android:layout_gravity="center"/>
-
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <ProgressBar

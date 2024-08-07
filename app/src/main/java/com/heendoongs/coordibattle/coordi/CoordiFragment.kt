@@ -631,7 +631,7 @@ class CoordiFragment : Fragment() {
         binding.btnDelete.visibility = View.GONE
 
         binding.btnSelectBackground.visibility = View.INVISIBLE
-        binding.backgroundSelectionLayout.visibility = View.INVISIBLE
+
 
         val bitmap = Bitmap.createBitmap(binding.coordiContainer.width, binding.coordiContainer.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
@@ -640,13 +640,12 @@ class CoordiFragment : Fragment() {
         selectedImageView?.background = originalDrawable
         binding.btnDelete.visibility = deleteButtonVisibility
         binding.btnSelectBackground.visibility = View.VISIBLE
-        binding.backgroundSelectionLayout.visibility = View.VISIBLE
 
         return bitmap
     }
 
 
-    /**
+    /**0
      * 업로드 성공 시 홈프래그먼트로 전환
      */
     private fun navigateToHomeFragment() {
