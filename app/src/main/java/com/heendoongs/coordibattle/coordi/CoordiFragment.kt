@@ -645,7 +645,7 @@ class CoordiFragment : Fragment() {
     }
 
 
-    /**0
+    /**
      * 업로드 성공 시 홈프래그먼트로 전환
      */
     private fun navigateToHomeFragment() {
