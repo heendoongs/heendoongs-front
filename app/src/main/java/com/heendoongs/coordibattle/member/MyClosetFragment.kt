@@ -123,11 +123,15 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
         service.getMyClosetList(page, size).enqueue(object : Callback<Page<CoordiListResponseDTO>> {
             override fun onResponse(call: Call<Page<CoordiListResponseDTO>>, response: Response<Page<CoordiListResponseDTO>>) {
                 binding.progressBar.visibility = View.INVISIBLE
-                binding.recyclerView.visibility = View.VISIBLE
-                binding.btnMore.visibility = View.VISIBLE
                 if (response.isSuccessful && response.body() != null) {
                     val pageData = response.body()!!
                     val newItems = pageData.content
+                    if (newItems.isNullOrEmpty()) {
+                        binding.emptyCloset.visibility = View.VISIBLE
+                        return
+                    }
+                    binding.recyclerView.visibility = View.VISIBLE
+                    binding.btnMore.visibility = View.VISIBLE
                     if (page == 0) {
                         adapter.updateData(newItems) // 초기 로드 시 데이터 설정
                     } else {

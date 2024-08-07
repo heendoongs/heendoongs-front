@@ -17,7 +17,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/dongle_bold"
         android:text="내 정보"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="56dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         app:outlineShadowColor="#75000000"
         app:outlineShadowDy="8"
         app:outlineShadowRadius="2"
-        app:textStrokeColor="@color/black"
+        app:textStrokeColor="@color/white"
         app:textStrokeWidth="14" />
 
     <!--    아이디 입력   -->
