@@ -33,7 +33,6 @@ import com.heendoongs.coordibattle.databinding.FragmentCoordiBinding
 import okhttp3.ResponseBody
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.global.checkLoginAndNavigate
-import com.heendoongs.coordibattle.member.LogInFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -253,7 +252,7 @@ class CoordiFragment : Fragment() {
             // 왼쪽팔
             R.drawable.img_left_arm1, R.drawable.img_left_arm2 -> {
                 binding.leftArm.setImageResource(imageResId)
-                setupImageView(binding.leftArm, 320, 330, 0,130, 360, "Arms")
+                setupImageView(binding.leftArm, 320, 330, 0,130, 360)
                 if (binding.leftArm.parent == null) {
                     binding.coordiContainer.addView(binding.leftArm)
                 }
@@ -261,7 +260,7 @@ class CoordiFragment : Fragment() {
             // 오른쪽 팔
             R.drawable.img_right_arm1, R.drawable.img_right_arm2 -> {
                 binding.rightArm.setImageResource(imageResId)
-                setupImageView(binding.rightArm,320, 330, 130, 0, 360,"Arms")
+                setupImageView(binding.rightArm,320, 330, 130, 0, 360)
                 if (binding.rightArm.parent == null) {
                     binding.coordiContainer.addView(binding.rightArm)
                 }
@@ -294,32 +293,31 @@ class CoordiFragment : Fragment() {
         if (!selectedClothIds.contains(clothId)) {
             selectedClothIds.add(clothId)
         }
-
         when (type) {
             "Shoe" -> {
                 // Add left shoe
                 val leftShoeImageView = ImageView(requireContext())
                 Glide.with(this).load(imageUrl).into(leftShoeImageView)
-                setupImageView(leftShoeImageView, 200, 200, 0, 80, 860, type)
+                setupImageView(leftShoeImageView, 200, 200, 0, 80, 860, clothId)
                 binding.coordiContainer.addView(leftShoeImageView)
 
                 // Add right shoe with flipped image
                 val rightShoeImageView = ImageView(requireContext())
                 Glide.with(this).load(imageUrl).into(rightShoeImageView)
                 rightShoeImageView.scaleX = -1f // Flip the image horizontally
-                setupImageView(rightShoeImageView, 200, 200, 80, 0, 860, type)
+                setupImageView(rightShoeImageView, 200, 200, 80, 0, 860, clothId)
                 binding.coordiContainer.addView(rightShoeImageView)
             }
             "Bottom" -> {
                 val imageView = ImageView(requireContext())
                 Glide.with(this).load(imageUrl).into(imageView)
-                setupImageView(imageView, 320, 320, 0,0, 530, type)
+                setupImageView(imageView, 320, 320, 0,0, 530, clothId)
                 binding.coordiContainer.addView(imageView)
             }
             "Top" -> {
                 val imageView = ImageView(requireContext())
                 Glide.with(this).load(imageUrl).into(imageView)
-                setupImageView(imageView, 350, 350, 0, 0, 330, type)
+                setupImageView(imageView, 350, 350, 0, 0, 330, clothId)
                 binding.coordiContainer.addView(imageView)
             }
         }
@@ -355,7 +353,7 @@ class CoordiFragment : Fragment() {
     private fun setupImageView(imageView: ImageView,
                                width: Int = FrameLayout.LayoutParams.WRAP_CONTENT, height: Int = FrameLayout.LayoutParams.WRAP_CONTENT,
                                marginStart: Int = 0, marginEnd: Int = 0, marginTop: Int = 0,
-                               type: String) {
+                               clothId: Long? = null) {
         imageView.layoutParams = FrameLayout.LayoutParams(
             width,
             height
@@ -366,7 +364,7 @@ class CoordiFragment : Fragment() {
             gravity = Gravity.CENTER_HORIZONTAL
         }
 
-        imageView.tag = type
+        imageView.tag = clothId
 
         /**
          * 이미지 뷰 터치 설정
