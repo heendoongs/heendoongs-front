@@ -50,12 +50,23 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
     private var selectedBattleId: Long? = null
     private var selectedSortOrder: String = "RANKING" // 기본 정렬 순서
 
+    companion object {
+        private const val KEY_SELECTED_BATTLE_ID = "selectedBattleId"
+        private const val KEY_SELECTED_SORT_ORDER = "selectedSortOrder"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        // 상태 복원
+        if (savedInstanceState != null) {
+            selectedBattleId = savedInstanceState.getLong(KEY_SELECTED_BATTLE_ID)
+            selectedSortOrder = savedInstanceState.getString(KEY_SELECTED_SORT_ORDER, "RANKING")
+        }
 
         // Retrofit 설정
         service = RetrofitConnection.getInstance().create(CoordiService::class.java)
@@ -100,6 +111,14 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
                     adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
                     binding.spinnerBattleFilter.adapter = adapter
 
+                    // 이전에 선택한 배틀이 있으면 해당 배틀로 설정
+                    selectedBattleId?.let {
+                        val selectedIndex = battles.indexOfFirst { it.battleId == selectedBattleId }
+                        if (selectedIndex >= 0) {
+                            binding.spinnerBattleFilter.setSelection(selectedIndex + 1)
+                        }
+                    }
+
                     binding.spinnerBattleFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             selectedBattleId = if (position == 0) null else battles[position - 1].battleId
@@ -130,6 +149,10 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         // 기본값으로 "RANKING"을 선택
         binding.spinnerSort.setSelection(sortOptions.indexOf("랭킹순"))
 
+        // 이전에 선택한 정렬이 있으면 해당 정렬로 설정
+        if (selectedSortOrder == "RECENT") {
+            binding.spinnerSort.setSelection(sortOptions.indexOf("최신순"))
+        }
 
         binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -224,6 +247,20 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
             .replace(R.id.main_container, detailFragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putLong(KEY_SELECTED_BATTLE_ID, selectedBattleId ?: -1L)
+        outState.putString(KEY_SELECTED_SORT_ORDER, selectedSortOrder)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        savedInstanceState?.let {
+            selectedBattleId = if (it.getLong(KEY_SELECTED_BATTLE_ID) == -1L) null else it.getLong(KEY_SELECTED_BATTLE_ID)
+            selectedSortOrder = it.getString(KEY_SELECTED_SORT_ORDER, "RANKING")
+        }
     }
 
     override fun onDestroyView() {
