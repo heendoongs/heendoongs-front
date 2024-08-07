@@ -94,6 +94,15 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         // 배너 데이터 로드
         loadBanners()
 
+        // 상태 복원
+        if (savedInstanceState != null) {
+            val selectedBattlePosition = savedInstanceState.getInt("selectedBattlePosition", 0)
+            val selectedSortOrderPosition = savedInstanceState.getInt("selectedSortOrderPosition", 0)
+            println("selectedBattlePosition: "+selectedBattlePosition)
+            binding.spinnerBattleFilter.setSelection(selectedBattlePosition)
+            binding.spinnerSort.setSelection(selectedSortOrderPosition)
+        }
+
         return view
     }
 
