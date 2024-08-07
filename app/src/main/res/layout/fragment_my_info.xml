@@ -118,6 +118,16 @@
         app:layout_constraintStart_toStartOf="@+id/img_pw_heart"
         app:layout_constraintTop_toBottomOf="@+id/pw" />
 
+    <TextView
+        android:id="@+id/no_pw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dongle_bold"
+        android:textColor="@color/red"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/edit_pw"
+        app:layout_constraintTop_toBottomOf="@+id/edit_pw" />
+
     <!--    비밀번호 확인-->
 
     <ImageView

@@ -128,6 +128,7 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
                 if (response.isSuccessful && response.body() != null) {
                     val pageData = response.body()!!
                     val newItems = pageData.content
+
                     if (page == 0) {
                         adapter.updateData(newItems) // 초기 로드 시 데이터 설정
                     } else {

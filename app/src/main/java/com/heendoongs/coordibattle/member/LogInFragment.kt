@@ -1,10 +1,13 @@
 package com.heendoongs.coordibattle.member
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.heendoongs.coordibattle.MainActivity
@@ -56,6 +59,8 @@ class LogInFragment : Fragment() {
         binding.btnSignUpPage.setOnClickListener {
             (requireActivity() as? MainActivity)?.replaceFragment(SignUpFragment(), R.id.fragment_my_closet)
         }
+
+        addTextChangedListenerToEditTexts(binding.editId, binding.editPw)
 
         return binding.root
     }
@@ -117,6 +122,23 @@ class LogInFragment : Fragment() {
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    // edittext에 입력 시 에러 메시지 삭제
+    private fun addTextChangedListenerToEditTexts(vararg editTexts: EditText) {
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.loginError.visibility = View.GONE
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        for (editText in editTexts) {
+            editText.addTextChangedListener(textWatcher)
+        }
     }
 
     // 토큰 추출
