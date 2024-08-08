@@ -1,13 +1,8 @@
 package com.heendoongs.coordibattle.global
 
-import android.content.Context
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import com.heendoongs.coordibattle.R
-import com.heendoongs.coordibattle.global.PreferenceUtil
-import com.heendoongs.coordibattle.member.LogInFragment
+import com.heendoongs.coordibattle.member.view.LogInFragment
 
 
 /**

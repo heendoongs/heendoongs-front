@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-    <com.heendoongs.coordibattle.view.OutLineTextView
+    <com.heendoongs.coordibattle.common.OutLineTextView
         android:id="@+id/myInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         app:srcCompat="@drawable/ic_heart" />
 
 
-    <com.heendoongs.coordibattle.view.OutLineTextView
+    <com.heendoongs.coordibattle.common.OutLineTextView
         android:id="@+id/id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_id"
         app:srcCompat="@drawable/ic_heart" />
 
-    <com.heendoongs.coordibattle.view.OutLineTextView
+    <com.heendoongs.coordibattle.common.OutLineTextView
         android:id="@+id/pw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_pw"
         app:srcCompat="@drawable/ic_heart" />
 
-    <com.heendoongs.coordibattle.view.OutLineTextView
+    <com.heendoongs.coordibattle.common.OutLineTextView
         android:id="@+id/pw_chk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -196,7 +196,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk"
         app:srcCompat="@drawable/ic_heart" />
 
-    <com.heendoongs.coordibattle.view.OutLineTextView
+    <com.heendoongs.coordibattle.common.OutLineTextView
         android:id="@+id/nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

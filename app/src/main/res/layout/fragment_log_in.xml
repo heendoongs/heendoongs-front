@@ -36,7 +36,7 @@
             app:layout_constraintTop_toBottomOf="@+id/logo"
             app:srcCompat="@drawable/ic_heart" />
 
-        <com.heendoongs.coordibattle.view.OutLineTextView
+        <com.heendoongs.coordibattle.common.OutLineTextView
             android:id="@+id/id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
             app:layout_constraintTop_toBottomOf="@+id/img_id_heart"
             app:srcCompat="@drawable/ic_heart" />
 
-        <com.heendoongs.coordibattle.view.OutLineTextView
+        <com.heendoongs.coordibattle.common.OutLineTextView
             android:id="@+id/pw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

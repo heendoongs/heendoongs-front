@@ -20,7 +20,7 @@
             android:layout_alignParentBottom="true"
             android:scaleType="centerCrop" />
 
-        <com.heendoongs.coordibattle.view.OutLineTextView
+        <com.heendoongs.coordibattle.common.OutLineTextView
             android:id="@+id/bannerTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             app:textStrokeColor="@color/white"
             app:textStrokeWidth="6" />
 
-        <com.heendoongs.coordibattle.view.OutLineTextView
+        <com.heendoongs.coordibattle.common.OutLineTextView
             android:id="@+id/bannerPeriod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

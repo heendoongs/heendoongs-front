@@ -1,6 +1,6 @@
 package com.heendoongs.coordibattle.global
 
-import com.heendoongs.coordibattle.MainApplication
+import com.heendoongs.coordibattle.common.MainApplication
 import okhttp3.Interceptor
 import okhttp3.Response
 

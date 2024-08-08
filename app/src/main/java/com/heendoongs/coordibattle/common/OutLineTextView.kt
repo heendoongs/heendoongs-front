@@ -1,0 +1,68 @@
+package com.heendoongs.coordibattle.common
+
+import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatTextView
+import com.heendoongs.coordibattle.R
+
+/**
+ * 테두리 있는 글씨 Textview
+ * @author 조희정
+ * @since 2024.07.29
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        	수정자        수정내용
+ * ----------  --------    ---------------------------
+ * 2024.07.29  	조희정       최초 생성
+ * </pre>
+ */
+class OutLineTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : AppCompatTextView(context, attrs, defStyleAttr) {
+
+    private var strokeColor: Int
+    private var strokeWidthVal: Float
+    private var outlineShadowColor: Int
+    private var outlineShadowRadius: Float
+    private var outlineShadowDx: Float
+    private var outlineShadowDy: Float
+
+    init {
+        // attributes 가져오기
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.OutLineTextView)
+        strokeWidthVal = typedArray.getFloat(R.styleable.OutLineTextView_textStrokeWidth, 3f)
+        strokeColor = typedArray.getColor(R.styleable.OutLineTextView_textStrokeColor, Color.TRANSPARENT)
+        outlineShadowColor = typedArray.getColor(R.styleable.OutLineTextView_outlineShadowColor, Color.TRANSPARENT)
+        outlineShadowRadius = typedArray.getFloat(R.styleable.OutLineTextView_outlineShadowRadius, 0f)
+        outlineShadowDx = typedArray.getFloat(R.styleable.OutLineTextView_outlineShadowDx, 0f)
+        outlineShadowDy = typedArray.getFloat(R.styleable.OutLineTextView_outlineShadowDy, 0f)
+        typedArray.recycle()
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        canvas?.let {
+            val originalTextColor: ColorStateList = textColors // 기본 텍스트 색상 저장
+            val text = text.toString()
+
+            // draw stroke
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = strokeWidthVal
+            paint.setShadowLayer(outlineShadowRadius, outlineShadowDx, outlineShadowDy, outlineShadowColor) // 그림자 설정
+            setTextColor(strokeColor)
+            super.onDraw(canvas)
+
+            // draw fill
+            paint.style = Paint.Style.FILL
+            paint.setShadowLayer(0f, 0f, 0f, 0) // 그림자 제거
+            setTextColor(originalTextColor)
+            super.onDraw(canvas)
+        }
+    }
+}

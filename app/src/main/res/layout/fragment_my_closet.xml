@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.heendoongs.coordibattle.view.OutLineTextView
+    <com.heendoongs.coordibattle.common.OutLineTextView
         android:id="@+id/nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             android:layout_height="34dp"
             app:srcCompat="@drawable/ic_paw" />
 
-        <com.heendoongs.coordibattle.view.OutLineTextView
+        <com.heendoongs.coordibattle.common.OutLineTextView
             android:id="@+id/my_coordi_list"
             android:background="@drawable/my_closet"
             android:layout_width="240dp"
