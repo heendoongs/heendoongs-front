@@ -18,12 +18,6 @@ data class LoginRequest(
     val password: String
 )
 
-// 로그인 응답
-data class LoginResponse(
-    val token: String,
-    val memberId: Long
-)
-
 // 회원가입 요청
 data class SignUpRequest(
     val loginId: String,

@@ -14,6 +14,7 @@ import okhttp3.Response
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.07.31  	조희정       최초 생성
+ * 수정해야해수정해야해수정해야해
  * </pre>
  */
 class AuthInterceptor(private val retrofitConnection: RetrofitConnection) : Interceptor {
@@ -48,7 +49,6 @@ class AuthInterceptor(private val retrofitConnection: RetrofitConnection) : Inte
                 }
             }
         }
-
         return response
     }
 

@@ -24,11 +24,12 @@ import java.util.concurrent.TimeUnit
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.07.30  	조희정       최초 생성
- * 2024.07.31  	조희정       JWT 토큰 받아오기 추가
+ * 2024.07.31  	조희정       JWT 토큰 포함하여 요청 보내기 기능 추가
+ * 2024.08.04  	조희정       LocalDateTime 역직렬화 기능 추가
  * </pre>
  */
 object RetrofitConnection {
-    private const val BASE_URL = "http://192.168.0.21:8080/"
+    private const val BASE_URL = "http://10.0.2.2:8080/"
     private var retrofit: Retrofit? = null
 
     fun getInstance(): Retrofit {
@@ -37,16 +38,19 @@ object RetrofitConnection {
                 level = HttpLoggingInterceptor.Level.BODY
             }
 
+            // 인터셉터 추가 (사용자 인증, 로그)
             val clientBuilder = OkHttpClient.Builder()
                 .addInterceptor(AuthInterceptor(this))
                 .addInterceptor(logging)
 
+            // 타임아웃 설정
             val client = clientBuilder
                 .connectTimeout(100, TimeUnit.SECONDS)
                 .readTimeout(100, TimeUnit.SECONDS)
                 .writeTimeout(100, TimeUnit.SECONDS)
                 .build()
 
+            // JSON LocalDateTime 역직렬화
             val gson = GsonBuilder()
                 .registerTypeAdapter(
                     LocalDate::class.java,
@@ -65,9 +69,10 @@ object RetrofitConnection {
                         )
                     }
                 )
-                .setLenient() // lenient 모드를 설정하여 잘못된 JSON을 허용 -> Base64용
+                .setLenient()
                 .create()
 
+            // retrofit 인스턴스 생성
             retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)

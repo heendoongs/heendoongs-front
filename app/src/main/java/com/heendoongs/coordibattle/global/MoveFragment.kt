@@ -6,7 +6,20 @@ import com.heendoongs.coordibattle.member.view.LogInFragment
 
 
 /**
- * 현재 프래그먼트에서 로그인 프래그먼트로 네비게이션하는 함수입니다.
+ * 프레그먼트 이동 메서드 모음 MoveFragment
+ * @author 조희정
+ * @since 2024.08.04
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        	수정자        수정내용
+ * ----------  --------    ---------------------------
+ * 2024.08.04  	조희정       최초 생성
+ * </pre>
+ */
+
+/**
+ * 로그인 프레그먼트로 이동
  */
 fun Fragment.navigateToLoginFragment() {
     val parentViewGroup = view?.parent as? ViewGroup
@@ -21,8 +34,8 @@ fun Fragment.navigateToLoginFragment() {
 }
 
 /**
- * 현재 프래그먼트에서 로그인 상태를 확인하고, 로그인이 되어 있지 않으면 로그인 프래그먼트로 이동합니다.
- * @return 로그인이 되어 있으면 true, 아니면 false를 반환합니다.
+ * 로그인 여부에 따라 프레그먼트 이동
+ * @return
  */
 fun Fragment.checkLoginAndNavigate(): Boolean {
     val preferenceUtil = PreferenceUtil(requireContext())
