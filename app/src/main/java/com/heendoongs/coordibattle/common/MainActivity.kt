@@ -34,6 +34,7 @@ import com.heendoongs.coordibattle.member.view.MyClosetFragment
  * 2024.07.26  	임원정       최초 생성
  * 2024.07.30  	조희정       하단바 fragment_my_closet 연결 프레그먼트 변경
  * 2024.08.04   남진수       구글 애널리틱스 관련 설정 추가
+ * 2024.08.06   임원정       상태바 및 내비게이션 바 설정 수정
  * </pre>
  */
 class MainActivity : AppCompatActivity() {
@@ -70,15 +71,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 상태바, 하단바까지 화면 확장
+     * 상태바 설정
      */
     private fun makeStatusBarTransparent() {
-        /*window.apply {
-            setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-        }*/
         window.apply {
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             statusBarColor = Color.WHITE
@@ -86,7 +81,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 하단 내비게이션바 설정
+     * 하단 내비게이션 메뉴 설정
      */
     private fun setBottomNavigation() {
         binding.bottomNavigationView.selectedItemId = R.id.fragment_home
@@ -121,6 +116,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 화면 터치 시 키보드 내림
+     */
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
@@ -133,7 +131,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * SHared Preference 가져오기
+     * Shared Preference 가져오기
      */
     fun getPreferenceUtil(): PreferenceUtil {
         return prefs

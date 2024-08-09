@@ -17,6 +17,8 @@ import retrofit2.http.*
  * 2024.07.30  	임원정       최초 생성
  * 2024.07.31   임원정       getCoordiList API 추가
  * 2024.08.01   임원정       getCoordiListWithFilter API 추가
+ * 2024.08.02   임원정       getClothes API 추가
+ * 2024.08.03   임원정       uploadCoordi API 추가
  * </pre>
  */
 
@@ -70,7 +72,7 @@ interface CoordiService {
      * 타입별 옷 리스트
      */
     @GET("coordi/clothes")
-    fun getClothesList(
+    fun getClothList(
         @Query("type") type: String
     ): Call<List<ClothesResponseDTO>>
 

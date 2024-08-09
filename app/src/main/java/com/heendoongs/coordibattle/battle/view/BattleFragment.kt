@@ -44,6 +44,7 @@ import retrofit2.Response
  * 2024.07.30  	남진수       배틀 투표 기능 추가
  * 2024 08 04   조희정       로그인 체크 메소드 추가
  * 2024.08.06  	남진수       ProgressBar 추가
+ * 2024.08.06   임원정       상태바 색 변경 추가
  * </pre>
  */
 
@@ -61,7 +62,7 @@ class BattleFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_battle, container, false)
 
-        requireActivity().window.statusBarColor = Color.parseColor("#FFF6DE")
+        requireActivity().window.statusBarColor = Color.parseColor("#FFF6DE")   // 상태바 색 변경
         progressBar = rootView.findViewById(R.id.progress_bar)
         progressBar.visibility = View.VISIBLE
 

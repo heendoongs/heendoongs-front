@@ -45,7 +45,7 @@ class CoordiAdapter(private val context: Context,
     override fun onBindViewHolder(holder: CoordiViewHolder, position: Int) {
         val item = coordiList[position]
         holder.bind(item)
-        holder.itemView.setOnClickListener {
+        holder.itemView.setOnClickListener {    // 터치 시 상세 페이지 연결
             itemClickListener.onItemClick(item)
         }
     }
@@ -79,19 +79,22 @@ class CoordiAdapter(private val context: Context,
             binding.tvCoordiTitle.text = item.coordiTitle
             binding.tvNickname.text = "by. ${item.nickname}"
 
-            // 이미지 로딩 함수 호출
-            loadImage(item.coordiImage, binding.ivCoordiImage)
+            loadImage(item.coordiImage, binding.ivCoordiImage) // 이미지 로딩 함수 호출
         }
 
-        // 이미지 가져오기
+        /**
+         * 이미지 가져오기
+         */
         private fun loadImage(base64Image: String, imageView: ImageView) {
             val bitmap = decodeBase64ToBitmap(base64Image)
             bitmap?.let {
                 Glide.with(context).load(it).into(imageView)
             }
         }
-        
-        // Base64 To Bitmap 변환
+
+        /**
+         * Base64 To Bitmap 변환
+         */
         private fun decodeBase64ToBitmap(base64Str: String): Bitmap? {
             return try {
                 val base64Data = base64Str.substringAfter(",")

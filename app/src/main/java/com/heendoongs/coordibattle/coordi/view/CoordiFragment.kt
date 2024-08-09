@@ -19,7 +19,6 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
@@ -55,6 +54,7 @@ import java.io.IOException
  * 2024.08.02   임원정       아이템 탭 메뉴 동작 및 아이템 불러오기 구현
  * 2024.08.03   임원정       코디 업로드 기능 구현
  * 2024.08.04   조희정       로그인 체크 메소드 추가
+ * 2024.08.05   임원정       신발 추가 로직 수정
  * </pre>
  */
 
@@ -62,6 +62,7 @@ class CoordiFragment : Fragment() {
     private var _binding: FragmentCoordiBinding? = null
     private val binding get() = _binding!!
 
+    // 갤러리 권한 사용
     companion object {
         private const val GALLERY_REQUEST_CODE = 1
     }
@@ -70,11 +71,9 @@ class CoordiFragment : Fragment() {
     private lateinit var clothesAdapter: ClothesAdapter
     private lateinit var service: CoordiService
 
-    private var selectedClothIds = mutableListOf<Long>()
-    private var defaultColor = Color.parseColor("#FFF6DE")
-
-    // 선택된 아이템
-    private var selectedImageView: ImageView? = null
+    private var selectedClothIds = mutableListOf<Long>()    // 선택된 옷 리스트
+    private var defaultColor = Color.parseColor("#FFF6DE")  // 옷입히기 영역 기본 색
+    private var selectedImageView: ImageView? = null    // 선택된 아이템
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,7 +82,7 @@ class CoordiFragment : Fragment() {
         _binding = FragmentCoordiBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        if (!checkLoginAndNavigate()) {
+        if (!checkLoginAndNavigate()) { // 로그인 체크
             return view
         }
 
@@ -120,12 +119,12 @@ class CoordiFragment : Fragment() {
         // 삭제 버튼 클릭 리스너
         binding.btnDelete.setOnClickListener {
             selectedImageView?.let {
-                // Remove the clothId from selectedClothIds
+                // 선택된 옷 리스트에서 해당 옷 삭제
                 val clothId = it.tag as? Long
                 if (clothId != null) {
                     selectedClothIds.remove(clothId)
                 }
-                // Remove the ImageView from coordiContainer
+                // 옷 입히기 영역에서 해당 이미지뷰 삭제
                 binding.coordiContainer.removeView(it)
                 binding.btnDelete.visibility = View.GONE
                 selectedImageView = null
@@ -155,7 +154,7 @@ class CoordiFragment : Fragment() {
             addRemoteImageToContainer(clothesId, imageUrl, selectedTab)
         }
         binding.itemList.layoutManager = GridLayoutManager(context, 3) // 한 행에 3개 아이템 표시
-        binding.itemList.adapter = heendyAdapter // 기본 흰디 얼굴 선택
+        binding.itemList.adapter = heendyAdapter // 기본으로 흰디 얼굴 선택하도록 지정
     }
 
     /**
@@ -272,7 +271,7 @@ class CoordiFragment : Fragment() {
      * DB에 저장된 아이템(상의, 하의, 신발) 가져오기
      */
     private fun loadRemoteItems(type: String) {
-        service.getClothesList(type).enqueue(object : Callback<List<ClothesResponseDTO>> {
+        service.getClothList(type).enqueue(object : Callback<List<ClothesResponseDTO>> {
             override fun onResponse(call: Call<List<ClothesResponseDTO>>, response: Response<List<ClothesResponseDTO>>) {
                 if (response.isSuccessful && response.body() != null) {
                     clothesAdapter.updateData(response.body()!!)
@@ -325,8 +324,10 @@ class CoordiFragment : Fragment() {
         // 얼굴은 항상 최상단
         binding.face.bringToFront()
     }
-    
 
+    /**
+     * 선택한 이미지 뷰 설정
+     */
     private fun selectImageView(imageView: ImageView) {
         // 이미지가 이미 선택된 상태라면 선택 해제
         if (selectedImageView == imageView) {
@@ -485,6 +486,9 @@ class CoordiFragment : Fragment() {
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
+    /**
+     * 배경 이미지 갤러리에서 가져오기
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -494,6 +498,9 @@ class CoordiFragment : Fragment() {
         }
     }
 
+    /**
+     * 배경화면 설정
+     */
     private fun setBackgroundImage(imageUri: Uri) {
         try {
             val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
@@ -504,6 +511,9 @@ class CoordiFragment : Fragment() {
         }
     }
 
+    /**
+     * 갤러리에서 가져 온 사진 회전 설정
+     */
     private fun rotateImageIfRequired(img: Bitmap, selectedImage: Uri): Bitmap {
         val input = requireContext().contentResolver.openInputStream(selectedImage)
         val ei = input?.let { ExifInterface(it) }
@@ -517,6 +527,9 @@ class CoordiFragment : Fragment() {
         }
     }
 
+    /**
+     * 배경사진 회전
+     */
     private fun rotateImage(img: Bitmap, degree: Int): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(degree.toFloat())
@@ -622,7 +635,10 @@ class CoordiFragment : Fragment() {
             Toast.makeText(requireContext(), "이미지 저장 실패!", Toast.LENGTH_SHORT).show()
         }
     }
-
+    
+    /**
+     * 선택 테두리 및 삭제버튼, 배경선택 버튼 제거 후 비트맵 생성
+     */
     private fun getBitmapWithoutSelection(): Bitmap {
         val originalDrawable = selectedImageView?.background
         val deleteButtonVisibility = binding.btnDelete.visibility
@@ -642,20 +658,6 @@ class CoordiFragment : Fragment() {
         binding.btnSelectBackground.visibility = View.VISIBLE
 
         return bitmap
-    }
-
-
-    /**
-     * 업로드 성공 시 홈프래그먼트로 전환
-     */
-    private fun navigateToHomeFragment() {
-        val homeFragment = HomeFragment()
-
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.main_container, homeFragment)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .addToBackStack(null)
-            .commit()
     }
 
     override fun onDestroyView() {
