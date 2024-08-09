@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ * 하단 내비게이션 바
+ * @author 임원정
+ * @since 2024.07.28
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        수정자        수정내용
+ * ==========  =======     ===========================
+ * 2024.07.28   임원정       최초 생성
+ * </pre>
+-->
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/fragment_home"

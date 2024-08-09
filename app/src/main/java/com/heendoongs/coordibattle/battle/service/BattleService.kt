@@ -19,7 +19,7 @@ import retrofit2.http.POST
  * 2024.07.30  	남진수       getBattleCoordies 배틀 페이지 리스트 조회
  * 2024.07.30  	남진수       postBattleResult 배틀 투표결과 저장
  * 2024.07.31   임원정       getCurrentBattles 메소드 추가
- * 2024.08.01   임원정       getBattles 메소드 추가
+ * 2024.08.01   임원정       getBattleTitles 메소드 추가
  * </pre>
  */
 
@@ -29,7 +29,7 @@ interface BattleService {
      * 배틀 페이지 불러오기
      */
     @GET("battle")
-    fun getBattleCoordies(): Call<List<BattleDTO>>
+    fun getBattleCoordies(): Call<List<BattleRequestDTO>>
 
     /*
      * 배틀 결과
@@ -37,7 +37,7 @@ interface BattleService {
     @POST("battle")
     fun postBattleResult(
         @Body voteRequest: MemberCoordiVoteRequestDTO
-    ): Call<BattleResponseDTO>
+    ): Call<Void>
 
     /**
      * 배너 출력

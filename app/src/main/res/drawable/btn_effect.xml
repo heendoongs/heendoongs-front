@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ * 코디페이지 갤러리 저장 및 올리기 버튼 눌림 효과
+ * @author 임원정
+ * @since 2024.07.30
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        수정자        수정내용
+ * ==========  ========     ===========================
+ * 2024.07.30      임원정       최초 생성
+ * </pre>
+-->
+
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="@color/dark_gray">
     <item android:id="@android:id/background">

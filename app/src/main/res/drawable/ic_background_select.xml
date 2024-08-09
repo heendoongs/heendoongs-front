@@ -1,3 +1,16 @@
+<!--
+ * 배경 선택 버튼
+ * @author 임원정
+ * @since 2024.08.04
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        수정자        수정내용
+ * ==========  ========     ===========================
+ * 2024.08.04      임원정       최초 생성
+ * </pre>
+-->
+
 <vector android:height="24dp" android:tint="#545454"
     android:viewportHeight="24" android:viewportWidth="24"
     android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">

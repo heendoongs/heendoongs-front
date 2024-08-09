@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ * colors
+ * @author 임원정
+ * @since 2024.07.25
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        수정자        수정내용
+ * ==========  =======     ===========================
+ * 2024.07.25   임원정       최초 생성
+ * </pre>
+-->
+
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>

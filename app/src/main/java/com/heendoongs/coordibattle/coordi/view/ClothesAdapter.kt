@@ -54,7 +54,6 @@ class ClothesAdapter(
 
     inner class ViewHolder(private val binding: ItemClothBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(cloth: ClothesResponseDTO) {
-            Log.d("com.heendoongs.coordibattle.coordi.view.ClothesAdapter", "Loading image URL: ${cloth.clothImageURL}")
             Glide.with(context).load(cloth.clothImageURL).into(binding.imageView)
             itemView.setOnClickListener {
                 itemClick(cloth.clothId, cloth.clothImageURL)

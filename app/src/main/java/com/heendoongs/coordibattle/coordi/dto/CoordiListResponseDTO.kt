@@ -7,9 +7,10 @@ package com.heendoongs.coordibattle.coordi.dto
  * @version 1.0
  *
  * <pre>
- * 수정일        	수정자        수정내용
+ * 수정일        수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.07.26  	임원정       최초 생성
+ * 2024.08.01   임원정       이름 변경 (RankingOrderCoordilistResponseDTO -> CoordiListResponseDTO)
  * </pre>
  */
 

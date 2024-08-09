@@ -9,21 +9,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageButton
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.gson.*
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.heendoongs.coordibattle.common.MainActivity
 import com.heendoongs.coordibattle.R
-import com.heendoongs.coordibattle.coordi.service.CoordiService
+import com.heendoongs.coordibattle.common.HomeFragment
 import com.heendoongs.coordibattle.coordi.dto.ClothDetailsResponseDTO
 import com.heendoongs.coordibattle.coordi.dto.CoordiDetailsResponseDTO
 import com.heendoongs.coordibattle.coordi.dto.CoordiUpdateRequestDTO
+import com.heendoongs.coordibattle.coordi.service.CoordiService
+import com.heendoongs.coordibattle.databinding.FragmentDetailBinding
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.member.view.LogInFragment
 import okhttp3.ResponseBody
@@ -31,7 +33,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-
 
 /**
  * 상세 페이지 프래그먼트
@@ -47,6 +48,7 @@ import java.util.*
  * 2024.08.02   임원정       coordiId 연결
  * 2024.08.02   남진수       상세페이지 코디 수정기능
  * 2024.08.02   남진수       상세페이지 코디 삭제기능
+ * 2024.08.02   남진수       코디 좋아요 기능
  * 2024.08.04   남진수       구글 애널리틱스 관련 설정 추가
  * 2024.08.06   남진수       ProgressBar 설정
  * </pre>
@@ -54,141 +56,58 @@ import java.util.*
 
 class DetailFragment : Fragment() {
 
-    private lateinit var rootView: View
+    private var _binding: FragmentDetailBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var service: CoordiService
-    private lateinit var updateButton: ImageButton
-    private lateinit var deleteButton: ImageButton
-    private lateinit var checkButton: ImageButton
-    private lateinit var xButton: ImageButton
-    private lateinit var voteButton: ImageButton
-    private lateinit var voteDisabledButton: ImageButton
-    private lateinit var titleTextView: TextView
-    private lateinit var titleEditText: EditText
-    private lateinit var voteCount: TextView
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     private var memberId: Long? = null
     private var coordiId: Long? = null
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-    private lateinit var progressBar: ProgressBar
 
+    /**
+     * ViewBinding 초기화 및 서비스 설정
+     */
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        rootView = inflater.inflate(R.layout.fragment_detail, container, false)
+    ): View {
+        _binding = FragmentDetailBinding.inflate(inflater, container, false)
+
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         service = RetrofitConnection.getInstance().create(CoordiService::class.java)
-        coordiId = arguments?.getLong("coordiId")
-        progressBar = rootView.findViewById(R.id.progress_bar)
 
+        coordiId = arguments?.getLong("coordiId")
         memberId = MainActivity.prefs.getMemberId()
 
         loadCoordiDetails()
-        return rootView
+
+        return binding.root
     }
 
+    /**
+     * 상세 페이지 불러오기
+     */
     private fun loadCoordiDetails() {
         coordiId?.let { id ->
-            progressBar.visibility = View.VISIBLE
-            val call = service.getCoordiDetails(id)
-            call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
+            binding.progressBar.visibility = View.VISIBLE
+            service.getCoordiDetails(id).enqueue(object : Callback<CoordiDetailsResponseDTO> {
                 override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
-                    progressBar.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
                     if (response.isSuccessful) {
-                        val coordiDetails = response.body()
-                        coordiDetails?.let { data ->
-                            titleTextView = rootView.findViewById(R.id.coordi_detail_title_text)
-                            titleEditText = rootView.findViewById(R.id.coordi_detail_title_edit)
-                            titleTextView.text = data.coordiTitle
-                            titleEditText.setText(data.coordiTitle)
-
-                            rootView.findViewById<TextView>(R.id.coordi_detail_nickname).text = data.nickname
-                            rootView.findViewById<TextView>(R.id.coordi_detail_create_date).text = data.createDate.toLocalDate().toString()
-
-                            voteCount = rootView.findViewById(R.id.coordi_detail_vote_count)
-                            voteButton = rootView.findViewById(R.id.coordi_detail_vote_button)
-                            voteDisabledButton = rootView.findViewById(R.id.coordi_detail_vote_button_disabled)
-                            updateButton = rootView.findViewById(R.id.coordi_detail_update_button)
-                            deleteButton = rootView.findViewById(R.id.coordi_detail_delete_button)
-                            checkButton = rootView.findViewById(R.id.coordi_detail_check_button)
-                            xButton  = rootView.findViewById(R.id.coordi_detail_x_button)
-
-                            rootView.findViewById<ImageView>(R.id.coordi_detail_vote_heart).visibility = View.VISIBLE
-                            voteCount.text = data.voteCount.toString()
-
-                            if (!data.isVotingPeriod) {
-                                voteDisabledButton.setImageDrawable(context?.let {
-                                    ContextCompat.getDrawable(
-                                        it, R.drawable.coordi_detail_vote_disabled
-                                    )
-                                })
-                                voteDisabledButton.visibility = View.VISIBLE
-                            } else {
-                                if (data.isVoted) {
-                                    voteButton.setImageDrawable(context?.let {
-                                        ContextCompat.getDrawable(
-                                            it, R.drawable.coordi_detail_vote_voted
-                                        )
-                                    })
-                                } else {
-                                    voteButton.setImageDrawable(context?.let {
-                                        ContextCompat.getDrawable(
-                                            it, R.drawable.coordi_detail_vote_not_voted
-                                        )
-                                    })
-                                }
-                                voteButton.visibility = View.VISIBLE
-                            }
-
-                            if (data.isCoordiPeriod && Objects.equals(memberId, data.memberId)) {
-                                updateButton.visibility = View.VISIBLE;
-                                deleteButton.visibility = View.VISIBLE;
-
-                                updateButton.setOnClickListener {
-                                    toggleEditMode(true)
-                                }
-                                deleteButton.setOnClickListener {
-                                    showDeleteDialog()
-                                }
-                                checkButton.setOnClickListener {
-                                    updateCoordi(id)
-                                    toggleEditMode(false)
-                                }
-                                xButton.setOnClickListener {
-                                    cancelEditMode()
-                                }
-                            }
-
-                            val bitmap = decodeBase64ToBitmap(data.coordiImage)
-                            bitmap?.let {
-                                Glide.with(this@DetailFragment).load(it).into(rootView.findViewById(R.id.coordi_detail_image))
-                            }
-
-                            val clothes = data.clothesList.map {
-                                ClothDetailsResponseDTO(it.clothId, it.brand, it.productName, it.price, it.clothImageURL, it.productURL)
-                            }
-                            setupRecyclerView(clothes)
-
-                            voteButton.setOnClickListener {
-                                if (data.isVotingPeriod) {
-                                    if (memberId == -1L || memberId == null) {
-                                        Toast.makeText(context, "로그인 이후 사용해주세요", Toast.LENGTH_SHORT).show()
-                                        val loginFragment = LogInFragment()
-                                        val mainActivity = activity as MainActivity
-                                        mainActivity.replaceFragment(loginFragment, R.id.fragment_my_closet)
-                                    } else {
-                                        likeCoordi(id)
-                                    }
-                                }
-                            }
+                        response.body()?.let { data ->
+                            populateDetailData(data)
+                            setupButtons(data)
+                            setupRecyclerView(data.clothesList)
                         }
-                    } else{
-                        Toast.makeText(context, "상세 페이지 로드 실패", Toast.LENGTH_SHORT).show()
+                    } else {
+                        showToast("상세 페이지 로드 실패")
                         Log.e("DetailFragment", "loadCoordiDetails 실패: ${response.errorBody()?.string()}")
                     }
                 }
                 override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
-                    Toast.makeText(context, "상세 페이지 로드 실패", Toast.LENGTH_SHORT).show()
+                    binding.progressBar.visibility = View.GONE
+                    showToast("상세 페이지 로드 실패")
                     Log.e("DetailFragment", "loadCoordiDetails 네트워크 요청 실패", t)
                 }
             })
@@ -196,102 +115,132 @@ class DetailFragment : Fragment() {
     }
 
     /**
-     * 상세페이지 내 코디 투표(좋아요)
+     * 코디 데이터 UI에 설정
      */
-    private fun likeCoordi(coordiId: Long) {
-        val call = service.likeCoordi(coordiId)
-        call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
-            override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
-                if (response.isSuccessful) {
-                    if (response.body()?.isVoted == true) {
-                        voteButton.setImageDrawable(context?.let {
-                            ContextCompat.getDrawable(
-                                it, R.drawable.coordi_detail_vote_voted
-                            )
-                        })
-                    } else {
-                        voteButton.setImageDrawable(context?.let {
-                            ContextCompat.getDrawable(
-                                it, R.drawable.coordi_detail_vote_not_voted
-                            )
-                        })
+    private fun populateDetailData(data: CoordiDetailsResponseDTO) {
+        with(binding) {
+            coordiDetailTitleText.text = data.coordiTitle
+            coordiDetailTitleEdit.setText(data.coordiTitle)
+            coordiDetailNickname.text = data.nickname
+            coordiDetailCreateDate.text = data.createDate.toLocalDate().toString()
+            coordiDetailVoteCount.text = data.voteCount.toString()
+            binding.coordiDetailVoteHeart.visibility = View.VISIBLE
+
+            val bitmap = decodeBase64ToBitmap(data.coordiImage)
+            bitmap?.let {
+                Glide.with(this@DetailFragment).load(it).into(coordiDetailImage)
+            }
+
+            if (!data.isVotingPeriod) {
+                coordiDetailVoteButtonDisabled.setImageDrawable(
+                    ContextCompat.getDrawable(requireContext(), R.drawable.coordi_detail_vote_disabled)
+                )
+                coordiDetailVoteButtonDisabled.visibility = View.VISIBLE
+            } else {
+                coordiDetailVoteButton.apply {
+                    setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            if (data.isVoted) R.drawable.coordi_detail_vote_voted else R.drawable.coordi_detail_vote_not_voted
+                        )
+                    )
+                    visibility = View.VISIBLE
+                    setOnClickListener {
+                        handleVoteClick(data)
                     }
-                    voteButton.visibility = View.VISIBLE
-                    voteCount.text = response.body()!!.voteCount.toString()
-                } else {
-                    Toast.makeText(context, "코디 투표에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    Log.e("DetailFragment", "likeCoordi 실패: ${response.errorBody()?.string()}")
                 }
             }
-            override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
-                Toast.makeText(context, "코디 투표에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                Log.e("DetailFragment", "likeCoordi 네트워크 요청 실패", t)
-            }
-        })
-    }
-
-    /**
-     * 상세페이지 제목 수정모드 설정
-     */
-    private fun toggleEditMode(isEditMode: Boolean) {
-        if (isEditMode) {
-            titleTextView.visibility = View.INVISIBLE
-            titleEditText.visibility = View.VISIBLE
-            updateButton.visibility = View.INVISIBLE
-            deleteButton.visibility = View.INVISIBLE
-            checkButton.visibility = View.VISIBLE
-            xButton.visibility = View.VISIBLE
-            checkButton.isClickable = true
-            xButton.isClickable = true
-        } else {
-            titleTextView.visibility = View.VISIBLE
-            titleEditText.visibility = View.INVISIBLE
-            updateButton.visibility = View.VISIBLE
-            deleteButton.visibility = View.VISIBLE
-            checkButton.visibility = View.INVISIBLE
-            xButton.visibility = View.INVISIBLE
-            checkButton.isClickable = false
-            xButton.isClickable = false
         }
     }
 
     /**
-     * 상세페이지 제목 수정 취소 (X 표시)
+     * 수정, 삭제, 저장 버튼 상태 설정
+     */
+    private fun setupButtons(data: CoordiDetailsResponseDTO) {
+        with(binding) {
+            if (data.isCoordiPeriod && Objects.equals(memberId, data.memberId)) {
+                coordiDetailUpdateButton.visibility = View.VISIBLE
+                coordiDetailDeleteButton.visibility = View.VISIBLE
+
+                coordiDetailUpdateButton.setOnClickListener { toggleEditMode(true) }
+                coordiDetailDeleteButton.setOnClickListener { showDeleteDialog() }
+                coordiDetailCheckButton.setOnClickListener {
+                    coordiId?.let { it1 -> updateCoordi(it1) }
+                    toggleEditMode(false)
+                }
+                coordiDetailXButton.setOnClickListener { cancelEditMode() }
+            }
+        }
+    }
+
+    /**
+     * RecyclerView 설정
+     */
+    private fun setupRecyclerView(clothesList: List<ClothDetailsResponseDTO>) {
+        val clothes = clothesList.map {
+            ClothDetailsResponseDTO(it.clothId, it.brand, it.productName, it.price, it.clothImageURL, it.productURL)
+        }
+
+        binding.clothesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = DetailClothesAdapter(clothes, requireContext()) { cloth ->
+                logItemClick(cloth)
+            }
+        }
+    }
+
+    /**
+     * 수정 모드 토글
+     */
+    private fun toggleEditMode(isEditMode: Boolean) {
+        with(binding) {
+            if (isEditMode) {
+                coordiDetailTitleText.visibility = View.INVISIBLE
+                coordiDetailTitleEdit.visibility = View.VISIBLE
+                coordiDetailUpdateButton.visibility = View.INVISIBLE
+                coordiDetailDeleteButton.visibility = View.INVISIBLE
+                coordiDetailCheckButton.visibility = View.VISIBLE
+                coordiDetailXButton.visibility = View.VISIBLE
+            } else {
+                coordiDetailTitleText.visibility = View.VISIBLE
+                coordiDetailTitleEdit.visibility = View.INVISIBLE
+                coordiDetailUpdateButton.visibility = View.VISIBLE
+                coordiDetailDeleteButton.visibility = View.VISIBLE
+                coordiDetailCheckButton.visibility = View.INVISIBLE
+                coordiDetailXButton.visibility = View.INVISIBLE
+            }
+        }
+    }
+
+    /**
+     * 수정 모드 취소
      */
     private fun cancelEditMode() {
-        titleEditText.setText(titleTextView.text)
+        binding.coordiDetailTitleEdit.setText(binding.coordiDetailTitleText.text)
         toggleEditMode(false)
     }
 
     /**
-     * 상세페이지 제목 업데이트
+     * 상세페이지 수정
      */
     private fun updateCoordi(coordiId: Long) {
-        val newTitle = titleEditText.text.toString()
-        if (newTitle != titleTextView.text.toString()) {
+        val newTitle = binding.coordiDetailTitleEdit.text.toString()
+        if (newTitle != binding.coordiDetailTitleText.text.toString()) {
             val requestDTO = CoordiUpdateRequestDTO(newTitle)
-            val call = service.updateCoordi(coordiId, requestDTO)
-            call.enqueue(object : Callback<CoordiDetailsResponseDTO> {
+            service.updateCoordi(coordiId, requestDTO).enqueue(object : Callback<CoordiDetailsResponseDTO> {
                 override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
                     if (response.isSuccessful) {
-                        Toast.makeText(context, "제목이 수정되었습니다!", Toast.LENGTH_SHORT).show()
-                        titleTextView.text = response.body()?.coordiTitle
-                        titleEditText.setText(response.body()?.coordiTitle)
-                    } else {
-                        val errorBody = response.errorBody()?.string()
-                        val errorMap = errorBody?.let {
-                            val gson = Gson()
-                            val type = object : TypeToken<Map<String, String>>() {}.type
-                            gson.fromJson<Map<String, String>>(it, type)
+                        response.body()?.let {
+                            showToast("제목이 수정되었습니다!")
+                            binding.coordiDetailTitleText.text = it.coordiTitle
+                            binding.coordiDetailTitleEdit.setText(it.coordiTitle)
                         }
-
-                        val errorMessage = errorMap?.get("message") ?: "제목은 1자 이상 15자 이하로 작성해 주세요."
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                        Log.e("DetailFragment", "updateCoordi 실패: $errorMessage")
+                    } else {
+                        handleUpdateError(response)
                     }
                 }
                 override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
-                    Toast.makeText(context, "제목 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    showToast("제목 수정에 실패했습니다.")
                     Log.e("DetailFragment", "updateCoordi 네트워크 요청 실패", t)
                 }
             })
@@ -299,7 +248,21 @@ class DetailFragment : Fragment() {
     }
 
     /**
-     * 삭제 다이얼로그 불러오기
+     * 수정 오류 처리
+     */
+    private fun handleUpdateError(response: Response<CoordiDetailsResponseDTO>) {
+        val errorBody = response.errorBody()?.string()
+        val errorMap = errorBody?.let {
+            Gson().fromJson<Map<String, String>>(it, object : TypeToken<Map<String, String>>() {}.type)
+        }
+
+        val errorMessage = errorMap?.get("message") ?: "제목은 1자 이상 15자 이하로 작성해 주세요."
+        showToast(errorMessage)
+        Log.e("DetailFragment", "updateCoordi 실패: $errorMessage")
+    }
+
+    /**
+     * 삭제 다이얼로그
      */
     private fun showDeleteDialog() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_delete, null)
@@ -321,18 +284,14 @@ class DetailFragment : Fragment() {
      * 상세페이지 삭제
      */
     private fun deleteCoordi(coordiId: Long?) {
-        val call = service.deleteCoordi(coordiId)
-        call.enqueue(object : Callback<ResponseBody> {
+        service.deleteCoordi(coordiId).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()?.string()
-                    Toast.makeText(context, responseBody, Toast.LENGTH_SHORT).show()
-                    val homeFragment = HomeFragment()
-                    val mainActivity = activity as MainActivity
-                    mainActivity.replaceFragment(homeFragment, R.id.fragment_my_closet)
+                    showToast(responseBody)
+                    navigateToHome()
                 } else {
-                    val errorBody = response.errorBody()?.string()
-                    Log.e("DetailFragment", "코디 삭제 실패, error: $errorBody")
+                    Log.e("DetailFragment", "코디 삭제 실패, error: ${response.errorBody()?.string()}")
                 }
             }
 
@@ -343,7 +302,50 @@ class DetailFragment : Fragment() {
     }
 
     /**
-     * 구글 애널리틱스 log
+     * 상세페이지 내 코디 투표(좋아요)
+     */
+    private fun handleVoteClick(data: CoordiDetailsResponseDTO) {
+        if (data.isVotingPeriod) {
+            if (memberId == -1L || memberId == null) {
+                showToast("로그인 이후 사용해주세요")
+                navigateToLogin()
+            } else {
+                coordiId?.let { likeCoordi(it) }
+            }
+        }
+    }
+
+    /**
+     * 코디 좋아요 기능
+     */
+    private fun likeCoordi(coordiId: Long) {
+        service.likeCoordi(coordiId).enqueue(object : Callback<CoordiDetailsResponseDTO> {
+            override fun onResponse(call: Call<CoordiDetailsResponseDTO>, response: Response<CoordiDetailsResponseDTO>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        binding.coordiDetailVoteButton.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                if (it.isVoted) R.drawable.coordi_detail_vote_voted else R.drawable.coordi_detail_vote_not_voted
+                            )
+                        )
+                        binding.coordiDetailVoteCount.text = it.voteCount.toString()
+                    }
+                } else {
+                    showToast("코디 투표에 실패했습니다.")
+                    Log.e("DetailFragment", "likeCoordi 실패: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<CoordiDetailsResponseDTO>, t: Throwable) {
+                showToast("코디 투표에 실패했습니다.")
+                Log.e("DetailFragment", "likeCoordi 네트워크 요청 실패", t)
+            }
+        })
+    }
+
+    /**
+     * Google Analytics 설정
      */
     private fun logItemClick(cloth: ClothDetailsResponseDTO) {
         val bundle = Bundle().apply {
@@ -357,19 +359,7 @@ class DetailFragment : Fragment() {
     }
 
     /**
-     * RecyclerView 불러오기
-     */
-    private fun setupRecyclerView(clothes: List<ClothDetailsResponseDTO>) {
-        val recyclerView = rootView.findViewById<RecyclerView>(R.id.clothes_recycler_view)
-        val adapter = DetailClothesAdapter(clothes, requireContext()) { cloth ->
-            logItemClick(cloth)
-        }
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-    }
-
-    /**
-     * Base64 디코드
+     * Base64 문자열 디코딩
      */
     private fun decodeBase64ToBitmap(base64Str: String): Bitmap? {
         return try {
@@ -380,5 +370,24 @@ class DetailFragment : Fragment() {
             e.printStackTrace()
             null
         }
+    }
+
+    private fun showToast(message: String?) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun navigateToHome() {
+        val homeFragment = HomeFragment()
+        (activity as MainActivity).replaceFragment(homeFragment, R.id.fragment_my_closet)
+    }
+
+    private fun navigateToLogin() {
+        val loginFragment = LogInFragment()
+        (activity as MainActivity).replaceFragment(loginFragment, R.id.fragment_my_closet)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

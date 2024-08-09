@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ * 필터 스피너 드롭다운
+ * @author 임원정
+ * @since 2024.08.02
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        수정자        수정내용
+ * ==========  =======     ===========================
+ * 2024.08.02   임원정       최초 생성
+ * </pre>
+-->
+
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dropdownText"
     android:layout_width="wrap_content"

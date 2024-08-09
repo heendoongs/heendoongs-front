@@ -1,4 +1,4 @@
-package com.heendoongs.coordibattle.coordi.view
+package com.heendoongs.coordibattle.common
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,6 +19,8 @@ import com.heendoongs.coordibattle.coordi.service.CoordiService
 import com.heendoongs.coordibattle.coordi.dto.CoordiFilterRequestDTO
 import com.heendoongs.coordibattle.coordi.dto.CoordiListResponseDTO
 import com.heendoongs.coordibattle.coordi.dto.Page
+import com.heendoongs.coordibattle.coordi.view.CoordiAdapter
+import com.heendoongs.coordibattle.coordi.view.DetailFragment
 import com.heendoongs.coordibattle.databinding.FragmentHomeBinding
 import com.smarteist.autoimageslider.SliderView
 import retrofit2.Call
@@ -37,6 +39,10 @@ import retrofit2.Response
  * 2024.07.28  	임원정       최초 생성
  * 2024.07.30   임원정       코디 리스트 출력
  * 2024.07.31   임원정       더보기 버튼 구현
+ * 2024.08.02   임원정       코디 리스트 필터 적용
+ * 2024.08.02   임원정       코디 상세보기 전환 구현
+ * 2024.08.06   임원정       코디 리스트 로드 전 다른 화면으로 전환시 앱 꺼짐 현상 해결
+ * 2024.08.07   임원정       필터 이전 상태 저장
  * </pre>
  */
 
@@ -64,7 +70,7 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        // 상태 복원
+        // 필터 상태 복원
         if (savedInstanceState != null) {
             selectedBattleId = savedInstanceState.getLong(KEY_SELECTED_BATTLE_ID)
             selectedSortOrder = savedInstanceState.getString(KEY_SELECTED_SORT_ORDER, "RANKING")
@@ -100,7 +106,6 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         if (savedInstanceState != null) {
             val selectedBattlePosition = savedInstanceState.getInt("selectedBattlePosition", 0)
             val selectedSortOrderPosition = savedInstanceState.getInt("selectedSortOrderPosition", 0)
-            println("selectedBattlePosition: "+selectedBattlePosition)
             binding.spinnerBattleFilter.setSelection(selectedBattlePosition)
             binding.spinnerSort.setSelection(selectedSortOrderPosition)
         }
@@ -108,8 +113,10 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         return view
     }
 
+    /**
+     * 배틀 필터 스피너 설정
+     */
     private fun setupFilterSpinner() {
-        // 배틀 필터 스피너 설정
         battleService.getBattleTitles().enqueue(object : Callback<List<BattleTitleResponseDTO>> {
             override fun onResponse(call: Call<List<BattleTitleResponseDTO>>, response: Response<List<BattleTitleResponseDTO>>) {
                 if (!isAdded) return  // Fragment가 여전히 활성 상태인지 확인
@@ -151,6 +158,9 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         })
     }
 
+    /**
+     * 정렬 스피너 설정
+     */
     private fun setupSortSpinner() {
         val sortOptions = resources.getStringArray(R.array.sort_options)
         val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, sortOptions)
@@ -176,6 +186,9 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         }
     }
 
+    /**
+     * 코디 리스트 로드
+     */
     private fun loadCoordiList(page: Int, size: Int) {
         val requestDTO = CoordiFilterRequestDTO(selectedBattleId, selectedSortOrder, page, size)
 
@@ -218,7 +231,9 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         })
     }
 
-    // 배너 가져오기
+    /**
+     * 배너 가져오기
+     */
     private fun loadBanners() {
         battleService.getCurrentBattles().enqueue(object : Callback<List<BannerResponseDTO>> {
             override fun onResponse(call: Call<List<BannerResponseDTO>>, response: Response<List<BannerResponseDTO>>) {
@@ -238,6 +253,9 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         })
     }
 
+    /**
+     * 배너 슬라이더 설정
+     */
     private fun setupSlider(banners: List<BannerResponseDTO>) {
         val sliderAdapter = BannerSliderAdapter(banners, requireContext())
         binding.banner.setSliderAdapter(sliderAdapter)
@@ -247,6 +265,9 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         binding.banner.startAutoCycle()
     }
 
+    /**
+     * 터치시 동작
+     */
     override fun onItemClick(item: CoordiListResponseDTO) {
         val bundle = Bundle().apply {
             putLong("coordiId", item.coordiId)
@@ -254,18 +275,25 @@ class HomeFragment : Fragment(), CoordiAdapter.OnItemClickListener {
         val detailFragment = DetailFragment().apply {
             arguments = bundle
         }
+        // 코디 상세 보기로 전환
         parentFragmentManager.beginTransaction()
             .replace(R.id.main_container, detailFragment)
             .addToBackStack(null)
             .commit()
     }
 
+    /**
+     * 상태 저장
+     */
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong(KEY_SELECTED_BATTLE_ID, selectedBattleId ?: -1L)
         outState.putString(KEY_SELECTED_SORT_ORDER, selectedSortOrder)
     }
 
+    /**
+     * 상세보기 갔다 돌아와도 필터 유지 하도록
+     */
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         savedInstanceState?.let {
