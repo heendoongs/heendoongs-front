@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ * 내 정보 화면
+ * @author 임원정
+ * @since 2024.07.28
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        수정자        수정내용
+ * ==========  ========     ===========================
+ * 2024.07.28  	임원정       최초 생성
+ * 2024.07.30  	조희정       페이지 디자인
+ * </pre>
+-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -10,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
+    <!-- 내 정보 타이틀 -->
     <com.heendoongs.coordibattle.common.OutLineTextView
         android:id="@+id/myInfo"
         android:layout_width="wrap_content"
@@ -28,8 +42,7 @@
         app:textStrokeColor="@color/white"
         app:textStrokeWidth="14" />
 
-    <!--    아이디 입력   -->
-
+    <!--    아이디   -->
     <ImageView
         android:id="@+id/img_id_heart"
         android:layout_width="20dp"
@@ -39,7 +52,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/id"
         app:srcCompat="@drawable/ic_heart" />
-
 
     <com.heendoongs.coordibattle.common.OutLineTextView
         android:id="@+id/id"
@@ -72,7 +84,7 @@
         app:layout_constraintStart_toStartOf="@+id/img_id_heart"
         app:layout_constraintTop_toBottomOf="@+id/id" />
 
-
+    <!--    비밀번호 입력    -->
     <ImageView
         android:id="@+id/img_pw_heart"
         android:layout_width="20dp"
@@ -119,7 +131,7 @@
         app:layout_constraintTop_toBottomOf="@+id/pw" />
 
     <TextView
-        android:id="@+id/no_pw"
+        android:id="@+id/pw_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/dongle_bold"
@@ -128,7 +140,7 @@
         app:layout_constraintStart_toStartOf="@+id/edit_pw"
         app:layout_constraintTop_toBottomOf="@+id/edit_pw" />
 
-    <!--    비밀번호 확인-->
+    <!--    비밀번호 확인 입력    -->
 
     <ImageView
         android:id="@+id/img_pw_chk_heart"
@@ -175,7 +187,7 @@
         app:layout_constraintTop_toBottomOf="@+id/pw_chk" />
 
     <TextView
-        android:id="@+id/pw_not_match"
+        android:id="@+id/pw_chk_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/dongle_bold"
@@ -184,8 +196,7 @@
         app:layout_constraintStart_toStartOf="@+id/edit_pw_chk"
         app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk" />
 
-    <!--    닉네임-->
-
+    <!--    닉네임    -->
     <ImageView
         android:id="@+id/img_nickname_heart"
         android:layout_width="20dp"
@@ -232,7 +243,7 @@
 
 
     <TextView
-        android:id="@+id/exist_nickname"
+        android:id="@+id/nickname_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/dongle_bold"
@@ -241,9 +252,7 @@
         app:layout_constraintStart_toStartOf="@+id/edit_nickname"
         app:layout_constraintTop_toBottomOf="@+id/edit_nickname" />
 
-
-    <!--    버튼-->
-
+    <!--    버튼    -->
         <ImageButton
             android:id="@+id/btn_update"
             android:layout_width="130dp"
@@ -270,7 +279,6 @@
             app:layout_constraintStart_toEndOf="@+id/btn_update"
             app:layout_constraintTop_toTopOf="@+id/btn_update"
             app:srcCompat="@drawable/ic_member_delete_btn" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

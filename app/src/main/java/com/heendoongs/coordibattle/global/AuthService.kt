@@ -1,5 +1,7 @@
 package com.heendoongs.coordibattle.global
 
+import retrofit2.Call
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 /**
@@ -9,7 +11,7 @@ import retrofit2.http.POST
  * @version 1.0
  *
  * <pre>
- * 수정일        	수정자        수정내용
+ * 수정일        수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.08.04  	조희정       최초 생성
  * </pre>
@@ -20,5 +22,5 @@ interface AuthService {
      * 토큰 재발급
      */
     @POST("token/reissue")
-    fun refreshToken(): retrofit2.Call<TokenResponse>
+    fun reissueToken(@Header("RefreshToken") refreshToken: String): Call<Void>
 }

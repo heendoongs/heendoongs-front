@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--
+ * 로그인 화면
+ * @author 임원정
+ * @since 2024.07.28
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        수정자        수정내용
+ * ==========  ========     ===========================
+ * 2024.07.28  	임원정       최초 생성
+ * 2024.07.30  	조희정       페이지 디자인
+ * </pre>
+-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -22,10 +34,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/img_home_title" />
 
-
-
         <!--    아이디 입력   -->
-
         <ImageView
             android:id="@+id/img_id_heart"
             android:layout_width="20dp"
@@ -55,8 +64,6 @@
             app:outlineShadowDy="2"/>
 
 
-        <!--    비밀번호 입력   -->
-
         <EditText
             android:id="@+id/edit_id"
             android:layout_width="0dp"
@@ -74,6 +81,7 @@
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="@+id/id" />
 
+        <!--    비밀번호 입력   -->
         <ImageView
             android:id="@+id/img_pw_heart"
             android:layout_width="20dp"
@@ -129,7 +137,7 @@
             app:layout_constraintStart_toStartOf="@+id/edit_pw"
             app:layout_constraintTop_toBottomOf="@+id/edit_pw" />
 
-        <!--    버튼-->
+        <!--    버튼    -->
         <ImageButton
             android:id="@+id/btn_sign_up_page"
             android:layout_width="130dp"
@@ -168,7 +176,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_begin="132dp" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

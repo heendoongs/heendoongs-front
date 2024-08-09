@@ -1,10 +1,16 @@
 package com.heendoongs.coordibattle.battle.view
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.battle.dto.BannerResponseDTO
 import com.heendoongs.coordibattle.common.MainActivity
+import com.heendoongs.coordibattle.coordi.view.CoordiFragment
 import com.heendoongs.coordibattle.databinding.ItemBannerBinding
 import com.smarteist.autoimageslider.SliderViewAdapter
 

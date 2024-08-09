@@ -33,10 +33,10 @@ class AuthInterceptor(private val retrofitConnection: RetrofitConnection) : Inte
         val response = chain.proceed(authenticatedRequest)
 
         // Access token이 만료되었을 경우
-        if (response.code == 800) {
+        if (response.code == 700) {
             synchronized(this) {
                 // Refresh Token을 사용하여 새로운 Access Token을 가져옴
-                val newAccessToken = getNewAccessToken()
+                val newAccessToken = reissueAccessToken()
                 if (newAccessToken != null) {
                     MainApplication.prefs.saveAccessToken(newAccessToken)
 
@@ -45,6 +45,7 @@ class AuthInterceptor(private val retrofitConnection: RetrofitConnection) : Inte
                         .header("Authorization", newAccessToken)
                         .build()
 
+
                     return chain.proceed(newRequest)
                 }
             }
@@ -52,12 +53,14 @@ class AuthInterceptor(private val retrofitConnection: RetrofitConnection) : Inte
         return response
     }
 
-    private fun getNewAccessToken(): String? {
+    private fun reissueAccessToken(): String? {
+        val refreshToken = MainApplication.prefs.getRefreshToken() ?: return null
         val authService = retrofitConnection.getInstance().create(AuthService::class.java)
-        val response = authService.refreshToken().execute()
 
+        // (동기 요청)
+        val response = authService.reissueToken(refreshToken).execute()
         return if (response.isSuccessful) {
-            response.body()?.accessToken
+            response.headers()["Authorization"]
         } else {
             null
         }

@@ -2,7 +2,7 @@ package com.heendoongs.coordibattle.member.service
 
 import com.heendoongs.coordibattle.coordi.dto.CoordiListResponseDTO
 import com.heendoongs.coordibattle.coordi.dto.Page
-import com.heendoongs.coordibattle.member.*
+import com.heendoongs.coordibattle.member.dto.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -29,7 +29,7 @@ interface MemberService {
      */
     @POST("signup")
     fun signUp(
-        @Body signUpRequest: SignUpRequest
+        @Body signUpRequestDTO: SignUpRequestDTO
     ): Call<ResponseBody>
 
     /**
@@ -37,7 +37,7 @@ interface MemberService {
      */
     @POST("login")
     fun login(
-        @Body loginRequest: LoginRequest
+        @Body loginRequestDTO: LoginRequestDTO
     ): Call<ResponseBody>
 
     /**
@@ -54,27 +54,27 @@ interface MemberService {
      */
     @GET("mycloset/nickname")
     fun getNickname(
-    ): Call<MyNicknameResponse>
+    ): Call<MyNicknameResponseDTO>
 
     /**
      * 내 정보 조회
      */
     @GET("myinfo")
     fun getMyInfo(
-    ): Call<MyInfoResponse>
+    ): Call<MyInfoResponseDTO>
 
     /**
      * 회원 정보 수정
      */
-    @PUT("updateAccount")
+    @PUT("update")
     fun updateAccount(
-        @Body memberUpdateRequest : MemberUpdateRequest
+        @Body memberUpdateRequestDTO : MemberUpdateRequestDTO
     ): Call<ResponseBody>
 
     /**
      * 회원 탈퇴
      */
-    @POST("deleteAccount")
+    @POST("delete")
     fun deleteAccount(
     ): Call<ResponseBody>
 

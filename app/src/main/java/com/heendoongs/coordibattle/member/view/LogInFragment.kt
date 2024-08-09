@@ -10,13 +10,13 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.common.MainActivity
 import com.heendoongs.coordibattle.common.MainApplication
-import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.coordi.view.HomeFragment
-import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.databinding.FragmentLogInBinding
-import com.heendoongs.coordibattle.member.LoginRequest
+import com.heendoongs.coordibattle.global.RetrofitConnection
+import com.heendoongs.coordibattle.member.dto.LoginRequestDTO
 import com.heendoongs.coordibattle.member.service.MemberService
 import okhttp3.ResponseBody
 import org.json.JSONException
@@ -36,7 +36,7 @@ import retrofit2.Response
  * ----------  --------    ---------------------------
  * 2024.07.26  	임원정       최초 생성
  * 2024.07.30  	조희정       login 메소드 추가
- * 2024.08.02  	조희정       access/refresh 토큰 저장 기능 추가
+ * 2024.08.02  	조희정       login 메소드에 access/refresh 토큰 저장 기능 추가
  * 2024.08.07  	조희정       addTextChangedListenerToEditTexts 메소드 추가
  * </pre>
  */
@@ -51,7 +51,10 @@ class LogInFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        // 뷰 바인딩
         binding = FragmentLogInBinding.inflate(inflater, container, false)
+
+        // Retrofit 인스턴스 생성
         service = RetrofitConnection.getInstance().create(MemberService::class.java)
 
         // 로그인 버튼
@@ -79,11 +82,16 @@ class LogInFragment : Fragment() {
         val loginId = binding.editId.text.toString()
         val password = binding.editPw.text.toString()
 
-        val loginRequest = LoginRequest(loginId, password)
+        if (loginId == null || password == null) {
+            binding.loginError.text = "아이디 또는 비밀번호를 확인하세요"
+        }
+
+        val loginRequest = LoginRequestDTO(loginId, password)
 
         // 로그인 요청 보내기
         service.login(loginRequest).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                // 요청 성공
                 if (response.isSuccessful) {
                     // access/refresh 토큰 저장
                     val accessToken = response.headers()["Authorization"]
@@ -98,6 +106,8 @@ class LogInFragment : Fragment() {
 
                     // 로그인 후 메인 페이지로 이동
                     (requireActivity() as? MainActivity)?.replaceFragment(HomeFragment(), R.id.fragment_home)
+
+                // 요청 실패
                 } else {
                     // 로그인 에러 처리
                     val errorBody = response.errorBody()?.string()

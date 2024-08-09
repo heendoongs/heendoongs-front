@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+ * 회원가입 화면
+ * @author 임원정
+ * @since 2024.07.28
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        수정자        수정내용
+ * ==========  ========     ===========================
+ * 2024.07.28  	임원정       최초 생성
+ * 2024.07.30  	조희정       페이지 디자인
+ * </pre>
+-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -10,8 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-    <!--    로고    -->
-
+        <!--    회원가입 타이틀    -->
         <ImageView
             android:id="@+id/thanks_bubble"
             android:layout_width="150dp"
@@ -43,263 +54,258 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dongle_bold"
                 android:gravity="center"
-                android:text="회원가입"
+                android:text="@string/sign_in"
                 android:textColor="@color/white"
                 android:textSize="48dp"
                 app:outlineShadowColor="#75000000"
                 app:outlineShadowDy="8"
                 app:outlineShadowRadius="2"
                 app:textStrokeColor="@color/black"
-                app:textStrokeWidth="14" />
+                app:textStrokeWidth="14"/>
 
             <ImageView
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 app:srcCompat="@drawable/ic_two_paws" />
-
         </LinearLayout>
 
-    <com.heendoongs.coordibattle.common.OutLineTextView
-        android:id="@+id/id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/dongle_bold"
-        android:text="@string/id"
-        android:textColor="@color/pink"
-        android:textSize="30dp"
-        app:layout_constraintStart_toEndOf="@+id/img_id_heart"
-        app:layout_constraintTop_toBottomOf="@+id/title_signup"
-        app:outlineShadowColor="#75000000"
-        app:outlineShadowDy="2"
-        app:outlineShadowRadius="2"
-        app:textStrokeColor="@color/light_pink"
-        app:textStrokeWidth="6" />
+        <!--    아이디 입력    -->
+        <ImageView
+            android:id="@+id/img_id_heart"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="40dp"
+            app:layout_constraintBottom_toBottomOf="@+id/id"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/id"
+            app:layout_constraintVertical_bias="0.47"
+            app:srcCompat="@drawable/ic_heart" />
 
-    <EditText
-        android:id="@+id/edit_id"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/input_text"
-        android:fontFamily="@font/dongle_regular"
-        android:hint="@string/id_input"
-        android:inputType="textPersonName"
-        android:paddingLeft="10dp"
-        android:textColor="@color/black"
-        android:textSize="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/img_id_heart"
-        app:layout_constraintTop_toBottomOf="@+id/id" />
+        <com.heendoongs.coordibattle.common.OutLineTextView
+            android:id="@+id/id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/dongle_bold"
+            android:text="@string/id"
+            android:textColor="@color/pink"
+            android:textSize="30dp"
+            app:layout_constraintStart_toEndOf="@+id/img_id_heart"
+            app:layout_constraintTop_toBottomOf="@+id/title_signup"
+            app:outlineShadowColor="#75000000"
+            app:outlineShadowDy="2"
+            app:outlineShadowRadius="2"
+            app:textStrokeColor="@color/light_pink"
+            app:textStrokeWidth="6" />
 
-    <ImageView
-        android:id="@+id/img_id_heart"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="40dp"
-        app:layout_constraintBottom_toBottomOf="@+id/id"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/id"
-        app:layout_constraintVertical_bias="0.47"
-        app:srcCompat="@drawable/ic_heart" />
+        <EditText
+            android:id="@+id/edit_id"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/input_text"
+            android:fontFamily="@font/dongle_regular"
+            android:hint="@string/id_input"
+            android:inputType="textPersonName"
+            android:paddingLeft="10dp"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/img_id_heart"
+            app:layout_constraintTop_toBottomOf="@+id/id" />
 
-    <TextView
-        android:id="@+id/exist_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/dongle_bold"
-        android:textColor="@color/red"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="@+id/edit_id"
-        app:layout_constraintTop_toBottomOf="@+id/edit_id" />
+        <TextView
+            android:id="@+id/id_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/dongle_bold"
+            android:textColor="@color/red"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@+id/edit_id"
+            app:layout_constraintTop_toBottomOf="@+id/edit_id" />
 
-    <TextView
-        android:id="@+id/pw_not_match"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/dongle_bold"
-        android:textColor="@color/red"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="@+id/edit_pw_chk"
-        app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk" />
+        <!--    비밀번호 입력    -->
+        <ImageView
+            android:id="@+id/img_pw_heart"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="48dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_id"
+            app:srcCompat="@drawable/ic_heart" />
 
-    <!--    비밀번호 확인-->
+        <com.heendoongs.coordibattle.common.OutLineTextView
+            android:id="@+id/pw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/dongle_bold"
+            android:text="@string/password"
+            android:textColor="@color/pink"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_pw_heart"
+            app:layout_constraintStart_toEndOf="@+id/img_pw_heart"
+            app:layout_constraintTop_toTopOf="@+id/img_pw_heart"
+            app:layout_constraintVertical_bias="0.529"
+            app:outlineShadowColor="#75000000"
+            app:outlineShadowDy="2"
+            app:outlineShadowRadius="2"
+            app:textStrokeColor="@color/light_pink"
+            app:textStrokeWidth="6" />
 
-    <EditText
-        android:id="@+id/edit_pw"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/input_text"
-        android:fontFamily="@font/dongle_regular"
-        android:hint="@string/pw_input"
-        android:inputType="textPassword"
-        android:paddingLeft="10dp"
-        android:textColor="@color/black"
-        android:textSize="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/img_pw_heart"
-        app:layout_constraintTop_toBottomOf="@+id/pw" />
+        <EditText
+            android:id="@+id/edit_pw"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/input_text"
+            android:fontFamily="@font/dongle_regular"
+            android:hint="@string/pw_input"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/img_pw_heart"
+            app:layout_constraintTop_toBottomOf="@+id/pw" />
 
-    <com.heendoongs.coordibattle.common.OutLineTextView
-        android:id="@+id/pw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/dongle_bold"
-        android:text="@string/password"
-        android:textColor="@color/pink"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/img_pw_heart"
-        app:layout_constraintStart_toEndOf="@+id/img_pw_heart"
-        app:layout_constraintTop_toTopOf="@+id/img_pw_heart"
-        app:layout_constraintVertical_bias="0.529"
-        app:outlineShadowColor="#75000000"
-        app:outlineShadowDy="2"
-        app:outlineShadowRadius="2"
-        app:textStrokeColor="@color/light_pink"
-        app:textStrokeWidth="6" />
+        <TextView
+            android:id="@+id/pw_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/dongle_bold"
+            android:textColor="@color/red"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@+id/edit_pw"
+            app:layout_constraintTop_toBottomOf="@+id/edit_pw" />
 
-    <ImageView
-        android:id="@+id/img_pw_heart"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_id"
-        app:srcCompat="@drawable/ic_heart" />
+        <!--    비밀번호 확인 입력   -->
+        <ImageView
+            android:id="@+id/img_pw_chk_heart"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="48dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_pw"
+            app:srcCompat="@drawable/ic_heart" />
 
-    <TextView
-        android:id="@+id/no_pw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/dongle_bold"
-        android:textColor="@color/red"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="@+id/edit_pw"
-        app:layout_constraintTop_toBottomOf="@+id/edit_pw" />
+        <com.heendoongs.coordibattle.common.OutLineTextView
+            android:id="@+id/pw_chk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/dongle_bold"
+            android:text="@string/password_check"
+            android:textColor="@color/pink"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_pw_chk_heart"
+            app:layout_constraintStart_toEndOf="@+id/img_pw_chk_heart"
+            app:layout_constraintTop_toTopOf="@+id/img_pw_chk_heart"
+            app:outlineShadowColor="#75000000"
+            app:outlineShadowDy="2"
+            app:outlineShadowRadius="2"
+            app:textStrokeColor="@color/light_pink"
+            app:textStrokeWidth="6" />
 
-    <ImageView
-        android:id="@+id/img_pw_chk_heart"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_pw"
-        app:srcCompat="@drawable/ic_heart" />
+        <EditText
+            android:id="@+id/edit_pw_chk"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/input_text"
+            android:fontFamily="@font/dongle_regular"
+            android:hint="@string/pw_chk_input"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/img_pw_chk_heart"
+            app:layout_constraintTop_toBottomOf="@+id/pw_chk" />
 
-    <com.heendoongs.coordibattle.common.OutLineTextView
-        android:id="@+id/pw_chk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/dongle_bold"
-        android:text="@string/password_check"
-        android:textColor="@color/pink"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/img_pw_chk_heart"
-        app:layout_constraintStart_toEndOf="@+id/img_pw_chk_heart"
-        app:layout_constraintTop_toTopOf="@+id/img_pw_chk_heart"
-        app:outlineShadowColor="#75000000"
-        app:outlineShadowDy="2"
-        app:outlineShadowRadius="2"
-        app:textStrokeColor="@color/light_pink"
-        app:textStrokeWidth="6" />
+        <TextView
+            android:id="@+id/pw_chk_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dongle_bold"
+            android:textColor="@color/red"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@+id/edit_pw_chk"
+            app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk" />
 
-    <EditText
-        android:id="@+id/edit_pw_chk"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/input_text"
-        android:fontFamily="@font/dongle_regular"
-        android:hint="@string/pw_chk_input"
-        android:inputType="textPassword"
-        android:paddingLeft="10dp"
-        android:textColor="@color/black"
-        android:textSize="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/img_pw_chk_heart"
-        app:layout_constraintTop_toBottomOf="@+id/pw_chk" />
+        <!--    닉네임 입력   -->
+        <ImageView
+            android:id="@+id/img_nickname_heart"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="48dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk"
+            app:srcCompat="@drawable/ic_heart" />
 
-    <!--    닉네임-->
+        <com.heendoongs.coordibattle.common.OutLineTextView
+            android:id="@+id/nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/dongle_bold"
+            android:text="@string/nickname"
+            android:textColor="@color/pink"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_nickname_heart"
+            app:layout_constraintStart_toEndOf="@+id/img_nickname_heart"
+            app:layout_constraintTop_toTopOf="@+id/img_nickname_heart"
+            app:outlineShadowColor="#75000000"
+            app:outlineShadowDy="2"
+            app:outlineShadowRadius="2"
+            app:textStrokeColor="@color/light_pink"
+            app:textStrokeWidth="6" />
 
-    <ImageView
-        android:id="@+id/img_nickname_heart"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_pw_chk"
-        app:srcCompat="@drawable/ic_heart" />
-
-    <com.heendoongs.coordibattle.common.OutLineTextView
-        android:id="@+id/nickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/dongle_bold"
-        android:text="@string/nickname"
-        android:textColor="@color/pink"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/img_nickname_heart"
-        app:layout_constraintStart_toEndOf="@+id/img_nickname_heart"
-        app:layout_constraintTop_toTopOf="@+id/img_nickname_heart"
-        app:outlineShadowColor="#75000000"
-        app:outlineShadowDy="2"
-        app:outlineShadowRadius="2"
-        app:textStrokeColor="@color/light_pink"
-        app:textStrokeWidth="6" />
-
-    <EditText
-        android:id="@+id/edit_nickname"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/input_text"
-        android:fontFamily="@font/dongle_regular"
-        android:hint="@string/nickname_input"
-        android:inputType="textPersonName"
-        android:paddingLeft="10dp"
-        android:textColor="@color/black"
-        android:textSize="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/img_nickname_heart"
-        app:layout_constraintTop_toBottomOf="@+id/nickname" />
-
-
-    <TextView
-        android:id="@+id/exist_nickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/dongle_bold"
-        android:textColor="@color/red"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="@+id/edit_nickname"
-        app:layout_constraintTop_toBottomOf="@+id/edit_nickname" />
-
-    <!--    버튼-->
-
-    <ImageView
-        android:id="@+id/btn_sign_up"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:fontFamily="@font/dongle_bold"
-        android:scaleType="centerInside"
-        android:text="@string/sign_in"
-        android:textSize="35dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_nickname"
-        app:srcCompat="@drawable/ic_signup_btn" />
+        <EditText
+            android:id="@+id/edit_nickname"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/input_text"
+            android:fontFamily="@font/dongle_regular"
+            android:hint="@string/nickname_input"
+            android:inputType="textPersonName"
+            android:paddingLeft="10dp"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/img_nickname_heart"
+            app:layout_constraintTop_toBottomOf="@+id/nickname" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/nickname_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dongle_bold"
+            android:textColor="@color/red"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@+id/edit_nickname"
+            app:layout_constraintTop_toBottomOf="@+id/edit_nickname" />
+
+        <!--    버튼    -->
+        <ImageView
+            android:id="@+id/btn_sign_up"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:fontFamily="@font/dongle_bold"
+            android:scaleType="centerInside"
+            android:textSize="35dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_nickname"
+            app:srcCompat="@drawable/ic_signup_btn" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
