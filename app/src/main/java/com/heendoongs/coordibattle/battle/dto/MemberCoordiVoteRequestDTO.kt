@@ -1,7 +1,7 @@
 package com.heendoongs.coordibattle.battle.dto
 
 /**
- * 배틀 DTO
+ * 배틀 투표 요청 DTO
  * @author 남진수
  * @since 2024.07.30
  * @version 1.0

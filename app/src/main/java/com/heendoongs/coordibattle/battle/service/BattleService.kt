@@ -29,7 +29,7 @@ interface BattleService {
      * 배틀 페이지 불러오기
      */
     @GET("battle")
-    fun getBattleCoordies(): Call<List<BattleDTO>>
+    fun getBattleCoordies(): Call<List<BattleRequestDTO>>
 
     /*
      * 배틀 결과
@@ -37,7 +37,7 @@ interface BattleService {
     @POST("battle")
     fun postBattleResult(
         @Body voteRequest: MemberCoordiVoteRequestDTO
-    ): Call<BattleResponseDTO>
+    ): Call<Void>
 
     /**
      * 배너 출력
