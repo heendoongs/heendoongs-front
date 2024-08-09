@@ -16,6 +16,10 @@ import retrofit2.http.*
  * ----------  --------    ---------------------------
  * 2024.07.30  	임원정       최초 생성
  * 2024.07.31   임원정       getCoordiList API 추가
+ * 2024.07.31   남진수       getCoordiDetails API 추가
+ * 2024.07.31   남진수       likeCoordi API 추가
+ * 2024.07.31   남진수       updateCoordi API 추가
+ * 2024.07.31   남진수       deleteCoordi API 추가
  * 2024.08.01   임원정       getCoordiListWithFilter API 추가
  * </pre>
  */

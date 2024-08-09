@@ -15,6 +15,19 @@ import com.heendoongs.coordibattle.common.MainActivity
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.global.checkLoginAndNavigate
 
+/**
+ * 코디 입장 프래그먼트
+ * @author 남진수
+ * @since 2024.08.06
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        수정자        수정내용
+ * ----------  --------    ---------------------------
+ * 2024.08.06  	남진수       최초 생성
+ * </pre>
+ */
+
 class CoordiEntranceFragment : Fragment()  {
 
     private lateinit var rootView: View

@@ -14,7 +14,7 @@ package com.heendoongs.coordibattle.battle.dto
  * </pre>
  */
 
-data class BattleDTO(
+data class BattleRequestDTO(
     val coordiId: Long,
     val coordiTitle: String,
     val coordiImage: String,
