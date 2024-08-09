@@ -1,4 +1,4 @@
-package com.heendoongs.coordibattle.coordi.view
+package com.heendoongs.coordibattle.common
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,6 +19,8 @@ import com.heendoongs.coordibattle.coordi.service.CoordiService
 import com.heendoongs.coordibattle.coordi.dto.CoordiFilterRequestDTO
 import com.heendoongs.coordibattle.coordi.dto.CoordiListResponseDTO
 import com.heendoongs.coordibattle.coordi.dto.Page
+import com.heendoongs.coordibattle.coordi.view.CoordiAdapter
+import com.heendoongs.coordibattle.coordi.view.DetailFragment
 import com.heendoongs.coordibattle.databinding.FragmentHomeBinding
 import com.smarteist.autoimageslider.SliderView
 import retrofit2.Call

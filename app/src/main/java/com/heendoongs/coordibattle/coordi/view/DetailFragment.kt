@@ -20,6 +20,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.heendoongs.coordibattle.common.MainActivity
 import com.heendoongs.coordibattle.R
+import com.heendoongs.coordibattle.common.HomeFragment
 import com.heendoongs.coordibattle.coordi.dto.ClothDetailsResponseDTO
 import com.heendoongs.coordibattle.coordi.dto.CoordiDetailsResponseDTO
 import com.heendoongs.coordibattle.coordi.dto.CoordiUpdateRequestDTO
