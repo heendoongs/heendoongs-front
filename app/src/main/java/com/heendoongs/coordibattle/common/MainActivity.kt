@@ -16,7 +16,6 @@ import com.google.firebase.ktx.Firebase
 import com.heendoongs.coordibattle.R
 import com.heendoongs.coordibattle.battle.view.BattleEntranceFragment
 import com.heendoongs.coordibattle.coordi.view.CoordiEntranceFragment
-import com.heendoongs.coordibattle.common.HomeFragment
 import com.heendoongs.coordibattle.databinding.ActivityMainBinding
 import com.heendoongs.coordibattle.global.PreferenceUtil
 import com.heendoongs.coordibattle.member.view.MyClosetFragment

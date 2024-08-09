@@ -11,9 +11,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.heendoongs.coordibattle.R
+import com.heendoongs.coordibattle.common.HomeFragment
 import com.heendoongs.coordibattle.common.MainActivity
 import com.heendoongs.coordibattle.common.MainApplication
-import com.heendoongs.coordibattle.coordi.view.HomeFragment
 import com.heendoongs.coordibattle.databinding.FragmentLogInBinding
 import com.heendoongs.coordibattle.global.RetrofitConnection
 import com.heendoongs.coordibattle.member.dto.LoginRequestDTO
