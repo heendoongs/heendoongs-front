@@ -101,7 +101,6 @@ class MyClosetFragment :Fragment(), CoordiAdapter.OnItemClickListener {
                 if (response.isSuccessful) {
                     // 성공
                     val myClosetResponse = response.body()
-                    println(response.body()!!.nickname)
                     if (myClosetResponse != null) {
                         binding.nickname.text = myClosetResponse.nickname
                         binding.myCoordiList.text = myClosetResponse.nickname + "의 옷장"

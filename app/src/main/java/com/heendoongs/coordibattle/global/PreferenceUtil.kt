@@ -54,7 +54,6 @@ class PreferenceUtil(context: Context) {
     }
 
     fun isLoggedIn(): Boolean {
-        println("로그인 체크용 토큰 확인" + getAccessToken())
         return getAccessToken() != null
     }
 
